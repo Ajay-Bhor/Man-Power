@@ -45,3 +45,5 @@ Thumbs.db
 # Local environments
 .env.local
 .env.*.local
+
+**/.vite/
