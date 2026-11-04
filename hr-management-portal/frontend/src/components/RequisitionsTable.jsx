@@ -147,12 +147,12 @@ export default function RequisitionsTable({
                       >
                         <span className="urja-job-title-text">{req.title}</span>
                       </div>
-                      {req.experience && (
+                      {(req.experience || req.budgetMin) && (
                         <div className="urja-job-meta-sub">
-                          <span className="urja-meta-chip">{req.experience}</span>
+                          {req.experience && <span className="urja-meta-chip">{req.experience}</span>}
                           {req.budgetMin && (
                             <span className="urja-meta-salary">
-                              {req.budgetMin} - {req.budgetMax}
+                              {req.budgetMin}{req.budgetMax ? ' - ' + req.budgetMax : ''}
                             </span>
                           )}
                         </div>

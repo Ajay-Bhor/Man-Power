@@ -272,8 +272,8 @@
   text-transform: capitalize;
 }
 
-.urja-filter-select,
-.urja-filter-input {
+.urja-offers-container .urja-filter-select,
+.urja-offers-container .urja-filter-input {
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
   border-radius: 8px;
@@ -285,8 +285,8 @@
   width: 100%;
 }
 
-.urja-filter-select:focus,
-.urja-filter-input:focus {
+.urja-offers-container .urja-filter-select:focus,
+.urja-offers-container .urja-filter-input:focus {
   border-color: #16A34A;
   box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
 }

@@ -989,473 +989,632 @@
 /* ==============================================================================
    2. REQUISITIONS STATUS TABS & CREATE BUTTON ROW
    ============================================================================== */
+.urja-job-requisitions-page .urja-status-tabs-container,
 .urja-status-tabs-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--urja-border);
-  margin-bottom: 1.25rem;
-  padding-bottom: 0;
-  gap: 1.25rem;
-  background-color: transparent;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 1px solid var(--urja-border) !important;
+  margin-bottom: 1.25rem !important;
+  padding-bottom: 0 !important;
+  gap: 1.5rem !important;
+  background-color: transparent !important;
+  width: 100% !important;
+  overflow: visible !important;
 }
 
 .urja-status-tabs-scroll-area {
-  display: flex;
-  align-items: center;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding-bottom: 2px;
+  display: flex !important;
+  align-items: center !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  white-space: nowrap !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+  padding-bottom: 2px !important;
+  flex: 1 1 auto !important;
 }
 
 .urja-status-tabs-scroll-area::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
 
 .urja-status-tabs-list {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 0;
-  margin: 0;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.25rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .urja-status-tab-item {
-  background: transparent;
-  border: none;
-  padding: 0.65rem 0.35rem 0.85rem;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--urja-text-muted);
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  outline: none;
+  background: transparent !important;
+  border: none !important;
+  padding: 0.65rem 0.35rem 0.85rem !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  color: var(--urja-text-muted) !important;
+  cursor: pointer !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  outline: none !important;
 }
 
 .urja-status-tab-item:hover {
-  color: var(--urja-text-dark);
+  color: var(--urja-text-dark) !important;
 }
 
 .urja-status-tab-item.active {
-  color: #0F172A;
-  font-weight: 700;
+  color: #0F172A !important;
+  font-weight: 700 !important;
 }
 
 .urja-status-tab-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.74rem;
-  font-weight: 700;
-  padding: 0.15rem 0.55rem;
-  border-radius: 9999px;
-  background-color: #E2E8F0;
-  color: #475569;
-  line-height: 1;
-  transition: all 0.2s ease;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  padding: 0.15rem 0.55rem !important;
+  border-radius: 9999px !important;
+  background-color: #E2E8F0 !important;
+  color: #475569 !important;
+  line-height: 1 !important;
+  transition: all 0.2s ease !important;
 }
 
 .urja-status-tab-badge.active {
-  background-color: #EDFADB;
-  color: #15803D;
-  border: 1px solid rgba(132, 204, 22, 0.4);
+  background-color: #EDFADB !important;
+  color: #15803D !important;
+  border: 1px solid rgba(132, 204, 22, 0.4) !important;
 }
 
 .urja-status-tab-indicator {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background-color: var(--urja-lime);
-  border-radius: 3px 3px 0 0;
-  box-shadow: 0 -1px 6px var(--urja-lime-glow);
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 3px !important;
+  background-color: var(--urja-lime) !important;
+  border-radius: 3px 3px 0 0 !important;
+  box-shadow: 0 -1px 6px var(--urja-lime-glow) !important;
 }
 
 /* Prominent + Create Requisition Button */
 .urja-status-tabs-actions {
-  flex-shrink: 0;
-  padding-bottom: 0.5rem;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  padding-bottom: 0.5rem !important;
 }
 
 .urja-btn-create-requisition {
-  background: linear-gradient(135deg, #A3E635 0%, #84CC16 100%);
-  color: #0A0E13;
-  font-weight: 700;
-  font-size: 0.88rem;
-  border: none;
-  padding: 0.6rem 1.35rem;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(132, 204, 22, 0.4);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  white-space: nowrap;
+  background: linear-gradient(135deg, #A3E635 0%, #84CC16 100%) !important;
+  color: #0A0E13 !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  border: none !important;
+  padding: 0.6rem 1.35rem !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(132, 204, 22, 0.4) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  white-space: nowrap !important;
 }
 
 .urja-btn-create-requisition:hover {
-  background: linear-gradient(135deg, #bef264 0%, #84cc16 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(132, 204, 22, 0.5);
-  color: #000000;
+  background: linear-gradient(135deg, #bef264 0%, #84cc16 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(132, 204, 22, 0.5) !important;
+  color: #000000 !important;
 }
 
 .urja-btn-create-requisition:active {
-  transform: translateY(0);
+  transform: translateY(0) !important;
 }
 
 .urja-btn-create-requisition i {
-  font-size: 0.95rem;
-  font-weight: 800;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
 }
 
 /* ==============================================================================
    3. FILTERS ROW (Department, Location, Status, Reset Filters & Search)
    ============================================================================== */
 .urja-filters-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  margin-bottom: 1.25rem;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  margin-bottom: 1.25rem !important;
+  width: 100% !important;
 }
 
 .urja-filters-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  width: 100%;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.85rem !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
 }
 
 /* Search Box */
 .urja-filter-search-box {
-  display: flex;
-  align-items: center;
-  background-color: #FFFFFF;
-  border: 1px solid var(--urja-border);
-  border-radius: 8px;
-  padding: 0 0.85rem;
-  height: 40px;
-  flex: 1 1 240px;
-  min-width: 200px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  display: flex !important;
+  align-items: center !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid var(--urja-border) !important;
+  border-radius: 8px !important;
+  padding: 0 0.85rem !important;
+  height: 42px !important;
+  flex: 1 1 260px !important;
+  min-width: 220px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+  position: relative !important;
+  box-sizing: border-box !important;
 }
 
 .urja-filter-search-box:focus-within {
-  border-color: #84CC16;
-  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.2);
+  border-color: #84CC16 !important;
+  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.2) !important;
+}
+
+.urja-filter-search-box .urja-filter-icon {
+  position: static !important;
+  color: #64748B !important;
+  font-size: 0.95rem !important;
+  margin-right: 0.5rem !important;
+  pointer-events: none !important;
 }
 
 .urja-filter-search-input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 100%;
-  font-size: 0.84rem;
-  color: var(--urja-text-dark);
-  padding: 0 0.5rem;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  width: 100% !important;
+  font-size: 0.86rem !important;
+  color: var(--urja-text-dark) !important;
+  padding: 0 !important;
 }
 
 .urja-filter-search-input::placeholder {
-  color: #94A3B8;
+  color: #94A3B8 !important;
 }
 
 .urja-filter-clear-btn {
-  background: transparent;
-  border: none;
-  color: #94A3B8;
-  cursor: pointer;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  transition: color 0.15s ease;
+  background: transparent !important;
+  border: none !important;
+  color: #94A3B8 !important;
+  cursor: pointer !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  transition: color 0.15s ease !important;
 }
 
 .urja-filter-clear-btn:hover {
-  color: var(--urja-text-dark);
+  color: var(--urja-text-dark) !important;
 }
 
 /* Dropdown Wrapper */
 .urja-filter-select-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background-color: #FFFFFF;
-  border: 1px solid var(--urja-border);
-  border-radius: 8px;
-  height: 40px;
-  flex: 0 1 auto;
-  min-width: 175px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid var(--urja-border) !important;
+  border-radius: 8px !important;
+  height: 42px !important;
+  flex: 0 1 auto !important;
+  min-width: 185px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+  box-sizing: border-box !important;
 }
 
 .urja-filter-select-wrapper:hover {
-  border-color: #CBD5E1;
+  border-color: #CBD5E1 !important;
 }
 
 .urja-filter-select-wrapper:focus-within {
-  border-color: #84CC16;
-  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.2);
+  border-color: #84CC16 !important;
+  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.2) !important;
 }
 
-.urja-filter-icon {
-  position: absolute;
-  left: 0.85rem;
-  color: #64748B;
-  font-size: 0.9rem;
-  pointer-events: none;
+.urja-filter-select-wrapper .urja-filter-icon {
+  position: absolute !important;
+  left: 0.95rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #64748B !important;
+  font-size: 0.92rem !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
 }
 
-.urja-filter-chevron {
-  position: absolute;
-  right: 0.85rem;
-  color: #94A3B8;
-  font-size: 0.72rem;
-  pointer-events: none;
+.urja-filter-select-wrapper .urja-filter-chevron {
+  position: absolute !important;
+  right: 0.85rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #94A3B8 !important;
+  font-size: 0.72rem !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
 }
 
-.urja-filter-select {
-  width: 100%;
-  height: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--urja-text-body);
-  padding: 0 2rem 0 2.25rem;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
+.urja-filter-select-wrapper select.urja-filter-select {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  color: #1E293B !important;
+  padding: 0 2.2rem 0 2.65rem !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  line-height: 40px !important;
+  position: relative !important;
+  z-index: 1 !important;
+  box-sizing: border-box !important;
+}
+
+.urja-filter-select-wrapper select.urja-filter-select::-ms-expand {
+  display: none !important;
 }
 
 /* Reset Filters Button */
 .urja-btn-reset-filters {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  background-color: #FFFFFF;
-  border: 1px solid var(--urja-border);
-  border-radius: 8px;
-  height: 40px;
-  padding: 0 1rem;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--urja-text-muted);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid var(--urja-border) !important;
+  border-radius: 8px !important;
+  height: 42px !important;
+  padding: 0 1.15rem !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  color: var(--urja-text-muted) !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  white-space: nowrap !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
 }
 
 .urja-btn-reset-filters:hover {
-  background-color: #F8FAFC;
-  border-color: #CBD5E1;
-  color: var(--urja-text-dark);
+  background-color: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: var(--urja-text-dark) !important;
 }
 
 .urja-btn-reset-filters.highlight {
-  background-color: #FEF2F2;
-  border-color: #FCA5A5;
-  color: #DC2626;
+  background-color: #FEF2F2 !important;
+  border-color: #FCA5A5 !important;
+  color: #DC2626 !important;
 }
 
 .urja-btn-reset-filters.highlight:hover {
-  background-color: #FEE2E2;
+  background-color: #FEE2E2 !important;
 }
 
 .urja-filter-status-strip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: var(--urja-text-muted);
-  background-color: #F8FAFC;
-  padding: 0.4rem 0.85rem;
-  border-radius: 6px;
-  border: 1px dashed var(--urja-border);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 0.8rem !important;
+  color: var(--urja-text-muted) !important;
+  background-color: #F8FAFC !important;
+  padding: 0.4rem 0.85rem !important;
+  border-radius: 6px !important;
+  border: 1px dashed var(--urja-border) !important;
 }
 
 .urja-filter-clear-all-link {
-  background: transparent;
-  border: none;
-  color: #DC2626;
-  font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
+  background: transparent !important;
+  border: none !important;
+  color: #DC2626 !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  cursor: pointer !important;
+  text-decoration: underline !important;
+  padding: 0 !important;
 }
 
 /* ==============================================================================
    4. REQUISITIONS DATA TABLE
    ============================================================================== */
 .urja-table-card {
-  background-color: #FFFFFF;
-  border: 1px solid var(--urja-border);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px rgba(15, 23, 42, 0.02);
-  width: 100%;
+  background-color: #FFFFFF !important;
+  border: 1px solid var(--urja-border) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 6px 18px rgba(15, 23, 42, 0.02) !important;
+  width: 100% !important;
 }
 
 .urja-table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 
 .urja-data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.84rem;
-  text-align: left;
+  width: 100% !important;
+  min-width: 980px !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  font-size: 0.85rem !important;
+  text-align: left !important;
 }
 
 .urja-data-table thead {
-  background-color: #F8FAFC;
-  border-bottom: 1px solid var(--urja-border);
+  background-color: #F8FAFC !important;
+  border-bottom: 1px solid var(--urja-border) !important;
 }
 
 .urja-data-table th {
-  padding: 0.85rem 1rem;
-  font-weight: 700;
-  color: #475569;
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  vertical-align: middle;
+  padding: 0.78rem 0.65rem !important;
+  font-weight: 700 !important;
+  color: #475569 !important;
+  font-size: 0.76rem !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  background-color: #F8FAFC !important;
+  border-bottom: 1px solid var(--urja-border) !important;
 }
 
 .urja-data-table tbody tr {
-  border-bottom: 1px solid #F1F5F9;
-  transition: background-color 0.15s ease;
+  border-bottom: 1px solid #F1F5F9 !important;
+  transition: background-color 0.15s ease !important;
 }
 
 .urja-data-table tbody tr:hover {
-  background-color: #F8FAFC;
+  background-color: #F8FAFC !important;
 }
 
 .urja-data-table tbody tr.selected {
-  background-color: #F0FDF4;
+  background-color: #F0FDF4 !important;
 }
 
 .urja-data-table td {
-  padding: 0.85rem 1rem;
-  color: var(--urja-text-body);
-  vertical-align: middle;
+  padding: 0.72rem 0.65rem !important;
+  color: var(--urja-text-body) !important;
+  vertical-align: middle !important;
+  border-bottom: 1px solid #F1F5F9 !important;
 }
 
-/* Checkbox */
+/* Checkbox Column */
+.urja-th-checkbox,
+.urja-td-checkbox {
+  width: 46px !important;
+  min-width: 46px !important;
+  max-width: 46px !important;
+  text-align: center !important;
+  padding: 0.85rem 0.65rem !important;
+}
+
 .urja-custom-checkbox {
-  width: 17px;
-  height: 17px;
-  border-radius: 4px;
-  border: 1.5px solid #CBD5E1;
-  cursor: pointer;
-  accent-color: #16A34A;
-  vertical-align: middle;
+  width: 17px !important;
+  height: 17px !important;
+  border-radius: 4px !important;
+  border: 1.5px solid #CBD5E1 !important;
+  cursor: pointer !important;
+  accent-color: #16A34A !important;
+  vertical-align: middle !important;
 }
 
-/* Req ID Link */
+/* Requisition ID */
+.urja-th-req-id,
+.urja-td-req-id {
+  width: 95px !important;
+  min-width: 90px !important;
+  white-space: nowrap !important;
+}
+
 .urja-link-code {
-  background: transparent;
-  border: none;
-  padding: 0;
-  color: #1D4ED8;
-  font-weight: 700;
-  font-size: 0.84rem;
-  cursor: pointer;
-  text-decoration: none;
-  font-family: inherit;
-  transition: color 0.15s ease;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #1D4ED8 !important;
+  font-weight: 700 !important;
+  font-size: 0.86rem !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  font-family: inherit !important;
+  transition: color 0.15s ease !important;
+  white-space: nowrap !important;
 }
 
 .urja-link-code:hover {
-  color: #1E40AF;
-  text-decoration: underline;
+  color: #1E40AF !important;
+  text-decoration: underline !important;
 }
 
-/* Job Title & Meta */
+/* Job Title & Meta Chips */
+.urja-th-title,
+.urja-td-title {
+  min-width: 180px !important;
+  max-width: 230px !important;
+}
+
 .urja-job-title-clickable {
-  cursor: pointer;
+  cursor: pointer !important;
+  margin-bottom: 4px !important;
 }
 
 .urja-job-title-text {
-  font-weight: 700;
-  color: var(--urja-text-dark);
-  font-size: 0.88rem;
-  transition: color 0.15s ease;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  font-size: 0.88rem !important;
+  line-height: 1.35 !important;
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  transition: color 0.15s ease !important;
 }
 
 .urja-job-title-clickable:hover .urja-job-title-text {
-  color: #15803D;
+  color: #15803D !important;
 }
 
 .urja-job-meta-sub {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin-top: 3px;
-  font-size: 0.75rem;
-  color: var(--urja-text-muted);
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  white-space: nowrap !important;
+  flex-wrap: nowrap !important;
 }
 
 .urja-meta-chip {
-  background-color: #F1F5F9;
-  color: #475569;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.72rem;
-  font-weight: 500;
+  background-color: #F1F5F9 !important;
+  color: #475569 !important;
+  padding: 0.12rem 0.48rem !important;
+  border-radius: 4px !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  line-height: 1.3 !important;
 }
 
 .urja-meta-salary {
-  color: #64748B;
-  font-weight: 600;
+  color: #475569 !important;
+  font-weight: 600 !important;
+  font-size: 0.72rem !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  background-color: #F8FAFC !important;
+  padding: 0.12rem 0.48rem !important;
+  border-radius: 4px !important;
+  border: 1px solid #E2E8F0 !important;
+  line-height: 1.3 !important;
 }
 
 /* Department & Location */
+.urja-th-dept,
+.urja-td-dept {
+  width: 110px !important;
+  min-width: 105px !important;
+  white-space: nowrap !important;
+}
+
 .urja-dept-tag {
-  display: inline-flex;
-  align-items: center;
-  font-weight: 600;
-  color: #334155;
-  white-space: nowrap;
+  display: inline-flex !important;
+  align-items: center !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  white-space: nowrap !important;
+  font-size: 0.84rem !important;
+}
+
+.urja-th-loc,
+.urja-td-loc {
+  width: 95px !important;
+  min-width: 90px !important;
+  white-space: nowrap !important;
 }
 
 .urja-loc-text {
-  font-size: 0.82rem;
-  color: #64748B;
-  white-space: nowrap;
+  font-size: 0.82rem !important;
+  color: #64748B !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
 
-/* Openings Chip */
+/* Openings */
+.urja-th-openings,
+.urja-td-openings {
+  width: 65px !important;
+  min-width: 60px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
 .urja-openings-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background-color: #EDF2F7;
-  color: #0F172A;
-  font-weight: 700;
-  font-size: 0.78rem;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background-color: #EDF2F7 !important;
+  color: #0F172A !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+}
+
+/* Status */
+.urja-th-status,
+.urja-td-status {
+  width: 95px !important;
+  min-width: 90px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+/* Approval Stage */
+.urja-th-approval,
+.urja-td-approval {
+  width: 95px !important;
+  min-width: 90px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+/* Created On & Target Date */
+.urja-th-date,
+.urja-td-date {
+  width: 95px !important;
+  min-width: 90px !important;
+  white-space: nowrap !important;
+}
+
+.urja-date-text {
+  font-size: 0.82rem !important;
+  color: #475569 !important;
+  white-space: nowrap !important;
+}
+
+.urja-target-date {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-weight: 500 !important;
+}
+
+/* Actions */
+.urja-th-actions,
+.urja-td-actions {
+  width: 110px !important;
+  min-width: 105px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+  padding-right: 1.25rem !important;
+}
+
+.urja-action-buttons-group {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 0.2rem !important;
+  position: relative !important;
+  white-space: nowrap !important;
 }
 
 /* Status Badges */

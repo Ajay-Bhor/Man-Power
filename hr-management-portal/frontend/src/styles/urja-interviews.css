@@ -233,8 +233,7 @@
    3. STATUS TABS BAR
    ------------------------------------------------------------------------------ */
 .urja-interviews-tabs-bar,
-.urja-interviews-root .urja-status-tabs-container,
-.urja-status-tabs-container {
+.urja-interviews-root .urja-status-tabs-container {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
@@ -259,8 +258,7 @@
 }
 
 .urja-interviews-tabs-bar .urja-status-tab-btn,
-.urja-interviews-root .urja-status-tab-btn,
-.urja-status-tab-btn {
+.urja-interviews-root .urja-status-tab-btn {
   display: inline-flex !important;
   flex-direction: row !important;
   align-items: center !important;
@@ -373,7 +371,7 @@
   box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
 }
 
-.urja-filter-select {
+.urja-interviews-root .urja-filter-select {
   width: 100%;
   padding: 0.48rem 0.65rem;
   background: #FFFFFF;
