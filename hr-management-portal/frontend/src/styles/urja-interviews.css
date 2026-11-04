@@ -1,0 +1,1175 @@
+/* ==============================================================================
+   Urja Foods ATS - Interview Assignment & Round Tracking Stylesheet
+   - Professional Enterprise ATS Design System
+   - Consistent with Urja Foods Green / Lime Branding
+   - 4 Summary KPI Cards
+   - Styled Filter Tabs (All, Upcoming, Completed, Pending Feedback, Cancelled)
+   - Multi-Filter Bar with Global Search, Dropdowns, Date Range & Reset
+   - Structured High-Density Interviews Table with IST Date/Time
+   - Action Menus, Modals (Schedule, Reschedule, Reassign, Feedback Scorecard, Details)
+   ============================================================================== */
+
+.urja-interviews-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ------------------------------------------------------------------------------
+   1. PAGE HEADER ROW
+   ------------------------------------------------------------------------------ */
+.urja-interviews-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.urja-interviews-title-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.urja-interviews-header-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #DCFCE7;
+  color: #15803D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(21, 128, 61, 0.15);
+}
+
+.urja-interviews-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.urja-interviews-subtitle {
+  font-size: 0.88rem;
+  color: #64748B;
+  margin: 4px 0 0;
+  font-weight: 400;
+}
+
+.urja-interviews-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.urja-btn-refresh {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.55rem 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.urja-btn-refresh:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+  color: #0F172A;
+}
+
+.urja-btn-refresh.spinning i {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.urja-btn-schedule-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #15803D;
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.58rem 1.15rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(21, 128, 61, 0.3);
+  transition: all 0.2s ease;
+}
+
+.urja-btn-schedule-primary:hover {
+  background: #166534;
+  box-shadow: 0 4px 10px rgba(21, 128, 61, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ------------------------------------------------------------------------------
+   2. 4 SUMMARY KPI CARDS
+   ------------------------------------------------------------------------------ */
+.urja-interviews-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+.urja-kpi-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.1rem 1.15rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.urja-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+  border-color: #CBD5E1;
+}
+
+.urja-kpi-card.active-kpi {
+  border-color: #15803D;
+  background: #F0FDF4;
+}
+
+.urja-kpi-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.urja-kpi-icon-badge.indigo {
+  background: #EEF2FF;
+  color: #4F46E5;
+}
+
+.urja-kpi-icon-badge.blue {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+.urja-kpi-icon-badge.green {
+  background: #DCFCE7;
+  color: #16A34A;
+}
+
+.urja-kpi-icon-badge.amber {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.urja-kpi-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.urja-kpi-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.urja-kpi-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.2;
+}
+
+.urja-kpi-desc {
+  font-size: 0.78rem;
+  color: #94A3B8;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-truncate: ellipsis;
+}
+
+/* ------------------------------------------------------------------------------
+   3. STATUS TABS BAR
+   ------------------------------------------------------------------------------ */
+.urja-interviews-tabs-bar,
+.urja-interviews-root .urja-status-tabs-container,
+.urja-status-tabs-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  border-bottom: 2px solid #E2E8F0 !important;
+  background: #FFFFFF !important;
+  border-radius: 10px 10px 0 0 !important;
+  padding: 0 0.5rem !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  gap: 0.25rem !important;
+  white-space: nowrap !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.urja-interviews-tabs-bar::-webkit-scrollbar,
+.urja-interviews-root .urja-status-tabs-container::-webkit-scrollbar {
+  display: none;
+  height: 0;
+}
+
+.urja-interviews-tabs-bar .urja-status-tab-btn,
+.urja-interviews-root .urja-status-tab-btn,
+.urja-status-tab-btn {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.5rem;
+  padding: 0.85rem 1.15rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #64748B;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: -2px;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  width: auto !important;
+}
+
+.urja-status-tab-btn:hover {
+  color: #0F172A;
+  background: #F8FAFC;
+}
+
+.urja-status-tab-btn.active {
+  color: #15803D !important;
+  border-bottom-color: #15803D !important;
+  font-weight: 700;
+}
+
+.urja-tab-counter {
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: #F1F5F9;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.urja-status-tab-btn.active .urja-tab-counter {
+  background: #DCFCE7 !important;
+  color: #15803D !important;
+}
+
+/* ------------------------------------------------------------------------------
+   4. MULTI-FILTER BAR
+   ------------------------------------------------------------------------------ */
+.urja-filters-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 0 0 10px 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.urja-filters-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr 1.1fr 1.2fr 1fr 1fr auto;
+  gap: 0.65rem;
+  align-items: flex-end;
+}
+
+.urja-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.urja-filter-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.urja-filter-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.urja-filter-input-wrap i {
+  position: absolute;
+  left: 10px;
+  color: #94A3B8;
+  pointer-events: none;
+  font-size: 0.88rem;
+}
+
+.urja-filter-input {
+  width: 100%;
+  padding: 0.48rem 0.75rem 0.48rem 32px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 7px;
+  font-size: 0.84rem;
+  color: #0F172A;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.urja-filter-input:focus {
+  border-color: #15803D;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+}
+
+.urja-filter-select {
+  width: 100%;
+  padding: 0.48rem 0.65rem;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 7px;
+  font-size: 0.84rem;
+  color: #0F172A;
+  outline: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.urja-filter-select:focus {
+  border-color: #15803D;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+}
+
+.urja-btn-reset-filters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.85rem;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 7px;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  height: 34px;
+}
+
+.urja-btn-reset-filters:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+/* ------------------------------------------------------------------------------
+   5. INTERVIEWS TABLE CONTAINER
+   ------------------------------------------------------------------------------ */
+.urja-table-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.urja-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.urja-interviews-table {
+  width: 100%;
+  min-width: 1280px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.86rem;
+}
+
+.urja-interviews-table thead {
+  background: #F8FAFC;
+  border-bottom: 1.5px solid #E2E8F0;
+}
+
+.urja-interviews-table th {
+  padding: 0.75rem 0.95rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.urja-interviews-table tbody tr {
+  border-bottom: 1px solid #F1F5F9;
+  transition: background-color 0.15s ease;
+}
+
+.urja-interviews-table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+.urja-interviews-table td {
+  padding: 0.85rem 0.95rem;
+  vertical-align: middle;
+  color: #1E293B;
+}
+
+/* Specific Cell Layouts */
+.cand-avatar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.cand-avatar-initials {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #DCFCE7;
+  color: #15803D;
+  font-weight: 700;
+  font-size: 0.84rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(21, 128, 61, 0.2);
+}
+
+.cand-name-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.cand-name-text {
+  font-weight: 700;
+  color: #0F172A;
+  font-size: 0.88rem;
+}
+
+.cand-code-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  background: #F1F5F9;
+  color: #475569;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #E2E8F0;
+  display: inline-block;
+  margin-top: 2px;
+  width: fit-content;
+}
+
+.cand-contact-sub {
+  font-size: 0.74rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+/* Requisition Cell */
+.req-job-title {
+  font-weight: 700;
+  color: #0F172A;
+  font-size: 0.86rem;
+}
+
+.req-dept-pill {
+  font-size: 0.72rem;
+  color: #475569;
+  background: #F8FAFC;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #E2E8F0;
+  margin-top: 3px;
+  display: inline-block;
+}
+
+/* Round Badge */
+.round-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.round-pill.screening {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.round-pill.technical {
+  background: #F0FDF4;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+.round-pill.managerial {
+  background: #FAF5FF;
+  color: #7E22CE;
+  border: 1px solid #E9D5FF;
+}
+
+.round-pill.director {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+/* Time & Date Cell */
+.time-ist-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-date-text {
+  font-weight: 600;
+  color: #0F172A;
+  font-size: 0.82rem;
+}
+
+.time-clock-text {
+  font-size: 0.76rem;
+  color: #15803D;
+  font-weight: 700;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.duration-pill {
+  font-size: 0.68rem;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 2px;
+  width: fit-content;
+}
+
+/* Interview Mode Badge */
+.mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+}
+
+.mode-badge.online {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #1D4ED8;
+}
+
+.mode-badge.in-person {
+  background: #F0FDF4;
+  border-color: #BBF7D0;
+  color: #15803D;
+}
+
+.mode-badge.telephonic {
+  background: #F5F3FF;
+  border-color: #DDD6FE;
+  color: #6D28D9;
+}
+
+.location-cell-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #1E293B;
+  background: #F8FAFC;
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #E2E8F0;
+}
+
+.telephonic-cell-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #475569;
+  background: #F8FAFC;
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #E2E8F0;
+}
+
+.meeting-link-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #15803D;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-decoration: none;
+  margin-top: 4px;
+  padding: 0.15rem 0.45rem;
+  background: #DCFCE7;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.meeting-link-action:hover {
+  background: #BBF7D0;
+  color: #166534;
+  text-decoration: underline;
+}
+
+/* Status Badge */
+.status-badge-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.status-badge-compact.scheduled {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.status-badge-compact.rescheduled {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.status-badge-compact.completed {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.status-badge-compact.cancelled {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+}
+
+.status-badge-compact.pending-feedback {
+  background: #FFEDD5;
+  color: #C2410C;
+  border: 1px solid #FED7AA;
+}
+
+/* Outcome & Feedback Cell */
+.feedback-outcome-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stars-score-display {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: #EAB308;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.recommendation-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.recommendation-badge.hire,
+.recommendation-badge.strong_hire {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.recommendation-badge.hold {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.recommendation-badge.reject {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+/* Actions Cell & Menu */
+.actions-cell-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  position: relative;
+}
+
+.urja-action-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.urja-action-icon-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+  border-color: #94A3B8;
+}
+
+.urja-actions-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 100;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  min-width: 190px;
+  padding: 0.35rem 0;
+  margin-top: 4px;
+}
+
+.urja-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.85rem;
+  color: #334155;
+  font-size: 0.82rem;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.urja-menu-item:hover {
+  background: #F8FAFC;
+  color: #0F172A;
+}
+
+.urja-menu-item.danger {
+  color: #DC2626;
+}
+
+.urja-menu-item.danger:hover {
+  background: #FEF2F2;
+}
+
+.urja-menu-divider {
+  height: 1px;
+  background: #E2E8F0;
+  margin: 0.25rem 0;
+}
+
+/* ------------------------------------------------------------------------------
+   6. PAGINATION & ROWS-PER-PAGE
+   ------------------------------------------------------------------------------ */
+.urja-pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.15rem;
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+  font-size: 0.82rem;
+  color: #64748B;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.urja-rows-per-page {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.urja-rows-select {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.urja-page-nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.urja-page-nav-btn {
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-page-nav-btn:hover:not(:disabled) {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.urja-page-nav-btn.active {
+  background: #15803D;
+  border-color: #15803D;
+  color: #FFFFFF;
+}
+
+.urja-page-nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------------------
+   7. EMPTY & LOADING STATES
+   ------------------------------------------------------------------------------ */
+.urja-empty-state-box {
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.urja-empty-icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #F1F5F9;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.urja-empty-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 0.35rem;
+}
+
+.urja-empty-text {
+  font-size: 0.88rem;
+  color: #64748B;
+  max-width: 440px;
+  margin-bottom: 1.25rem;
+  line-height: 1.45;
+}
+
+/* ------------------------------------------------------------------------------
+   8. MODALS (Schedule, Reschedule, Reassign, Feedback, View Details)
+   ------------------------------------------------------------------------------ */
+.urja-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.urja-modal-card {
+  background: #FFFFFF;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 640px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+}
+
+.urja-modal-card form {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+.urja-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.4rem;
+  border-bottom: 1px solid #E2E8F0;
+  background: #F8FAFC;
+}
+
+.urja-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.urja-modal-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #DCFCE7;
+  color: #15803D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.urja-modal-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.urja-modal-subtitle {
+  font-size: 0.78rem;
+  color: #64748B;
+  margin: 0;
+}
+
+.urja-modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: #94A3B8;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.urja-modal-close-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.urja-modal-body {
+  padding: 1.25rem 1.4rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.urja-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 0.95rem 1.4rem;
+  border-top: 1px solid #E2E8F0;
+  background: #F8FAFC;
+}
+
+.urja-btn-modal-cancel {
+  padding: 0.55rem 1.15rem;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 7px;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.urja-btn-modal-cancel:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.urja-btn-modal-submit {
+  padding: 0.55rem 1.35rem;
+  background: #15803D;
+  border: none;
+  border-radius: 7px;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-size: 0.86rem;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(21, 128, 61, 0.25);
+  transition: all 0.15s ease;
+}
+
+.urja-btn-modal-submit:hover {
+  background: #166534;
+  box-shadow: 0 4px 8px rgba(21, 128, 61, 0.35);
+}
+
+/* Evaluation Criteria Badges */
+.urja-criteria-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.urja-criteria-pill {
+  font-size: 0.74rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #475569;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.urja-criteria-pill.selected {
+  background: #DCFCE7;
+  border-color: #86EFAC;
+  color: #166534;
+  font-weight: 600;
+}
+
+/* Star Rating Widget in Feedback Modal */
+.urja-star-rating-box {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.urja-star-rating-box i {
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.urja-star-rating-box i:hover {
+  transform: scale(1.15);
+}
+
+/* ------------------------------------------------------------------------------
+   9. RESPONSIVE DESIGN FOR INTERVIEW TRACKING
+   ------------------------------------------------------------------------------ */
+@media (max-width: 1200px) {
+  .urja-interviews-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .urja-filters-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .urja-interviews-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .urja-filters-grid {
+    grid-template-columns: 1fr;
+  }
+  .urja-interviews-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .urja-interviews-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

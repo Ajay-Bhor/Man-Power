@@ -1,0 +1,3404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Urja Foods ATS - Enterprise Manpower Requisition, Approval Workflow & Recruitment Management Portal" />
+  <title>ATS URJA | Urja Foods & Agro Recruitment Workspace</title>
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="/src/styles/portal.css" />
+  <link rel="stylesheet" href="/src/styles/urja-login.css" />
+  <link rel="stylesheet" href="/src/styles/urja-dashboard.css" />
+  <link rel="stylesheet" href="./src/styles/portal.css" />
+  <link rel="stylesheet" href="./src/styles/urja-login.css" />
+  <link rel="stylesheet" href="./src/styles/urja-dashboard.css" />
+  <link rel="stylesheet" href="./frontend/src/styles/portal.css" />
+  <link rel="stylesheet" href="./frontend/src/styles/urja-login.css" />
+  <link rel="stylesheet" href="./frontend/src/styles/urja-dashboard.css" />
+
+  <!-- React 18, ReactDOM, and Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --navy-darkest: #071326;
+      --navy-900: #0b192c;
+      --navy-800: #122847;
+      --navy-700: #1b3864;
+      --navy-600: #23487f;
+      --navy-primary: #1e40af;
+      --navy-light: #3b82f6;
+      --navy-accent: #0ea5e9;
+      --navy-glow: rgba(14, 165, 233, 0.25);
+
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-muted: #f1f5f9;
+      --border-color: #e2e8f0;
+
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-inverse: #f8fafc;
+
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-danger: #ef4444;
+
+      --sidebar-width: 275px;
+      --topbar-height: 70px;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 8px 24px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+      --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.1);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-wrapper {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .app-sidebar {
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, var(--navy-darkest) 0%, var(--navy-900) 45%, var(--navy-800) 100%);
+      color: var(--text-inverse);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(7, 19, 38, 0.25);
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      padding: 1.5rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #0ea5e9 0%, #1e40af 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: white;
+      box-shadow: 0 4px 12px var(--navy-glow);
+    }
+
+    .brand-text h4 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--navy-accent);
+      font-weight: 700;
+    }
+
+    .sidebar-nav {
+      padding: 0.85rem 0.75rem;
+      flex-grow: 1;
+    }
+
+    .nav-section-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      padding: 0.75rem 0.85rem 0.35rem;
+    }
+
+    .sidebar-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.62rem 0.85rem;
+      margin-bottom: 0.2rem;
+      border-radius: var(--radius-sm);
+      color: #94a3b8;
+      background: transparent;
+      border: none;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-align: left;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .sidebar-btn i {
+      font-size: 1.1rem;
+      width: 22px;
+      text-align: center;
+    }
+
+    .sidebar-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateX(3px);
+    }
+
+    .sidebar-btn.active {
+      color: #ffffff;
+      background: linear-gradient(90deg, rgba(30, 64, 175, 0.85) 0%, rgba(14, 165, 233, 0.4) 100%);
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+      font-weight: 700;
+      border-left: 3px solid #38bdf8;
+    }
+
+    .sidebar-footer {
+      padding: 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .app-main {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg-page);
+    }
+
+    .app-navbar {
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 99;
+    }
+
+    .nav-role-switcher {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 0.95rem;
+      font-size: 0.84rem;
+    }
+
+    .nav-role-switcher select {
+      border: none;
+      background: transparent;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--navy-primary);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .page-container {
+      padding: 2rem;
+      flex-grow: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-header h2 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--navy-900);
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0.25rem 0 0;
+    }
+
+    .card-portal {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      overflow: hidden;
+    }
+
+    .card-portal:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-header-portal {
+      padding: 1.25rem 1.5rem;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header-portal h5 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy-900);
+    }
+
+    .stat-card {
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .stat-card.navy::before {
+      background: var(--navy-primary);
+    }
+
+    .stat-card.cyan::before {
+      background: var(--navy-accent);
+    }
+
+    .stat-card.success::before {
+      background: var(--color-success);
+    }
+
+    .stat-card.warning::before {
+      background: var(--color-warning);
+    }
+
+    .stat-card.danger::before {
+      background: var(--color-danger);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--navy-900);
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+    }
+
+    .stat-icon.navy {
+      background: #eff6ff;
+      color: #1e40af;
+    }
+
+    .stat-icon.cyan {
+      background: #f0f9ff;
+      color: #0284c7;
+    }
+
+    .stat-icon.success {
+      background: #ecfdf5;
+      color: #059669;
+    }
+
+    .stat-icon.warning {
+      background: #fffbeb;
+      color: #d97706;
+    }
+
+    .stat-icon.danger {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .badge-status {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-status.approved {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .badge-status.pending {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .badge-status.recruiter {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .badge-status.interviewing {
+      background: #ede9fe;
+      color: #6d28d9;
+      border: 1px solid #ddd6fe;
+    }
+
+    .badge-status.rejected {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .badge-status.critical {
+      background: #ffe4e6;
+      color: #be123c;
+      font-weight: 800;
+      border: 1px solid #fecdd3;
+    }
+
+    .tat-tracker {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      min-width: 140px;
+    }
+
+    .tat-bar-container {
+      height: 8px;
+      background-color: #e2e8f0;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .tat-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      transition: width 0.4s ease;
+    }
+
+    .tat-bar-fill.normal {
+      background: linear-gradient(90deg, #10b981, #059669);
+    }
+
+    .tat-bar-fill.warning {
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+    }
+
+    .tat-bar-fill.overdue {
+      background: linear-gradient(90deg, #ef4444, #dc2626);
+    }
+
+    .btn-navy {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+      color: white;
+      font-weight: 600;
+      padding: 0.6rem 1.25rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      box-shadow: 0 4px 10px rgba(30, 64, 175, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .btn-navy:hover {
+      background: linear-gradient(135deg, #172554 0%, #1e3a8a 100%);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-navy {
+      border: 1.5px solid #1e40af;
+      color: #1e40af;
+      background: transparent;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 1.15rem;
+    }
+
+    .btn-outline-navy:hover {
+      background: #1e40af;
+      color: white;
+    }
+
+    .table-portal {
+      width: 100%;
+      margin-bottom: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .table-portal th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.95rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .table-portal td {
+      padding: 1.05rem 1.25rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text-main);
+      font-size: 0.88rem;
+    }
+
+    .table-portal tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    .workflow-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      padding: 1rem 0 2rem;
+    }
+
+    .workflow-stepper::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 40px;
+      right: 40px;
+      height: 3px;
+      background: #e2e8f0;
+      z-index: 1;
+    }
+
+    .step-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 120px;
+    }
+
+    .step-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-item.completed .step-circle {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .step-item.active .step-circle {
+      background: #1e40af;
+      border-color: #0ea5e9;
+      color: white;
+      box-shadow: 0 0 0 5px rgba(14, 165, 233, 0.2);
+    }
+
+    .step-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--navy-900);
+    }
+
+    .step-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <!-- Interactive React Application Script -->
+  <script type="text/babel">
+    const { useState, useMemo, useEffect, useRef } = React;
+
+    const INITIAL_ROLES = [
+      { id: 'ROLE_IT_ADMIN', name: 'IT Admin', label: 'IT Administrator (Superuser)' },
+      { id: 'ROLE_HR_ADMIN', name: 'HR Admin', label: 'HR Administrator' },
+      { id: 'ROLE_HR_RECRUITER', name: 'HR Recruiter', label: 'HR Recruiter' },
+      { id: 'ROLE_DEPT_HEAD', name: 'Department Head', label: 'Department Head (Engineering)' },
+      { id: 'ROLE_APPROVING_MANAGER', name: 'Approving Manager', label: 'Approving Manager (Operations)' },
+      { id: 'ROLE_SENIOR_MGMT', name: 'Senior Management', label: 'Senior Management (VP/CXO)' },
+      { id: 'ROLE_INTERVIEWER', name: 'Interviewer', label: 'Technical Interviewer' },
+      { id: 'ROLE_EMPLOYEE', name: 'Employee / Requester', label: 'General Employee / Requester' }
+    ];
+
+    const INITIAL_USERS = [
+      { id: 1, username: 'itadmin', name: 'Vikramaditya Sharma', role: 'ROLE_IT_ADMIN', email: 'admin@company.com', avatar: 'VS', dept: 'IT Infrastructure' },
+      { id: 2, username: 'hradmin', name: 'Priyanka Sen', role: 'ROLE_HR_ADMIN', email: 'hradmin@company.com', avatar: 'PS', dept: 'Human Resources' },
+      { id: 3, username: 'recruiter.anita', name: 'Anita Deshmukh', role: 'ROLE_HR_RECRUITER', email: 'anita.recruiter@company.com', avatar: 'AD', dept: 'Talent Acquisition' },
+      { id: 4, username: 'recruiter.rahul', name: 'Rahul Nair', role: 'ROLE_HR_RECRUITER', email: 'rahul.recruiter@company.com', avatar: 'RN', dept: 'Talent Acquisition' },
+      { id: 5, username: 'depthead.eng', name: 'Rajesh Kulkarni', role: 'ROLE_DEPT_HEAD', email: 'rajesh.eng@company.com', avatar: 'RK', dept: 'Engineering & Technology' },
+      { id: 6, username: 'manager.amit', name: 'Amitav Mukherjee', role: 'ROLE_APPROVING_MANAGER', email: 'amitav.mgr@company.com', avatar: 'AM', dept: 'Operations & Supply' },
+      { id: 7, username: 'senior.mehta', name: 'Siddharth Mehta (VP)', role: 'ROLE_SENIOR_MGMT', email: 'smehta.vp@company.com', avatar: 'SM', dept: 'Executive Board' },
+      { id: 8, username: 'interviewer.dev', name: 'Arjun Varma', role: 'ROLE_INTERVIEWER', email: 'arjun.tech@company.com', avatar: 'AV', dept: 'Engineering' }
+    ];
+
+    const INITIAL_DEPARTMENTS = [
+      { id: 1, code: 'DEP-ENG', name: 'Engineering & Technology', head: 'Rajesh Kulkarni', active: true, totalEmployees: 142 },
+      { id: 2, code: 'DEP-SALES', name: 'Global Sales & Enterprise BD', head: 'Nandita Das', active: true, totalEmployees: 64 },
+      { id: 3, code: 'DEP-HR', name: 'Human Resources & Talent Acquisition', head: 'Priyanka Sen', active: true, totalEmployees: 28 },
+      { id: 4, code: 'DEP-FIN', name: 'Finance, Tax & Accounts', head: 'Suresh Goyal', active: true, totalEmployees: 35 },
+      { id: 5, code: 'DEP-OPS', name: 'Operations & Supply Chain', head: 'Amitav Mukherjee', active: true, totalEmployees: 86 },
+      { id: 6, code: 'DEP-MKT', name: 'Brand Marketing & Communications', head: 'Kavita Menon', active: true, totalEmployees: 22 }
+    ];
+
+    const INITIAL_DESIGNATIONS = [
+      { id: 1, code: 'DES-ENG-01', name: 'Principal Cloud Architect', departmentId: 1, level: 'Senior Lead', active: true },
+      { id: 2, code: 'DES-ENG-02', name: 'Senior Full Stack Java Engineer', departmentId: 1, level: 'Senior', active: true },
+      { id: 3, code: 'DES-ENG-03', name: 'Frontend React Developer', departmentId: 1, level: 'Mid-Level', active: true },
+      { id: 4, code: 'DES-ENG-04', name: 'QA Automation Specialist', departmentId: 1, level: 'Mid-Level', active: true },
+      { id: 5, code: 'DES-SAL-01', name: 'Enterprise Sales Director', departmentId: 2, level: 'Director', active: true },
+      { id: 6, code: 'DES-SAL-02', name: 'Business Development Executive', departmentId: 2, level: 'Junior-Mid', active: true },
+      { id: 7, code: 'DES-HR-01', name: 'Senior Technical Recruiter', departmentId: 3, level: 'Mid-Level', active: true },
+      { id: 8, code: 'DES-FIN-01', name: 'Financial Controller', departmentId: 4, level: 'Senior Lead', active: true }
+    ];
+
+    const INITIAL_EMPLOYEES = [
+      { id: 1, code: 'EMP-1001', name: 'Rajesh Kulkarni', email: 'rajesh.eng@company.com', phone: '+91 98200 55667', dept: 'Engineering & Technology', desig: 'Principal Cloud Architect', manager: 'Executive Board', joiningDate: '2021-03-15', status: 'ACTIVE', location: 'Bangalore HQ' },
+      { id: 2, code: 'EMP-1002', name: 'Arjun Varma', email: 'arjun.tech@company.com', phone: '+91 98200 88990', dept: 'Engineering & Technology', desig: 'Senior Full Stack Java Engineer', manager: 'Rajesh Kulkarni', joiningDate: '2022-06-01', status: 'ACTIVE', location: 'Bangalore HQ' },
+      { id: 3, code: 'EMP-1003', name: 'Anita Deshmukh', email: 'anita.recruiter@company.com', phone: '+91 98200 33445', dept: 'Human Resources', desig: 'Senior Technical Recruiter', manager: 'Priyanka Sen', joiningDate: '2023-01-10', status: 'ACTIVE', location: 'Mumbai Office' },
+      { id: 4, code: 'EMP-1004', name: 'Rahul Nair', email: 'rahul.recruiter@company.com', phone: '+91 98200 44556', dept: 'Human Resources', desig: 'Senior Technical Recruiter', manager: 'Priyanka Sen', joiningDate: '2023-04-18', status: 'ACTIVE', location: 'Pune Office' }
+    ];
+
+    const INITIAL_DOCUMENTS = [
+      { id: 1, empCode: 'EMP-1001', empName: 'Rajesh Kulkarni', name: 'Passport_Copy.pdf', category: 'PASSPORT', size: '2.4 MB', version: 'v1.0', confidential: true, uploadedAt: '2021-03-16' },
+      { id: 2, empCode: 'EMP-1001', empName: 'Rajesh Kulkarni', name: 'Employment_Offer_Letter.pdf', category: 'OFFER_LETTER', size: '850 KB', version: 'v1.0', confidential: true, uploadedAt: '2021-03-10' },
+      { id: 3, empCode: 'EMP-1002', empName: 'Arjun Varma', name: 'BTech_Degree_Certificate.pdf', category: 'DEGREE_CERTIFICATE', size: '1.8 MB', version: 'v1.0', confidential: false, uploadedAt: '2022-06-02' },
+      { id: 4, empCode: 'EMP-1003', empName: 'Anita Deshmukh', name: 'Signed_NDA_Security_Policy.pdf', category: 'NDA_POLICY', size: '1.1 MB', version: 'v1.0', confidential: false, uploadedAt: '2023-01-11' }
+    ];
+
+    const INITIAL_REQUISITIONS = [
+      {
+        "id": 1,
+        "code": "URJ-R-2026-028",
+        "title": "Assistant Manager Production",
+        "deptName": "Soya Division",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "10 Oct 2026",
+        "targetDate": "31 Oct 2026",
+        "hiringManager": "Rajesh Kulkarni",
+        "priority": "HIGH",
+        "experience": "5-8 Years",
+        "budgetMin": "9.0 LPA",
+        "budgetMax": "12.5 LPA",
+        "description": "Solvent extraction plant oversight, yield monitoring, and compliance with food safety norms."
+      },
+      {
+        "id": 2,
+        "code": "URJ-R-2026-027",
+        "title": "Sr. Shift Incharge",
+        "deptName": "Soya Division",
+        "location": "Plant - Rahuri",
+        "openings": 2,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "09 Oct 2026",
+        "targetDate": "30 Oct 2026",
+        "hiringManager": "Rajesh Kulkarni",
+        "priority": "HIGH",
+        "experience": "4-7 Years",
+        "budgetMin": "7.5 LPA",
+        "budgetMax": "10.0 LPA",
+        "description": "Lead shift operators, refinery throughput, steam conservation, and safety protocols."
+      },
+      {
+        "id": 3,
+        "code": "URJ-R-2026-026",
+        "title": "QA / QC Executive",
+        "deptName": "Quality Assurance",
+        "location": "Plant - Rahuri",
+        "openings": 2,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "08 Oct 2026",
+        "targetDate": "25 Oct 2026",
+        "hiringManager": "Dr. Sunita Kulkarni",
+        "priority": "CRITICAL",
+        "experience": "3-5 Years",
+        "budgetMin": "5.5 LPA",
+        "budgetMax": "7.8 LPA",
+        "description": "Lab analysis of moisture, protein, FFA, aflatoxin testing for grain and feed products."
+      },
+      {
+        "id": 4,
+        "code": "URJ-R-2026-025",
+        "title": "Hatchery Manager",
+        "deptName": "Poultry Integration",
+        "location": "Plant - Nashik",
+        "openings": 1,
+        "status": "In Approval",
+        "approvalStage": "Pending with DGM",
+        "createdOn": "07 Oct 2026",
+        "targetDate": "20 Oct 2026",
+        "hiringManager": "Suresh Deshmukh",
+        "priority": "HIGH",
+        "experience": "6-10 Years",
+        "budgetMin": "10.0 LPA",
+        "budgetMax": "14.0 LPA",
+        "description": "Setter and hatcher ventilation, incubation parameters, and day-old chick vaccination."
+      },
+      {
+        "id": 5,
+        "code": "URJ-R-2026-024",
+        "title": "Purchase Executive (Fresher)",
+        "deptName": "Purchase",
+        "location": "HO - Pune",
+        "openings": 1,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "05 Oct 2026",
+        "targetDate": "31 Oct 2026",
+        "hiringManager": "Vikram Joshi",
+        "priority": "MEDIUM",
+        "experience": "0-2 Years",
+        "budgetMin": "3.6 LPA",
+        "budgetMax": "4.8 LPA",
+        "description": "Raw material vendor purchase orders, inventory reconciliation, and invoice matching in SAP."
+      },
+      {
+        "id": 6,
+        "code": "URJ-R-2026-023",
+        "title": "Project Engineer - Civil",
+        "deptName": "Projects",
+        "location": "Multiple Sites",
+        "openings": 2,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "03 Oct 2026",
+        "targetDate": "25 Oct 2026",
+        "hiringManager": "Sunil Jagtap",
+        "priority": "HIGH",
+        "experience": "4-8 Years",
+        "budgetMin": "8.0 LPA",
+        "budgetMax": "11.0 LPA",
+        "description": "Greenfield silo construction, structural civil supervision, vendor contractor bill verification."
+      },
+      {
+        "id": 7,
+        "code": "URJ-R-2026-022",
+        "title": "Medical Dispatch Executive",
+        "deptName": "CBF Division",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "On Hold",
+        "approvalStage": "Pending with HOD",
+        "createdOn": "01 Oct 2026",
+        "targetDate": "Not Defined",
+        "hiringManager": "Dr. A. Verma",
+        "priority": "LOW",
+        "experience": "2-4 Years",
+        "budgetMin": "4.5 LPA",
+        "budgetMax": "6.0 LPA",
+        "description": "Veterinary medicine dispatch, cold chain logistics, vaccine delivery to contract farms."
+      },
+      {
+        "id": 8,
+        "code": "URJ-R-2026-021",
+        "title": "Sales Executive",
+        "deptName": "Cattle Feed Sales",
+        "location": "Pune Region",
+        "openings": 3,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "28 Sep 2026",
+        "targetDate": "15 Oct 2026",
+        "hiringManager": "Nitin Pawar",
+        "priority": "HIGH",
+        "experience": "2-5 Years",
+        "budgetMin": "5.0 LPA",
+        "budgetMax": "7.5 LPA",
+        "description": "Distributor dealer network development, cattle feed booking targets, dairy farm visits."
+      },
+      {
+        "id": 9,
+        "code": "URJ-R-2026-020",
+        "title": "Maintenance Technician",
+        "deptName": "Feedmill",
+        "location": "Plant - Rahuri",
+        "openings": 2,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "26 Sep 2026",
+        "targetDate": "20 Oct 2026",
+        "hiringManager": "Ramesh Patil",
+        "priority": "MEDIUM",
+        "experience": "3-6 Years",
+        "budgetMin": "4.8 LPA",
+        "budgetMax": "6.5 LPA",
+        "description": "Pellet mill preventive maintenance, conveyor gearbox alignment, electrical motor troubleshooting."
+      },
+      {
+        "id": 10,
+        "code": "URJ-R-2026-019",
+        "title": "HR Executive",
+        "deptName": "Human Resources",
+        "location": "HO - Pune",
+        "openings": 1,
+        "status": "Filled",
+        "approvalStage": "Closed",
+        "createdOn": "20 Sep 2026",
+        "targetDate": "10 Oct 2026",
+        "hiringManager": "Sanchita N. Shingade",
+        "priority": "MEDIUM",
+        "experience": "2-4 Years",
+        "budgetMin": "4.5 LPA",
+        "budgetMax": "6.0 LPA",
+        "description": "Plant attendance management, employee welfare, contractor PF/ESIC statutory audit compliance."
+      },
+      {
+        "id": 11,
+        "code": "URJ-R-2026-018",
+        "title": "Boiler Operator",
+        "deptName": "Soya Division",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "18 Sep 2026",
+        "targetDate": "15 Oct 2026",
+        "hiringManager": "Rajesh Kulkarni",
+        "priority": "HIGH",
+        "experience": "3-6 Years",
+        "budgetMin": "4.5 LPA",
+        "budgetMax": "5.8 LPA",
+        "description": "IBR certified boiler operation, fuel briquette firing, steam pressure regulation."
+      },
+      {
+        "id": 12,
+        "code": "URJ-R-2026-017",
+        "title": "Poultry Farm Supervisor",
+        "deptName": "Poultry Integration",
+        "location": "Plant - Nashik",
+        "openings": 2,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "16 Sep 2026",
+        "targetDate": "12 Oct 2026",
+        "hiringManager": "Suresh Deshmukh",
+        "priority": "HIGH",
+        "experience": "2-5 Years",
+        "budgetMin": "4.8 LPA",
+        "budgetMax": "6.2 LPA",
+        "description": "Flock supervision, feed conversion ratio tracking, mortality audits."
+      },
+      {
+        "id": 13,
+        "code": "URJ-R-2026-016",
+        "title": "Breeder Flock Specialist",
+        "deptName": "Breeder Operation",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "In Approval",
+        "approvalStage": "Pending with DGM",
+        "createdOn": "15 Sep 2026",
+        "targetDate": "18 Oct 2026",
+        "hiringManager": "Ganesh More",
+        "priority": "HIGH",
+        "experience": "5-8 Years",
+        "budgetMin": "7.0 LPA",
+        "budgetMax": "9.5 LPA",
+        "description": "Breeder flock management, hatching egg collection hygiene, biosecurity controls."
+      },
+      {
+        "id": 14,
+        "code": "URJ-R-2026-015",
+        "title": "Electrical Engineer",
+        "deptName": "Feedmill",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "12 Sep 2026",
+        "targetDate": "10 Oct 2026",
+        "hiringManager": "Ramesh Patil",
+        "priority": "HIGH",
+        "experience": "4-7 Years",
+        "budgetMin": "6.5 LPA",
+        "budgetMax": "8.5 LPA",
+        "description": "HT / LT substation operations, DG set sync, PLC automation panels."
+      },
+      {
+        "id": 15,
+        "code": "URJ-R-2026-014",
+        "title": "Safety Officer",
+        "deptName": "Quality Assurance",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "10 Sep 2026",
+        "targetDate": "08 Oct 2026",
+        "hiringManager": "Dr. Sunita Kulkarni",
+        "priority": "MEDIUM",
+        "experience": "3-6 Years",
+        "budgetMin": "5.0 LPA",
+        "budgetMax": "7.0 LPA",
+        "description": "Plant industrial safety, fire hydrant drills, OSHA compliance, PPE enforcement."
+      },
+      {
+        "id": 16,
+        "code": "URJ-R-2026-013",
+        "title": "Accounts Executive",
+        "deptName": "Purchase",
+        "location": "HO - Pune",
+        "openings": 1,
+        "status": "Filled",
+        "approvalStage": "Closed",
+        "createdOn": "08 Sep 2026",
+        "targetDate": "01 Oct 2026",
+        "hiringManager": "Vikram Joshi",
+        "priority": "MEDIUM",
+        "experience": "3-5 Years",
+        "budgetMin": "4.8 LPA",
+        "budgetMax": "6.0 LPA",
+        "description": "Vendor payment processing, GST filing, bank reconciliation in SAP."
+      },
+      {
+        "id": 17,
+        "code": "URJ-R-2026-012",
+        "title": "Shift Incharge - Feedmill",
+        "deptName": "Feedmill",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Filled",
+        "approvalStage": "Closed",
+        "createdOn": "05 Sep 2026",
+        "targetDate": "28 Sep 2026",
+        "hiringManager": "Ramesh Patil",
+        "priority": "HIGH",
+        "experience": "4-7 Years",
+        "budgetMin": "7.0 LPA",
+        "budgetMax": "9.0 LPA",
+        "description": "Feed formulation mixing, extrusion process control, shift log maintenance."
+      },
+      {
+        "id": 18,
+        "code": "URJ-R-2026-011",
+        "title": "Civil Supervisor",
+        "deptName": "Projects",
+        "location": "Multiple Sites",
+        "openings": 1,
+        "status": "On Hold",
+        "approvalStage": "Pending with HOD",
+        "createdOn": "02 Sep 2026",
+        "targetDate": "Not Defined",
+        "hiringManager": "Sunil Jagtap",
+        "priority": "LOW",
+        "experience": "2-5 Years",
+        "budgetMin": "4.2 LPA",
+        "budgetMax": "5.5 LPA",
+        "description": "Site civil execution, cement reinforcement checks, foundation pouring supervision."
+      },
+      {
+        "id": 19,
+        "code": "URJ-R-2026-010",
+        "title": "Store Executive",
+        "deptName": "Soya Division",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Filled",
+        "approvalStage": "Closed",
+        "createdOn": "28 Aug 2026",
+        "targetDate": "20 Sep 2026",
+        "hiringManager": "Rajesh Kulkarni",
+        "priority": "MEDIUM",
+        "experience": "3-5 Years",
+        "budgetMin": "4.0 LPA",
+        "budgetMax": "5.2 LPA",
+        "description": "Engineering spare parts inventory, gate pass tracking, MRN verification."
+      },
+      {
+        "id": 20,
+        "code": "URJ-R-2026-009",
+        "title": "Microbiologist",
+        "deptName": "Quality Assurance",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "In Approval",
+        "approvalStage": "Pending with DGM",
+        "createdOn": "25 Aug 2026",
+        "targetDate": "22 Sep 2026",
+        "hiringManager": "Dr. Sunita Kulkarni",
+        "priority": "HIGH",
+        "experience": "3-6 Years",
+        "budgetMin": "5.5 LPA",
+        "budgetMax": "7.5 LPA",
+        "description": "Salmonella and E.coli testing in poultry feed, agar plating, microbial culture analysis."
+      },
+      {
+        "id": 21,
+        "code": "URJ-R-2026-008",
+        "title": "Broiler Integration Officer",
+        "deptName": "Poultry Integration",
+        "location": "Plant - Nashik",
+        "openings": 1,
+        "status": "In Approval",
+        "approvalStage": "Pending with DGM",
+        "createdOn": "22 Aug 2026",
+        "targetDate": "18 Sep 2026",
+        "hiringManager": "Suresh Deshmukh",
+        "priority": "HIGH",
+        "experience": "3-6 Years",
+        "budgetMin": "5.2 LPA",
+        "budgetMax": "6.8 LPA",
+        "description": "Contract farmer onboarding, chick placement schedules, live bird lifting coordination."
+      },
+      {
+        "id": 22,
+        "code": "URJ-R-2026-007",
+        "title": "Regional Sales Manager",
+        "deptName": "Cattle Feed Sales",
+        "location": "Pune Region",
+        "openings": 1,
+        "status": "In Approval",
+        "approvalStage": "Pending with DGM",
+        "createdOn": "20 Aug 2026",
+        "targetDate": "15 Sep 2026",
+        "hiringManager": "Nitin Pawar",
+        "priority": "CRITICAL",
+        "experience": "8-12 Years",
+        "budgetMin": "12.0 LPA",
+        "budgetMax": "16.0 LPA",
+        "description": "Western Maharashtra sales territory expansion, key account dairy unions, dealer incentives."
+      },
+      {
+        "id": 23,
+        "code": "URJ-R-2026-006",
+        "title": "Silo Operations Incharge",
+        "deptName": "Soya Division",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Filled",
+        "approvalStage": "Closed",
+        "createdOn": "15 Aug 2026",
+        "targetDate": "10 Sep 2026",
+        "hiringManager": "Rajesh Kulkarni",
+        "priority": "HIGH",
+        "experience": "5-8 Years",
+        "budgetMin": "8.0 LPA",
+        "budgetMax": "10.5 LPA",
+        "description": "Grain handling silos aeration, temperature monitoring cables, pest fumigation control."
+      },
+      {
+        "id": 24,
+        "code": "URJ-R-2026-005",
+        "title": "Instrumentation Technician",
+        "deptName": "Soya Division",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "12 Aug 2026",
+        "targetDate": "05 Sep 2026",
+        "hiringManager": "Rajesh Kulkarni",
+        "priority": "MEDIUM",
+        "experience": "3-6 Years",
+        "budgetMin": "4.5 LPA",
+        "budgetMax": "6.0 LPA",
+        "description": "Pressure transmitters, RTD sensors calibration, flowmeters, pneumatic control valves."
+      },
+      {
+        "id": 25,
+        "code": "URJ-R-2026-004",
+        "title": "Environmental Officer",
+        "deptName": "Quality Assurance",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "In Approval",
+        "approvalStage": "Pending with DGM",
+        "createdOn": "10 Aug 2026",
+        "targetDate": "02 Sep 2026",
+        "hiringManager": "Dr. Sunita Kulkarni",
+        "priority": "MEDIUM",
+        "experience": "4-7 Years",
+        "budgetMin": "6.0 LPA",
+        "budgetMax": "8.0 LPA",
+        "description": "ETP / STP effluent treatment, MPCB compliance, air emission chimney testing."
+      },
+      {
+        "id": 26,
+        "code": "URJ-R-2026-003",
+        "title": "Procurement Specialist - Agro Raw Material",
+        "deptName": "Purchase",
+        "location": "HO - Pune",
+        "openings": 1,
+        "status": "Open",
+        "approvalStage": "Approved",
+        "createdOn": "05 Aug 2026",
+        "targetDate": "28 Aug 2026",
+        "hiringManager": "Vikram Joshi",
+        "priority": "CRITICAL",
+        "experience": "6-10 Years",
+        "budgetMin": "9.0 LPA",
+        "budgetMax": "12.0 LPA",
+        "description": "Soybean seed mandi purchasing, maize and de-oiled cake procurement, APMC rate arbitrage."
+      },
+      {
+        "id": 27,
+        "code": "URJ-R-2026-002",
+        "title": "Plant Admin Officer",
+        "deptName": "Human Resources",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "Filled",
+        "approvalStage": "Closed",
+        "createdOn": "01 Aug 2026",
+        "targetDate": "25 Aug 2026",
+        "hiringManager": "Sanchita N. Shingade",
+        "priority": "MEDIUM",
+        "experience": "3-6 Years",
+        "budgetMin": "4.5 LPA",
+        "budgetMax": "5.8 LPA",
+        "description": "Canteen management, security agency supervision, company guest house and housekeeping."
+      },
+      {
+        "id": 28,
+        "code": "URJ-R-2026-001",
+        "title": "Veterinary Officer",
+        "deptName": "CBF Division",
+        "location": "Plant - Rahuri",
+        "openings": 1,
+        "status": "In Approval",
+        "approvalStage": "Pending with DGM",
+        "createdOn": "25 Jul 2026",
+        "targetDate": "20 Aug 2026",
+        "hiringManager": "Dr. A. Verma",
+        "priority": "HIGH",
+        "experience": "4-7 Years",
+        "budgetMin": "7.5 LPA",
+        "budgetMax": "10.0 LPA",
+        "description": "BVSc certified veterinary doctor, disease diagnosis, post-mortem audits, biosecurity protocols."
+      }
+    ];
+
+    const INITIAL_CANDIDATES = [
+      { id: 1, code: 'CAN-2026-101', reqCode: 'REQ-2026-001', name: 'Rohan Mathur', email: 'rohan.mathur@email.com', exp: '6.5 Years', employer: 'Infosys Ltd', ctc: '16.5 LPA', expectedCtc: '21.0 LPA', source: 'LinkedIn', status: 'INTERVIEW_SCHEDULED' },
+      { id: 2, code: 'CAN-2026-102', reqCode: 'REQ-2026-001', name: 'Sneha Patel', email: 'sneha.patel@email.com', exp: '7.2 Years', employer: 'Wipro', ctc: '17.0 LPA', expectedCtc: '22.5 LPA', source: 'Naukri', status: 'SHORTLISTED' },
+      { id: 3, code: 'CAN-2026-103', reqCode: 'REQ-2026-002', name: 'Kunal Sengupta', email: 'kunal.sengupta@email.com', exp: '4.0 Years', employer: 'Cognizant', ctc: '11.0 LPA', expectedCtc: '14.5 LPA', source: 'Referral', status: 'SCREENING' },
+      { id: 4, code: 'CAN-2026-104', reqCode: 'REQ-2026-005', name: 'Deepika Rao', email: 'deepika.rao@email.com', exp: '9.5 Years', employer: 'Deloitte', ctc: '24.0 LPA', expectedCtc: '29.0 LPA', source: 'Headhunter', status: 'INTERVIEW_SCHEDULED' }
+    ];
+
+    const INITIAL_INTERVIEWS = [
+      { id: 1, candidateName: 'Rohan Mathur', reqCode: 'REQ-2026-001', jobTitle: 'Senior Full Stack Java Engineer', round: 'Technical Round 1', interviewer: 'Arjun Varma', date: '2026-10-23', time: '15:00 - 16:00', location: 'MS Teams Video Call', status: 'SCHEDULED', feedback: null },
+      { id: 2, candidateName: 'Deepika Rao', reqCode: 'REQ-2026-005', jobTitle: 'Financial Controller', round: 'Managerial Round', interviewer: 'Amitav Mukherjee', date: '2026-10-24', time: '11:30 - 12:30', location: 'Conference Room 3A (Mumbai)', status: 'SCHEDULED', feedback: null },
+      { id: 3, candidateName: 'Sneha Patel', reqCode: 'REQ-2026-001', jobTitle: 'Senior Full Stack Java Engineer', round: 'HR Screening', interviewer: 'Anita Deshmukh', date: '2026-10-18', time: '10:00 - 10:30', location: 'Phone Screen', status: 'COMPLETED', feedback: { rating: 4.5, recommendation: 'STRONG_HIRE' } }
+    ];
+
+    const INITIAL_TASKS = [
+      { id: 1, reqCode: 'REQ-2026-001', recruiter: 'Anita Deshmukh', title: 'Schedule Tech Round 2 for Rohan Mathur', dueDate: '2026-10-24', status: 'PENDING' },
+      { id: 2, reqCode: 'REQ-2026-002', recruiter: 'Rahul Nair', title: 'Screen 10 LinkedIn profiles for React role', dueDate: '2026-10-25', status: 'IN_PROGRESS' },
+      { id: 3, reqCode: 'REQ-2026-005', recruiter: 'Anita Deshmukh', title: 'Source alternate Finance Controller candidates (TAT Critical)', dueDate: '2026-10-22', status: 'OVERDUE' }
+    ];
+
+    const INITIAL_NOTIFICATIONS = [
+      { id: 1, title: 'New application received', message: 'Production Executive – Soya Division candidate applied via portal.', time: '2 min ago', type: 'INFO', unread: true, isRead: false, readStatus: 'UNREAD' },
+      { id: 2, title: 'Interview scheduled', message: 'Sr. Shift Incharge – Feedmill interview scheduled with Sachin Jadhav.', time: '25 min ago', type: 'SUCCESS', unread: true, isRead: false, readStatus: 'UNREAD' },
+      { id: 3, title: 'Offer released', message: 'QA / QC Executive offer dispatched to Pooja Sawant.', time: '1 hour ago', type: 'INFO', unread: true, isRead: false, readStatus: 'UNREAD' },
+      { id: 4, title: 'Candidate joined', message: 'Maintenance Technician joined Urja Foods Rahuri plant.', time: '3 hours ago', type: 'SUCCESS', unread: true, isRead: false, readStatus: 'UNREAD' },
+      { id: 5, title: 'TAT Milestone Reached', message: 'Feedmill recruitment is tracking at 18 days (Well within 30-day target).', time: '5 hours ago', type: 'INFO', unread: true, isRead: false, readStatus: 'UNREAD' }
+    ];
+
+    const INITIAL_BACKUPS = [
+      { id: 1, fileName: 'db_backup_full_20261021_0200.sql.gz', type: 'SCHEDULED_DAILY', size: '14.5 MB', location: 's3://hr-portal-secure-backups/daily/', status: 'SUCCESS', checksum: 'sha256:e3b0c44298fc1c149afbf4c8996fb924', date: '2026-10-21 02:04:12' },
+      { id: 2, fileName: 'db_backup_manual_pre_migration.sql.gz', type: 'MANUAL_FULL', size: '13.9 MB', location: 's3://hr-portal-secure-backups/manual/', status: 'SUCCESS', checksum: 'sha256:cb238edd767d2b45e1f7050e041655e8', date: '2026-10-10 18:30:19' }
+    ];
+
+    const INITIAL_AUDIT_LOGS = [
+      { id: 101, actor: 'Vikramaditya Sharma', action: 'MANUAL_BACKUP_INITIATED', entity: 'DATABASE', entityId: 'SNAPSHOT-20261021', ip: '192.168.1.104', timestamp: '2026-10-22 13:45:10' },
+      { id: 102, actor: 'Priyanka Sen', action: 'RECRUITER_ASSIGNED', entity: 'REQUISITION', entityId: 'REQ-2026-002', ip: '192.168.1.112', timestamp: '2026-10-22 11:15:34' },
+      { id: 103, actor: 'Rajesh Kulkarni', action: 'REQUISITION_CREATED', entity: 'REQUISITION', entityId: 'REQ-2026-006', ip: '192.168.1.88', timestamp: '2026-10-22 09:30:15' }
+    ];
+
+    function calculateTat(startDateStr, dueDateStr, isClosed = false) {
+      if (!startDateStr) {
+        return { started: false, elapsedDays: 0, daysRemaining: null, isOverdue: false, progress: 0, label: 'Not Started' };
+      }
+      const start = new Date(startDateStr);
+      const due = dueDateStr ? new Date(dueDateStr) : new Date(start.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const now = new Date('2026-10-22');
+
+      const diffTime = now.getTime() - start.getTime();
+      const elapsedDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+
+      if (isClosed) {
+        return { started: true, elapsedDays, daysRemaining: 0, isOverdue: false, progress: 100, label: `Closed in ${elapsedDays}d` };
+      }
+
+      const remainingDiff = due.getTime() - now.getTime();
+      const daysRemaining = Math.ceil(remainingDiff / (1000 * 60 * 60 * 24));
+      const isOverdue = daysRemaining < 0;
+      const progress = Math.min(100, Math.max(0, Math.round((elapsedDays / 30) * 100)));
+
+      let label = `${daysRemaining} days left`;
+      if (isOverdue) label = `OVERDUE (${Math.abs(daysRemaining)}d)`;
+      else if (elapsedDays >= 20 || daysRemaining <= 7) label = `Warning (${daysRemaining}d left)`;
+
+      return { started: true, elapsedDays, daysRemaining, isOverdue, progress, label };
+    }
+
+    function UrjaLoginPage({ onLoginSuccess }) {
+      const [email, setEmail] = useState('');
+      const [password, setPassword] = useState('');
+      const [showPassword, setShowPassword] = useState(false);
+      const [rememberMe, setRememberMe] = useState(false);
+      const [isLoading, setIsLoading] = useState(false);
+      const [errorMessage, setErrorMessage] = useState('');
+      const [showForgotModal, setShowForgotModal] = useState(false);
+      const [forgotEmail, setForgotEmail] = useState('');
+      const [forgotSent, setForgotSent] = useState(false);
+
+      useEffect(() => {
+        try {
+          localStorage.removeItem('ats_urja_saved_email');
+          sessionStorage.removeItem('ats_urja_user');
+          sessionStorage.removeItem('ats_urja_token');
+        } catch (e) { }
+        setEmail('');
+        setPassword('');
+        const timer = setTimeout(() => {
+          const emailInput = document.getElementById('cardWorkEmail');
+          const passInput = document.getElementById('cardPassword');
+          if (emailInput) emailInput.removeAttribute('readonly');
+          if (passInput) passInput.removeAttribute('readonly');
+        }, 400);
+        return () => clearTimeout(timer);
+      }, []);
+
+      const demoAccounts = [
+        { label: 'HR Admin', email: 'hradmin@company.com', role: 'ROLE_HR_ADMIN', name: 'Priyanka Sen' },
+        { label: 'IT Admin', email: 'admin@company.com', role: 'ROLE_IT_ADMIN', name: 'Vikramaditya Sharma' },
+        { label: 'Recruiter', email: 'anita.recruiter@company.com', role: 'ROLE_HR_RECRUITER', name: 'Anita Deshmukh' },
+        { label: 'Dept Head', email: 'rajesh.eng@company.com', role: 'ROLE_DEPT_HEAD', name: 'Rajesh Kulkarni' },
+        { label: 'Approver', email: 'amitav.mgr@company.com', role: 'ROLE_APPROVING_MANAGER', name: 'Amitav Mukherjee' },
+        { label: 'Sr Mgmt (VP)', email: 'smehta.vp@company.com', role: 'ROLE_SENIOR_MGMT', name: 'Siddharth Mehta' }
+      ];
+
+      const handleSelectDemo = (acc) => {
+        setEmail(acc.email);
+        setPassword('password');
+        setErrorMessage('');
+      };
+
+      const handleSubmit = async (e) => {
+        if (e) e.preventDefault();
+        if (!email || !password) {
+          setErrorMessage('Please enter both work email and password.');
+          return;
+        }
+
+        setIsLoading(true);
+        setErrorMessage('');
+
+        try {
+          const res = await fetch('http://localhost:8080/api/v1/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usernameOrEmail: email, password: password })
+          });
+
+          if (res.ok) {
+            const body = await res.json();
+            const authData = body.data;
+            if (rememberMe) {
+              localStorage.setItem('ats_urja_token', authData.token);
+              localStorage.setItem('ats_urja_user', JSON.stringify(authData));
+            }
+            if (onLoginSuccess) {
+              onLoginSuccess(authData);
+            }
+            return;
+          }
+        } catch (err) {
+          console.warn('Backend API unreachable, using seamless offline login:', err);
+        }
+
+        const matched = demoAccounts.find(a => a.email.toLowerCase() === email.toLowerCase()) || {
+          name: email.split('@')[0],
+          email: email,
+          role: 'ROLE_HR_ADMIN'
+        };
+
+        setTimeout(() => {
+          setIsLoading(false);
+          if (onLoginSuccess) {
+            onLoginSuccess({
+              token: 'demo-jwt-token-ats-urja-enterprise',
+              username: matched.name,
+              name: matched.name,
+              email: matched.email,
+              roles: [matched.role]
+            });
+          }
+        }, 500);
+      };
+
+      const handleMicrosoftSSO = () => {
+        setIsLoading(true);
+        setTimeout(() => {
+          setIsLoading(false);
+          if (onLoginSuccess) {
+            onLoginSuccess({
+              token: 'ms-sso-token-ats-urja',
+              username: 'priyanka.sen@urjafoods.com',
+              name: 'Priyanka Sen (Urja Corporate SSO)',
+              email: 'priyanka.sen@urjafoods.com',
+              roles: ['ROLE_HR_ADMIN']
+            });
+          }
+        }, 600);
+      };
+
+      return (
+        <div className="urja-login-viewport">
+          <div className="urja-main-container">
+            {/* LEFT HERO */}
+            <div className="urja-hero-section">
+              <div className="urja-brand-block">
+                <div className="urja-logo-text">
+                  <span className="urja-logo-white">Urja</span>
+                  <div className="urja-logo-foods">
+                    <span>FOODS</span>
+                    <span className="urja-logo-tagline">CREATING ENERGY</span>
+                  </div>
+                </div>
+                <div className="urja-company-name">Urja Foods & Agro Pvt. Ltd.</div>
+
+                <div className="urja-ats-badge">
+                  <div className="urja-ats-title">
+                    ATS <span>URJA</span>
+                  </div>
+                  <div className="urja-ats-subtitle">Applicant Tracking System</div>
+                </div>
+              </div>
+
+              <div className="urja-hero-content">
+                <h1 className="urja-hero-headline">
+                  Right Talent<br />
+                  Stronger <span className="highlight-inline">Urja</span>
+                </h1>
+                <p className="urja-hero-description">
+                  A smarter way to manage recruitment, candidates, interviews and hiring for a stronger Urja team.
+                </p>
+              </div>
+
+              {/* Angled Collage with Lime Borders */}
+              <div className="urja-collage-grid">
+                <div className="collage-cell collage-silos">
+                  <img src="assets/images/silos.jpg" alt="Urja Grain Silos Infrastructure" />
+                </div>
+                <div className="collage-cell collage-chick">
+                  <img src="assets/images/chick.jpg" alt="Urja Poultry & Hatchery Operations" />
+                </div>
+                <div className="collage-cell collage-soya">
+                  <img src="assets/images/soya.jpg" alt="Urja Soya Agro Harvest" />
+                </div>
+                <div className="collage-cell collage-woman">
+                  <img src="assets/images/woman.jpg" alt="Urja Corporate HR Workspace" />
+                  <div className="script-overlay">
+                    <div>People</div>
+                    <div>Process</div>
+                    <div>Progress</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 5 Feature Pillars */}
+              <div className="urja-features-row">
+                <div className="urja-feature-item">
+                  <div className="urja-feature-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <line x1="19" y1="8" x2="19" y2="14"></line>
+                      <line x1="22" y1="11" x2="16" y2="11"></line>
+                    </svg>
+                  </div>
+                  <div className="urja-feature-label">Attract<br />Top Talent</div>
+                </div>
+
+                <div className="urja-feature-item">
+                  <div className="urja-feature-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                  </div>
+                  <div className="urja-feature-label">Streamline<br />Hiring</div>
+                </div>
+
+                <div className="urja-feature-item">
+                  <div className="urja-feature-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                  </div>
+                  <div className="urja-feature-label">Better<br />Collaboration</div>
+                </div>
+
+                <div className="urja-feature-item">
+                  <div className="urja-feature-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"></line>
+                      <line x1="12" y1="20" x2="12" y2="4"></line>
+                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                  </div>
+                  <div className="urja-feature-label">Faster Hiring<br />Decisions</div>
+                </div>
+
+                <div className="urja-feature-item">
+                  <div className="urja-feature-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                      <polyline points="16 7 22 7 22 13"></polyline>
+                    </svg>
+                  </div>
+                  <div className="urja-feature-label">Build<br />Stronger Teams</div>
+                </div>
+              </div>
+
+              {/* 6 Business Divisions */}
+              <div className="urja-divisions-strip">
+                <div className="urja-division-badge">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                  </svg>
+                  <span>Soya Division</span>
+                </div>
+                <div className="urja-division-badge">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M6 18c0-3 2-6 6-6s6 3 6 6"></path>
+                    <path d="M12 2v10"></path>
+                    <path d="M8 6l4 2 4-2"></path>
+                  </svg>
+                  <span>Feedmill</span>
+                </div>
+                <div className="urja-division-badge">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 4a3 3 0 0 0-3 3c0 1.2.7 2.2 1.7 2.7L9 16h6l-1.7-6.3A3 3 0 0 0 12 4z"></path>
+                    <circle cx="12" cy="7" r="1"></circle>
+                  </svg>
+                  <span>Poultry Operation</span>
+                </div>
+                <div className="urja-division-badge">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <ellipse cx="12" cy="13" rx="7" ry="9"></ellipse>
+                  </svg>
+                  <span>Hatchery</span>
+                </div>
+                <div className="urja-division-badge">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="8" width="18" height="12" rx="3"></rect>
+                    <path d="M7 8V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"></path>
+                  </svg>
+                  <span>Breeder Operation</span>
+                </div>
+                <div className="urja-division-badge">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"></path>
+                    <line x1="8.5" y1="2" x2="15.5" y2="2"></line>
+                  </svg>
+                  <span>QA / QC</span>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT FLOATING CARD */}
+            <div className="urja-login-card">
+              <div className="urja-card-header">
+                <h3>Welcome to</h3>
+                <h1>ATS <span>URJA</span></h1>
+                <p>Sign in to access your recruitment workspace.</p>
+              </div>
+
+              {errorMessage && (
+                <div className="urja-error-alert">
+                  <i className="bi bi-exclamation-triangle-fill"></i>
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="urja-form" autoComplete="off">
+                <div style={{ position: 'absolute', opacity: 0, height: 0, width: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: -1 }}>
+                  <input type="text" name="prevent_autofill_username" tabIndex={-1} autoComplete="off" />
+                  <input type="password" name="prevent_autofill_password" tabIndex={-1} autoComplete="new-password" />
+                </div>
+                <div className="urja-input-group">
+                  <label htmlFor="cardWorkEmail">Work Email</label>
+                  <div className="urja-input-box">
+                    <svg className="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <input
+                      id="cardWorkEmail"
+                      name="cardWorkEmail"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      onFocus={(e) => e.target.removeAttribute('readonly')}
+                      readOnly
+                      placeholder="Enter your work email"
+                      autoComplete="off"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="urja-input-group">
+                  <label htmlFor="cardPassword">Password</label>
+                  <div className="urja-input-box">
+                    <svg className="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <input
+                      id="cardPassword"
+                      name="cardPassword"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onFocus={(e) => e.target.removeAttribute('readonly')}
+                      readOnly
+                      placeholder="Enter your password"
+                      autoComplete="new-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                          <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                      ) : (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="urja-options-row">
+                  <label className="urja-remember-label">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                    />
+                    <span>Remember me</span>
+                  </label>
+                  <button
+                    type="button"
+                    className="urja-forgot-btn"
+                    onClick={() => { setShowForgotModal(true); setForgotEmail(email); setForgotSent(false); }}
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+
+                <button type="submit" className="urja-signin-btn" disabled={isLoading}>
+                  {isLoading ? <span>Authenticating...</span> : (
+                    <>
+                      <span>Sign In</span>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </>
+                  )}
+                </button>
+
+                <div className="urja-divider"><span>OR</span></div>
+
+                <button type="button" className="urja-sso-btn" onClick={handleMicrosoftSSO} disabled={isLoading}>
+                  <div className="ms-logo-icon">
+                    <div className="ms-sq red"></div>
+                    <div className="ms-sq green"></div>
+                    <div className="ms-sq blue"></div>
+                    <div className="ms-sq yellow"></div>
+                  </div>
+                  <span>Sign in with Microsoft</span>
+                </button>
+
+                <div className="urja-card-footer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span>Secure Access | Urja Foods & Agro Pvt. Ltd.</span>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {showForgotModal && (
+            <div className="urja-modal-backdrop" onClick={() => setShowForgotModal(false)}>
+              <div className="urja-modal-box" onClick={(e) => e.stopPropagation()}>
+                <div className="urja-modal-header">
+                  <h4>Reset Urja ATS Password</h4>
+                  <button className="urja-close-btn" onClick={() => setShowForgotModal(false)}>✕</button>
+                </div>
+                <div className="urja-modal-body">
+                  {forgotSent ? (
+                    <div className="urja-modal-success">
+                      <div className="success-icon">✓</div>
+                      <h5>Password Reset Link Dispatched</h5>
+                      <p>Instructions have been dispatched to <strong>{forgotEmail}</strong>. Check your official inbox.</p>
+                      <button className="urja-modal-btn" onClick={() => setShowForgotModal(false)}>Close</button>
+                    </div>
+                  ) : (
+                    <div>
+                      <p>Enter your official Urja work email to receive password reset instructions.</p>
+                      <div className="urja-input-group" style={{ marginBottom: '1rem' }}>
+                        <label>Official Work Email</label>
+                        <input
+                          type="email"
+                          className="urja-modal-input"
+                          value={forgotEmail}
+                          onChange={(e) => setForgotEmail(e.target.value)}
+                          placeholder="name@urjafoods.com"
+                        />
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                        <button type="button" className="urja-btn-ghost" onClick={() => setShowForgotModal(false)}>Cancel</button>
+                        <button
+                          type="button"
+                          className="urja-signin-btn"
+                          style={{ width: 'auto', padding: '0.6rem 1.4rem' }}
+                          onClick={() => setForgotSent(true)}
+                        >
+                          Send Instructions
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function TalentPulsePortal() {
+      const [isAuthenticated, setIsAuthenticated] = useState(false);
+      const [activeTab, setActiveTab] = useState('dashboard');
+      const [currentRoleId, setCurrentRoleId] = useState('ROLE_HR_ADMIN');
+      const [currentUser, setCurrentUser] = useState(INITIAL_USERS[1]);
+
+      const [requisitions, setRequisitions] = useState(INITIAL_REQUISITIONS);
+      const [reqStatusFilter, setReqStatusFilter] = useState('ALL');
+      const [filterDept, setFilterDept] = useState('ALL');
+      const [filterLoc, setFilterLoc] = useState('ALL');
+      const [filterStat, setFilterStat] = useState('ALL');
+      const [reqSearch, setReqSearch] = useState('');
+      const [reqPage, setReqPage] = useState(1);
+      const [reqRowsPerPage, setReqRowsPerPage] = useState(10);
+      const [selectedReqIds, setSelectedReqIds] = useState([]);
+
+      const reqCounts = useMemo(() => {
+        let open = 0, inApproval = 0, filled = 0, onHold = 0;
+        requisitions.forEach(r => {
+          const s = (r.status || '').toLowerCase();
+          if (s === 'open') open += 1;
+          else if (s === 'in approval') inApproval += 1;
+          else if (s === 'filled') filled += 1;
+          else if (s === 'on hold') onHold += 1;
+        });
+        return { all: requisitions.length, open, inApproval, filled, onHold };
+      }, [requisitions]);
+
+      const filteredRequisitions = useMemo(() => {
+        return requisitions.filter(req => {
+          if (reqStatusFilter === 'OPEN' && req.status !== 'Open') return false;
+          if (reqStatusFilter === 'IN_APPROVAL' && req.status !== 'In Approval') return false;
+          if (reqStatusFilter === 'FILLED' && req.status !== 'Filled') return false;
+          if (reqStatusFilter === 'ON_HOLD' && req.status !== 'On Hold') return false;
+
+          if (filterDept !== 'ALL' && req.deptName !== filterDept) return false;
+          if (filterLoc !== 'ALL' && req.location !== filterLoc) return false;
+          if (filterStat !== 'ALL' && (req.status || '').toLowerCase() !== filterStat.toLowerCase()) return false;
+
+          if (reqSearch && reqSearch.trim()) {
+            const q = reqSearch.toLowerCase().trim();
+            const matchTitle = (req.title || '').toLowerCase().includes(q);
+            const matchCode = (req.code || '').toLowerCase().includes(q);
+            const matchDept = (req.deptName || '').toLowerCase().includes(q);
+            const matchLoc = (req.location || '').toLowerCase().includes(q);
+            if (!matchTitle && !matchCode && !matchDept && !matchLoc) return false;
+          }
+          return true;
+        });
+      }, [requisitions, reqStatusFilter, filterDept, filterLoc, filterStat, reqSearch]);
+
+      const paginatedRequisitions = useMemo(() => {
+        const start = (reqPage - 1) * reqRowsPerPage;
+        return filteredRequisitions.slice(start, start + reqRowsPerPage);
+      }, [filteredRequisitions, reqPage, reqRowsPerPage]);
+
+      const totalReqPages = Math.ceil(filteredRequisitions.length / reqRowsPerPage) || 1;
+
+      const handleResetFilters = () => {
+        setReqStatusFilter('ALL');
+        setFilterDept('ALL');
+        setFilterLoc('ALL');
+        setFilterStat('ALL');
+        setReqSearch('');
+        setReqPage(1);
+        setSelectedReqIds([]);
+      };
+
+      const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
+      const [interviews, setInterviews] = useState(INITIAL_INTERVIEWS);
+      const [tasks, setTasks] = useState(INITIAL_TASKS);
+      const [departments, setDepartments] = useState(INITIAL_DEPARTMENTS);
+      const [designations, setDesignations] = useState(INITIAL_DESIGNATIONS);
+      const [employees, setEmployees] = useState(INITIAL_EMPLOYEES);
+      const [documents, setDocuments] = useState(INITIAL_DOCUMENTS);
+      const [backups, setBackups] = useState(INITIAL_BACKUPS);
+      const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
+      const [auditLogs, setAuditLogs] = useState(INITIAL_AUDIT_LOGS);
+
+      const [showReqModal, setShowReqModal] = useState(false);
+      const [showApprovalModal, setShowApprovalModal] = useState(false);
+      const [selectedReqForApproval, setSelectedReqForApproval] = useState(null);
+      const [approvalDecision, setApprovalDecision] = useState('APPROVED');
+      const [approvalRemarks, setApprovalRemarks] = useState('');
+
+      const [showAssignModal, setShowAssignModal] = useState(false);
+      const [selectedReqForAssign, setSelectedReqForAssign] = useState(null);
+      const [selectedRecruiterId, setSelectedRecruiterId] = useState('3');
+
+      const [toastMessage, setToastMessage] = useState(null);
+
+      const showToast = (msg) => {
+        setToastMessage(msg);
+        setTimeout(() => setToastMessage(null), 3500);
+      };
+
+      const handleRoleChange = (roleId) => {
+        setCurrentRoleId(roleId);
+        const foundUser = INITIAL_USERS.find(u => u.role === roleId) || INITIAL_USERS[0];
+        setCurrentUser(foundUser);
+        showToast(`Switched active view to: ${foundUser.role} (${foundUser.name})`);
+      };
+
+      const handleProcessApproval = (e) => {
+        e.preventDefault();
+        if (!selectedReqForApproval) return;
+
+        let nextStatus = selectedReqForApproval.status;
+        if (approvalDecision === 'APPROVED') {
+          if (selectedReqForApproval.status === 'PENDING_HR_REVIEW') nextStatus = 'PENDING_DEPT_APPROVAL';
+          else if (selectedReqForApproval.status === 'PENDING_DEPT_APPROVAL') nextStatus = 'PENDING_SENIOR_APPROVAL';
+          else if (selectedReqForApproval.status === 'PENDING_SENIOR_APPROVAL') nextStatus = 'APPROVED';
+          else nextStatus = 'APPROVED';
+        } else if (approvalDecision === 'REJECTED') {
+          nextStatus = 'REJECTED';
+        } else if (approvalDecision === 'RETURNED_FOR_CORRECTION') {
+          nextStatus = 'RETURNED';
+        }
+
+        setRequisitions(prev => prev.map(r => r.id === selectedReqForApproval.id ? { ...r, status: nextStatus } : r));
+
+        const newLog = {
+          id: auditLogs.length + 101,
+          actor: currentUser.name,
+          action: `REQUISITION_${approvalDecision}`,
+          entity: 'REQUISITION',
+          entityId: selectedReqForApproval.code,
+          ip: '192.168.1.105',
+          timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19)
+        };
+        setAuditLogs([newLog, ...auditLogs]);
+
+        setShowApprovalModal(false);
+        setApprovalRemarks('');
+        showToast(`Requisition ${selectedReqForApproval.code} updated to ${nextStatus}`);
+      };
+
+      const handleAssignRecruiter = (e) => {
+        e.preventDefault();
+        if (!selectedReqForAssign) return;
+
+        const recruiterObj = INITIAL_USERS.find(u => u.id === parseInt(selectedRecruiterId));
+        setRequisitions(prev => prev.map(r => {
+          if (r.id === selectedReqForAssign.id) {
+            return {
+              ...r,
+              assignedRecruiter: recruiterObj.name,
+              tatStartDate: '2026-10-22',
+              dueDate: '2026-11-21',
+              status: 'RECRUITER_ASSIGNED'
+            };
+          }
+          return r;
+        }));
+
+        setShowAssignModal(false);
+        showToast(`Assigned to ${recruiterObj.name}. 30-Day TAT countdown active!`);
+      };
+
+      const handleTriggerBackup = () => {
+        const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').substring(0, 14);
+        const newBackup = {
+          id: backups.length + 1,
+          fileName: `db_backup_manual_${timestamp}.sql.gz`,
+          type: 'MANUAL_FULL',
+          size: '14.8 MB',
+          location: 's3://hr-portal-secure-backups/manual/',
+          status: 'SUCCESS',
+          checksum: `sha256:${Math.random().toString(36).substring(2, 15)}`,
+          date: new Date().toISOString().replace('T', ' ').substring(0, 19)
+        };
+        setBackups([newBackup, ...backups]);
+        showToast('Manual database snapshot created and verified!');
+      };
+
+      const handleLoginSuccess = (authData) => {
+        setIsAuthenticated(true);
+        const found = INITIAL_USERS.find(u => u.email.toLowerCase() === (authData.email || '').toLowerCase());
+        if (found) {
+          setCurrentUser(found);
+          setCurrentRoleId(found.role);
+        } else {
+          setCurrentUser({
+            id: 99,
+            name: authData.name || authData.username,
+            email: authData.email,
+            role: authData.roles ? authData.roles[0] : 'ROLE_HR_ADMIN',
+            avatar: (authData.name || 'User').substring(0, 2).toUpperCase(),
+            dept: 'Urja Foods & Agro'
+          });
+        }
+        showToast(`Welcome back, ${authData.name || authData.username}! Signed in to Urja ATS.`);
+      };
+
+      if (!isAuthenticated) {
+        return (
+          <UrjaLoginPage
+            onLoginSuccess={handleLoginSuccess}
+          />
+        );
+      }
+
+      return (
+        <div className="app-wrapper">
+          <aside className="app-sidebar">
+            <div className="sidebar-brand">
+              <div className="brand-icon-box" style={{ background: 'linear-gradient(135deg, #15803d 0%, #84d623 100%)' }}>
+                <i className="bi bi-buildings"></i>
+              </div>
+              <div className="brand-text">
+                <h4 style={{ letterSpacing: '0.02em' }}>ATS URJA</h4>
+                <span style={{ color: '#84d623', fontWeight: 800 }}>Urja Foods & Agro</span>
+              </div>
+            </div>
+
+            <nav className="sidebar-nav">
+              <div className="nav-section-label">Core Operations</div>
+              <button className={`sidebar-btn ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>
+                <i className="bi bi-grid-1x2-fill"></i> 02. Dashboard
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'requisitions' ? 'active' : ''}`} onClick={() => setActiveTab('requisitions')}>
+                <i className="bi bi-file-earmark-text-fill"></i> 06. Manpower Requisition
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'approvals' ? 'active' : ''}`} onClick={() => setActiveTab('approvals')}>
+                <i className="bi bi-patch-check-fill"></i> 07. Approval Workflow
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'recruiterAssign' ? 'active' : ''}`} onClick={() => setActiveTab('recruiterAssign')}>
+                <i className="bi bi-person-lines-fill"></i> 08. Recruiter Assignment
+              </button>
+
+              <div className="nav-section-label">Recruitment Pipeline</div>
+              <button className={`sidebar-btn ${activeTab === 'candidates' ? 'active' : ''}`} onClick={() => setActiveTab('candidates')}>
+                <i className="bi bi-people-fill"></i> 09. Candidate Management
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'interviews' ? 'active' : ''}`} onClick={() => setActiveTab('interviews')}>
+                <i className="bi bi-calendar-event-fill"></i> 10. Interview Scheduler
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'tat' ? 'active' : ''}`} onClick={() => setActiveTab('tat')}>
+                <i className="bi bi-stopwatch-fill"></i> 11. TAT & Task Tracking
+              </button>
+
+              <div className="nav-section-label">Organization & Staff</div>
+              <button className={`sidebar-btn ${activeTab === 'departments' ? 'active' : ''}`} onClick={() => setActiveTab('departments')}>
+                <i className="bi bi-building"></i> 03. Department Master
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'employees' ? 'active' : ''}`} onClick={() => setActiveTab('employees')}>
+                <i className="bi bi-person-badge-fill"></i> 04. Employee Management
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'documents' ? 'active' : ''}`} onClick={() => setActiveTab('documents')}>
+                <i className="bi bi-folder-fill"></i> 05. Employee Documents
+              </button>
+
+              <div className="nav-section-label">Administration & Insights</div>
+              <button className={`sidebar-btn ${activeTab === 'reports' ? 'active' : ''}`} onClick={() => setActiveTab('reports')}>
+                <i className="bi bi-bar-chart-line-fill"></i> 12. Reports & Analytics
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'notifications' ? 'active' : ''}`} onClick={() => setActiveTab('notifications')}>
+                <i className="bi bi-envelope-paper-fill"></i> 13. Email Notifications
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'backups' ? 'active' : ''}`} onClick={() => setActiveTab('backups')}>
+                <i className="bi bi-database-fill-gear"></i> 14. Backup & Restore
+              </button>
+              <button className={`sidebar-btn ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}>
+                <i className="bi bi-shield-lock-fill"></i> 15. User & Permissions
+              </button>
+              <button className="sidebar-btn" onClick={() => { setIsAuthenticated(false); showToast('Switched to ATS URJA Login Screen'); }}>
+                <i className="bi bi-box-arrow-left text-success"></i> 01. ATS URJA Login Screen
+              </button>
+            </nav>
+
+            <div className="sidebar-footer">
+              <div className="d-flex align-items-center gap-2">
+                <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: 36, height: 36 }}>
+                  {currentUser.avatar}
+                </div>
+                <div className="overflow-hidden">
+                  <div className="text-white fw-bold text-truncate" style={{ fontSize: '0.85rem' }}>{currentUser.name}</div>
+                  <div className="text-secondary text-truncate" style={{ fontSize: '0.72rem' }}>{currentUser.role}</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div className="app-main">
+            <header className="app-navbar">
+              <div className="d-flex align-items-center gap-3">
+                <span className="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-bold" style={{ fontSize: '0.78rem' }}>
+                  <i className="bi bi-shield-check me-1"></i> ATS URJA • Spring Boot 3 + MySQL 8.x Active
+                </span>
+              </div>
+
+              <div className="d-flex align-items-center gap-3">
+                <button
+                  className="btn btn-sm btn-outline-success fw-bold d-flex align-items-center gap-1 px-3 py-1.5"
+                  style={{ borderColor: '#84d623', color: '#166534', background: 'rgba(132, 214, 35, 0.08)' }}
+                  onClick={() => { setIsAuthenticated(false); showToast('Switched to ATS URJA Login Screen'); }}
+                  title="Switch to ATS URJA Login screen"
+                >
+                  <i className="bi bi-box-arrow-right"></i>
+                  <span>ATS URJA Login</span>
+                </button>
+
+                <div className="nav-role-switcher">
+                  <i className="bi bi-person-gear text-primary"></i>
+                  <span className="text-muted small">Switch Role:</span>
+                  <select value={currentRoleId} onChange={(e) => handleRoleChange(e.target.value)}>
+                    {INITIAL_ROLES.map(r => (
+                      <option key={r.id} value={r.id}>{r.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <button className="btn btn-light rounded-circle position-relative p-2" onClick={() => setActiveTab('notifications')}>
+                  <i className="bi bi-bell text-secondary"></i>
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '0.65rem' }}>
+                    {notifications.filter(n => n.unread).length}
+                  </span>
+                </button>
+              </div>
+            </header>
+
+            {toastMessage && (
+              <div className="position-fixed bottom-0 end-0 p-3" style={{ zIndex: 9999 }}>
+                <div className="toast show align-items-center text-white bg-dark border-0 shadow-lg p-2" role="alert">
+                  <div className="d-flex align-items-center gap-2">
+                    <i className="bi bi-check-circle-fill text-success fs-5"></i>
+                    <div>{toastMessage}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <main className="page-container">
+              {activeTab === 'dashboard' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>Executive Recruitment Dashboard</h2>
+                      <p>Active user: <strong>{currentUser.name}</strong> ({currentUser.role}). Target: 30 Calendar Days SLA.</p>
+                    </div>
+                    <button className="btn btn-navy" onClick={() => setShowReqModal(true)}>
+                      <i className="bi bi-plus-circle me-1"></i> New Manpower Requisition
+                    </button>
+                  </div>
+
+                  <div className="row g-4 mb-4">
+                    <div className="col-12 col-sm-6 col-xl-3">
+                      <div className="stat-card navy">
+                        <div>
+                          <div className="stat-value">{requisitions.length}</div>
+                          <div className="stat-label">Active Vacancies</div>
+                        </div>
+                        <div className="stat-icon navy"><i className="bi bi-briefcase-fill"></i></div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-sm-6 col-xl-3">
+                      <div className="stat-card warning">
+                        <div className="stat-value">{requisitions.filter(r => r.status.includes('PENDING')).length}</div>
+                        <div className="stat-label">Pending Approvals</div>
+                      </div>
+                      <div className="stat-icon warning"><i className="bi bi-clock-history"></i></div>
+                    </div>
+                    <div className="col-12 col-sm-6 col-xl-3">
+                      <div className="stat-card cyan">
+                        <div className="stat-value">{candidates.length}</div>
+                        <div className="stat-label">Candidates in Pipeline</div>
+                      </div>
+                      <div className="stat-icon cyan"><i className="bi bi-people-fill"></i></div>
+                    </div>
+                    <div className="col-12 col-sm-6 col-xl-3">
+                      <div className="stat-card danger">
+                        <div className="stat-value">
+                          {requisitions.filter(r => calculateTat(r.tatStartDate, r.dueDate).isOverdue).length}
+                        </div>
+                        <div className="stat-label">Overdue TAT Alerts</div>
+                      </div>
+                      <div className="stat-icon danger"><i className="bi bi-exclamation-triangle-fill"></i></div>
+                    </div>
+                  </div>
+
+                  <div className="card-portal mb-4">
+                    <div className="card-header-portal">
+                      <h5>Active Manpower Requisitions & 30-Day SLA Progress</h5>
+                      <button className="btn btn-sm btn-outline-navy" onClick={() => setActiveTab('requisitions')}>View All Requisitions</button>
+                    </div>
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Code & Position Title</th>
+                            <th>Department</th>
+                            <th>Priority</th>
+                            <th>Current Status</th>
+                            <th>Assigned Recruiter</th>
+                            <th>TAT SLA (30 Calendar Days)</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {requisitions.map(r => {
+                            const tat = calculateTat(r.tatStartDate, r.dueDate, r.status === 'FILLED');
+                            return (
+                              <tr key={r.id}>
+                                <td>
+                                  <div className="fw-bold">{r.title}</div>
+                                  <span className="text-muted small">{r.code} • {r.headcount} Headcount</span>
+                                </td>
+                                <td>{r.deptName}</td>
+                                <td>
+                                  <span className={`badge-status ${r.priority === 'CRITICAL' ? 'critical' : 'pending'}`}>
+                                    {r.priority}
+                                  </span>
+                                </td>
+                                <td>
+                                  <span className="badge-status recruiter">{r.status.replace(/_/g, ' ')}</span>
+                                </td>
+                                <td>{r.assignedRecruiter || <span className="text-muted fst-italic">Unassigned</span>}</td>
+                                <td>
+                                  {tat.started ? (
+                                    <div className="tat-tracker">
+                                      <div className="d-flex justify-content-between small">
+                                        <span className="fw-semibold">{tat.label}</span>
+                                        <span className="text-muted">{tat.elapsedDays}/30d</span>
+                                      </div>
+                                      <div className="tat-bar-container">
+                                        <div className={`tat-bar-fill ${tat.isOverdue ? 'overdue' : tat.elapsedDays >= 20 ? 'warning' : 'normal'}`} style={{ width: `${tat.progress}%` }}></div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <span className="text-muted small">SLA starts on recruiter assignment</span>
+                                  )}
+                                </td>
+                                <td>
+                                  {r.status.includes('PENDING') && (
+                                    <button className="btn btn-sm btn-navy me-1" onClick={() => { setSelectedReqForApproval(r); setShowApprovalModal(true); }}>
+                                      Approve
+                                    </button>
+                                  )}
+                                  {r.status === 'APPROVED' && !r.assignedRecruiter && (
+                                    <button className="btn btn-sm btn-outline-navy" onClick={() => { setSelectedReqForAssign(r); setShowAssignModal(true); }}>
+                                      Assign
+                                    </button>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 06: Manpower Requisition */}
+              {activeTab === 'requisitions' && (
+                <div className="urja-job-requisitions-page">
+                  {/* Hero Banner Header */}
+                  <div className="urja-req-hero-card">
+                    <div className="urja-req-hero-left">
+                      <div className="urja-req-hero-icon-box">
+                        <i className="bi bi-card-checklist"></i>
+                      </div>
+                      <div>
+                        <h1 className="urja-req-hero-title">Job Requisitions</h1>
+                        <p className="urja-req-hero-desc">Create, track and manage all manpower requisitions with multi-stage approval workflows.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 2. Status Tabs Row + Create Button */}
+                  <div className="urja-status-tabs-container">
+                    <div className="urja-status-tabs-scroll-area">
+                      <div className="urja-status-tabs-list" role="tablist">
+                        {[
+                          { key: 'ALL', label: 'All', count: reqCounts.all },
+                          { key: 'OPEN', label: 'Open', count: reqCounts.open },
+                          { key: 'IN_APPROVAL', label: 'In Approval', count: reqCounts.inApproval },
+                          { key: 'FILLED', label: 'Filled', count: reqCounts.filled },
+                          { key: 'ON_HOLD', label: 'On Hold', count: reqCounts.onHold },
+                          { key: 'CLOSED', label: 'Closed', count: reqCounts.closed }
+                        ].map(tab => {
+                          const isActive = reqStatusFilter === tab.key;
+                          return (
+                            <button
+                              key={tab.key}
+                              type="button"
+                              className={`urja-status-tab-item ${isActive ? 'active' : ''}`}
+                              onClick={() => { setReqStatusFilter(tab.key); setReqPage(1); }}
+                            >
+                              <span className="urja-status-tab-label">{tab.label}</span>
+                              <span className={`urja-status-tab-badge ${isActive ? 'active' : ''}`}>{tab.count}</span>
+                              {isActive && <span className="urja-status-tab-indicator"></span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="urja-status-tabs-actions">
+                      <button
+                        type="button"
+                        className="urja-btn-create-requisition"
+                        onClick={() => setShowReqModal(true)}
+                      >
+                        <i className="bi bi-plus-lg me-1"></i>
+                        <span>Create Requisition</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 3. Horizontal Filters Bar */}
+                  <div className="urja-filters-container">
+                    <div className="urja-filters-row">
+                      {/* Search */}
+                      <div className="urja-filter-search-box">
+                        <i className="bi bi-search urja-filter-icon"></i>
+                        <input
+                          type="text"
+                          className="urja-filter-search-input"
+                          placeholder="Search by title, ID, dept or location..."
+                          value={reqSearch}
+                          onChange={(e) => { setReqSearch(e.target.value); setReqPage(1); }}
+                        />
+                        {reqSearch && (
+                          <button type="button" className="urja-filter-clear-btn" onClick={() => setReqSearch('')}>
+                            <i className="bi bi-x"></i>
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Department Dropdown */}
+                      <div className="urja-filter-select-wrapper">
+                        <i className="bi bi-building urja-filter-icon"></i>
+                        <select
+                          className="urja-filter-select"
+                          value={filterDept}
+                          onChange={(e) => { setFilterDept(e.target.value); setReqPage(1); }}
+                        >
+                          <option value="ALL">Department — All</option>
+                          <option value="Soya Division">Soya Division</option>
+                          <option value="Feedmill">Feedmill</option>
+                          <option value="Poultry Integration">Poultry Integration</option>
+                          <option value="Hatchery">Hatchery</option>
+                          <option value="Breeder Operation">Breeder Operation</option>
+                          <option value="Quality Assurance">Quality Assurance</option>
+                          <option value="Purchase">Purchase</option>
+                          <option value="Projects">Projects</option>
+                          <option value="CBF Division">CBF Division</option>
+                          <option value="Cattle Feed Sales">Cattle Feed Sales</option>
+                          <option value="Human Resources">Human Resources</option>
+                        </select>
+                        <i className="bi bi-chevron-down urja-filter-chevron"></i>
+                      </div>
+
+                      {/* Location Dropdown */}
+                      <div className="urja-filter-select-wrapper">
+                        <i className="bi bi-geo-alt urja-filter-icon"></i>
+                        <select
+                          className="urja-filter-select"
+                          value={filterLoc}
+                          onChange={(e) => { setFilterLoc(e.target.value); setReqPage(1); }}
+                        >
+                          <option value="ALL">Location — All</option>
+                          <option value="Plant - Rahuri">Plant - Rahuri</option>
+                          <option value="Plant - Nashik">Plant - Nashik</option>
+                          <option value="HO - Pune">HO - Pune</option>
+                          <option value="Multiple Sites">Multiple Sites</option>
+                          <option value="Pune Region">Pune Region</option>
+                          <option value="Solapur Plant">Solapur Plant</option>
+                        </select>
+                        <i className="bi bi-chevron-down urja-filter-chevron"></i>
+                      </div>
+
+                      {/* Status Dropdown */}
+                      <div className="urja-filter-select-wrapper">
+                        <i className="bi bi-funnel urja-filter-icon"></i>
+                        <select
+                          className="urja-filter-select"
+                          value={filterStat}
+                          onChange={(e) => { setFilterStat(e.target.value); setReqPage(1); }}
+                        >
+                          <option value="ALL">Status — All</option>
+                          <option value="Open">Open</option>
+                          <option value="In Approval">In Approval</option>
+                          <option value="Filled">Filled</option>
+                          <option value="On Hold">On Hold</option>
+                          <option value="Closed">Closed</option>
+                        </select>
+                        <i className="bi bi-chevron-down urja-filter-chevron"></i>
+                      </div>
+
+                      {/* Reset Filters */}
+                      <button
+                        type="button"
+                        className="urja-btn-reset-filters"
+                        onClick={handleResetFilters}
+                      >
+                        <i className="bi bi-arrow-counterclockwise me-1"></i>
+                        <span>Reset Filters</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 4. Requisitions Data Table */}
+                  <div className="urja-table-card">
+                    <div className="table-responsive urja-table-responsive">
+                      <table className="urja-data-table">
+                        <thead>
+                          <tr>
+                            <th className="urja-th-checkbox" style={{ width: '42px' }}>
+                              <input
+                                type="checkbox"
+                                className="urja-custom-checkbox"
+                                checked={paginatedRequisitions.length > 0 && paginatedRequisitions.every(r => selectedReqIds.includes(r.id))}
+                                onChange={(e) => {
+                                  if (e.target.checked) setSelectedReqIds(paginatedRequisitions.map(r => r.id));
+                                  else setSelectedReqIds([]);
+                                }}
+                              />
+                            </th>
+                            <th className="urja-th-req-id">Requisition ID</th>
+                            <th className="urja-th-title">Job Title</th>
+                            <th className="urja-th-dept">Department</th>
+                            <th className="urja-th-loc">Location</th>
+                            <th className="urja-th-openings text-center">Openings</th>
+                            <th className="urja-th-status">Status</th>
+                            <th className="urja-th-approval">Approval Stage</th>
+                            <th className="urja-th-date">Created On</th>
+                            <th className="urja-th-date">Target Date</th>
+                            <th className="urja-th-actions text-end">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {paginatedRequisitions.length === 0 ? (
+                            <tr>
+                              <td colSpan="11" className="urja-empty-table-cell">
+                                <div className="urja-empty-state">
+                                  <div className="urja-empty-icon-box"><i className="bi bi-funnel"></i></div>
+                                  <h5>No Requisitions Found</h5>
+                                  <p>There are no job requisitions matching your current filters or search query.</p>
+                                  <button type="button" className="urja-btn-reset-filters highlight mt-2" onClick={handleResetFilters}>
+                                    <i className="bi bi-arrow-counterclockwise me-1"></i> Reset All Filters
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ) : (
+                            paginatedRequisitions.map(r => {
+                              const isSelected = selectedReqIds.includes(r.id);
+                              const s = (r.status || '').toLowerCase();
+                              const badgeCls = s === 'open' ? 'urja-badge-status-open' :
+                                s === 'in approval' ? 'urja-badge-status-approval' :
+                                  s === 'filled' ? 'urja-badge-status-filled' :
+                                    s === 'on hold' ? 'urja-badge-status-hold' : 'urja-badge-status-closed';
+                              const dotCls = s === 'open' ? 'urja-dot-open' :
+                                s === 'in approval' ? 'urja-dot-approval' :
+                                  s === 'filled' ? 'urja-dot-filled' :
+                                    s === 'on hold' ? 'urja-dot-hold' : 'urja-dot-closed';
+
+                              const appStage = (r.approvalStage || '').toLowerCase();
+                              const appCls = appStage.includes('approved') ? 'urja-approval-approved' :
+                                appStage.includes('dgm') ? 'urja-approval-dgm' :
+                                  appStage.includes('hod') ? 'urja-approval-hod' : 'urja-approval-closed';
+
+                              return (
+                                <tr key={r.id} className={`urja-table-row ${isSelected ? 'selected' : ''}`}>
+                                  <td className="urja-td-checkbox">
+                                    <input
+                                      type="checkbox"
+                                      className="urja-custom-checkbox"
+                                      checked={isSelected}
+                                      onChange={() => {
+                                        setSelectedReqIds(prev => prev.includes(r.id) ? prev.filter(x => x !== r.id) : [...prev, r.id]);
+                                      }}
+                                    />
+                                  </td>
+                                  <td className="urja-td-req-id">
+                                    <span className="urja-link-code">{r.code}</span>
+                                  </td>
+                                  <td className="urja-td-title">
+                                    <span className="urja-job-title-text">{r.title}</span>
+                                    {r.experience && (
+                                      <div className="urja-job-meta-sub">
+                                        <span className="urja-meta-chip">{r.experience}</span>
+                                        {r.budgetMin && <span className="urja-meta-salary">{r.budgetMin} - {r.budgetMax}</span>}
+                                      </div>
+                                    )}
+                                  </td>
+                                  <td className="urja-td-dept">
+                                    <span className="urja-dept-tag">
+                                      <i className="bi bi-building me-1 opacity-75"></i>
+                                      {r.deptName}
+                                    </span>
+                                  </td>
+                                  <td className="urja-td-loc">
+                                    <span className="urja-loc-text">
+                                      <i className="bi bi-geo-alt me-1 text-muted"></i>
+                                      {r.location || 'Multiple Sites'}
+                                    </span>
+                                  </td>
+                                  <td className="urja-td-openings text-center">
+                                    <span className="urja-openings-chip">{r.openings || r.headcount || 1}</span>
+                                  </td>
+                                  <td className="urja-td-status">
+                                    <span className={`urja-status-badge ${badgeCls}`}>
+                                      <span className={`urja-status-badge-dot ${dotCls}`}></span>
+                                      <span>{r.status}</span>
+                                    </span>
+                                  </td>
+                                  <td className="urja-td-approval">
+                                    <span className={`urja-approval-pill ${appCls}`}>
+                                      {r.approvalStage || 'Approved'}
+                                    </span>
+                                  </td>
+                                  <td className="urja-td-date">
+                                    <span className="urja-date-text">{r.createdOn || '10 Oct 2026'}</span>
+                                  </td>
+                                  <td className="urja-td-date">
+                                    <span className="urja-date-text urja-target-date">
+                                      <i className="bi bi-calendar-event me-1 opacity-75"></i>
+                                      {r.targetDate || r.dueDate || '31 Oct 2026'}
+                                    </span>
+                                  </td>
+                                  <td className="urja-td-actions text-end">
+                                    <div className="urja-action-buttons-group">
+                                      <button type="button" className="urja-btn-icon-action" title="View Details" onClick={() => showToast('Requisition Details: ' + r.code)}>
+                                        <i className="bi bi-eye"></i>
+                                      </button>
+                                      <button type="button" className="urja-btn-icon-action" title="Edit Requisition" onClick={() => showToast('Edit form opened for ' + r.code)}>
+                                        <i className="bi bi-pencil"></i>
+                                      </button>
+                                      <button type="button" className="urja-btn-icon-action" title="Approvals" onClick={() => setActiveTab('approvals')}>
+                                        <i className="bi bi-check2-circle"></i>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Pagination Footer */}
+                    <div className="urja-table-footer">
+                      <div className="urja-table-footer-info">
+                        Showing <strong>{filteredRequisitions.length === 0 ? 0 : (reqPage - 1) * reqRowsPerPage + 1}</strong> to <strong>{Math.min(reqPage * reqRowsPerPage, filteredRequisitions.length)}</strong> of <strong>{filteredRequisitions.length}</strong> requisitions
+                      </div>
+
+                      <div className="urja-table-footer-controls">
+                        <div className="urja-rows-per-page-box">
+                          <span className="urja-rows-label">Rows per page</span>
+                          <select
+                            className="urja-rows-select"
+                            value={reqRowsPerPage}
+                            onChange={(e) => { setReqRowsPerPage(parseInt(e.target.value, 10)); setReqPage(1); }}
+                          >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                          </select>
+                        </div>
+
+                        <div className="urja-pagination-btns">
+                          <button
+                            type="button"
+                            className="urja-page-nav-btn"
+                            disabled={reqPage <= 1}
+                            onClick={() => setReqPage(p => Math.max(1, p - 1))}
+                          >
+                            <i className="bi bi-chevron-left"></i>
+                          </button>
+                          {Array.from({ length: totalReqPages }, (_, i) => i + 1).map(p => (
+                            <button
+                              key={p}
+                              type="button"
+                              className={`urja-page-number-btn ${reqPage === p ? 'active' : ''}`}
+                              onClick={() => setReqPage(p)}
+                            >
+                              {p}
+                            </button>
+                          ))}
+                          <button
+                            type="button"
+                            className="urja-page-nav-btn"
+                            disabled={reqPage >= totalReqPages}
+                            onClick={() => setReqPage(p => Math.min(totalReqPages, p + 1))}
+                          >
+                            <i className="bi bi-chevron-right"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 07: Approval Workflow */}
+              {activeTab === 'approvals' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>07. Approval Workflow Matrix</h2>
+                      <p>Multi-stage approval pipeline: HR Review ➔ Line Manager ➔ Senior Management.</p>
+                    </div>
+                  </div>
+
+                  <div className="card-portal p-4 mb-4">
+                    <h6 className="fw-bold text-navy mb-3">Enterprise Multi-Stage Approval Sequence</h6>
+                    <div className="workflow-stepper">
+                      <div className="step-item completed">
+                        <div className="step-circle"><i className="bi bi-check-lg"></i></div>
+                        <div className="step-label">1. Request</div>
+                        <div className="step-sub">Requester fills form</div>
+                      </div>
+                      <div className="step-item active">
+                        <div className="step-circle">2</div>
+                        <div className="step-label">2. HR Review</div>
+                        <div className="step-sub">Budget & Designation</div>
+                      </div>
+                      <div className="step-item">
+                        <div className="step-circle">3</div>
+                        <div className="step-label">3. Manager Signoff</div>
+                        <div className="step-sub">Line Manager</div>
+                      </div>
+                      <div className="step-item">
+                        <div className="step-circle">4</div>
+                        <div className="step-label">4. Senior VP</div>
+                        <div className="step-sub">Final sanction</div>
+                      </div>
+                      <div className="step-item">
+                        <div className="step-circle">5</div>
+                        <div className="step-label">5. Recruiter Assigned</div>
+                        <div className="step-sub">30d TAT Begins</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="card-portal">
+                    <div className="card-header-portal">
+                      <h5>Requisitions Awaiting Approval Decision</h5>
+                    </div>
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Code</th>
+                            <th>Job Title</th>
+                            <th>Department</th>
+                            <th>Created By</th>
+                            <th>Stage</th>
+                            <th>Budget</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {requisitions.filter(r => (r.status && (r.status.toUpperCase().includes('PENDING') || r.status.toUpperCase().includes('APPROVAL') || r.status === 'In Approval')) || (r.approvalStage && r.approvalStage.toLowerCase().includes('pending'))).length === 0 ? (
+                            <tr>
+                              <td colSpan="7" className="text-center py-4 text-muted">
+                                <i className="bi bi-check2-circle text-success fs-3 d-block mb-2"></i>
+                                All manpower requisitions are reviewed and approved.
+                              </td>
+                            </tr>
+                          ) : (
+                            requisitions.filter(r => (r.status && (r.status.toUpperCase().includes('PENDING') || r.status.toUpperCase().includes('APPROVAL') || r.status === 'In Approval')) || (r.approvalStage && r.approvalStage.toLowerCase().includes('pending'))).map(r => (
+                              <tr key={r.id}>
+                                <td className="fw-bold text-primary">{r.code}</td>
+                                <td>{r.title}</td>
+                                <td>{r.deptName}</td>
+                                <td>{r.createdBy || r.hiringManager}</td>
+                                <td><span className="badge-status pending">{(r.approvalStage || r.status || 'Pending').replace(/_/g, ' ')}</span></td>
+                                <td>{r.budgetMin} - {r.budgetMax}</td>
+                                <td>
+                                  <button className="btn btn-sm btn-navy" onClick={() => { setSelectedReqForApproval(r); setShowApprovalModal(true); }}>
+                                    <i className="bi bi-pen me-1"></i> Review & Approve
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 08: Recruiter Assignment */}
+              {activeTab === 'recruiterAssign' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>08. Recruiter Assignment & Workload</h2>
+                      <p>Assign approved vacancies to recruiters and initiate the 30-day TAT SLA.</p>
+                    </div>
+                  </div>
+
+                  <div className="card-portal">
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Code</th>
+                            <th>Job Title</th>
+                            <th>Department</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Assigned Recruiter</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {requisitions.map(r => (
+                            <tr key={r.id}>
+                              <td className="fw-bold">{r.code}</td>
+                              <td>{r.title}</td>
+                              <td>{r.deptName}</td>
+                              <td><span className="badge-status critical">{r.priority}</span></td>
+                              <td><span className="badge-status approved">{r.status}</span></td>
+                              <td>{r.assignedRecruiter || <span className="text-danger fw-bold">Unassigned</span>}</td>
+                              <td>
+                                <button className="btn btn-sm btn-outline-navy" onClick={() => { setSelectedReqForAssign(r); setShowAssignModal(true); }}>
+                                  <i className="bi bi-person-plus me-1"></i> {r.assignedRecruiter ? 'Reassign' : 'Assign Recruiter'}
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 09: Candidate Management */}
+              {activeTab === 'candidates' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>09. Candidate Management Pipeline</h2>
+                      <p>Candidate profiles, resumes, current vs expected CTC, and stage progression.</p>
+                    </div>
+                    <button className="btn btn-navy" onClick={() => showToast('Candidate registration modal opened')}>
+                      <i className="bi bi-person-plus-fill me-1"></i> Add Candidate
+                    </button>
+                  </div>
+
+                  <div className="card-portal">
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Code & Name</th>
+                            <th>Requisition</th>
+                            <th>Experience</th>
+                            <th>Employer</th>
+                            <th>Current / Expected CTC</th>
+                            <th>Source</th>
+                            <th>Status</th>
+                            <th>Resume</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {candidates.map(c => (
+                            <tr key={c.id}>
+                              <td>
+                                <div className="fw-bold">{c.name}</div>
+                                <span className="text-muted small">{c.code} • {c.email}</span>
+                              </td>
+                              <td><span className="badge bg-light text-dark border">{c.reqCode}</span></td>
+                              <td>{c.exp}</td>
+                              <td>{c.employer}</td>
+                              <td>{c.ctc} / {c.expectedCtc}</td>
+                              <td><span className="badge bg-secondary-subtle text-secondary">{c.source}</span></td>
+                              <td><span className="badge-status interviewing">{c.status}</span></td>
+                              <td>
+                                <button className="btn btn-sm btn-light border" onClick={() => showToast(`Resume for ${c.name} opened from encrypted S3 storage.`)}>
+                                  <i className="bi bi-file-earmark-pdf text-danger"></i> PDF
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 10: Interview Scheduler */}
+              {activeTab === 'interviews' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>10. Interview Scheduler & Scorecards</h2>
+                      <p>Schedule interview rounds, send MS Teams invitations, and submit candidate scorecards.</p>
+                    </div>
+                    <button className="btn btn-navy" onClick={() => showToast('Interview scheduler dialog loaded.')}>
+                      <i className="bi bi-calendar-plus me-1"></i> Schedule Interview
+                    </button>
+                  </div>
+
+                  <div className="card-portal">
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Candidate</th>
+                            <th>Position</th>
+                            <th>Round</th>
+                            <th>Interviewer</th>
+                            <th>Scheduled Date</th>
+                            <th>Status</th>
+                            <th>Scorecard / Rating</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {interviews.map(i => (
+                            <tr key={i.id}>
+                              <td className="fw-bold">{i.candidateName}</td>
+                              <td>{i.jobTitle}</td>
+                              <td><span className="badge bg-info-subtle text-info border">{i.round}</span></td>
+                              <td>{i.interviewer}</td>
+                              <td>{i.date} ({i.time})</td>
+                              <td><span className="badge-status approved">{i.status}</span></td>
+                              <td>
+                                {i.feedback ? (
+                                  <span className="badge bg-success-subtle text-success border">
+                                    ⭐ {i.feedback.rating}/5 ({i.feedback.recommendation})
+                                  </span>
+                                ) : (
+                                  <button className="btn btn-sm btn-outline-navy" onClick={() => showToast(`Scorecard modal opened for ${i.candidateName}`)}>
+                                    Submit Rating
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 11: TAT & Task Tracking */}
+              {activeTab === 'tat' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>11. 30-Day TAT & SLA Task Tracking</h2>
+                      <p>Real-time SLA calculations: Start Date, Target (30 Calendar Days), Elapsed, and Overdue Alerts.</p>
+                    </div>
+                  </div>
+
+                  <div className="row g-4 mb-4">
+                    <div className="col-12 col-lg-8">
+                      <div className="card-portal p-3">
+                        <h6 className="fw-bold text-navy mb-3">Requisition Turn-Around-Time (TAT) Dashboard</h6>
+                        <div className="table-responsive">
+                          <table className="table table-portal">
+                            <thead>
+                              <tr>
+                                <th>Requisition</th>
+                                <th>Recruiter</th>
+                                <th>Start Date</th>
+                                <th>Target</th>
+                                <th>SLA Meter</th>
+                                <th>Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {requisitions.filter(r => r.tatStartDate).map(r => {
+                                const tat = calculateTat(r.tatStartDate, r.dueDate, r.status === 'FILLED');
+                                return (
+                                  <tr key={r.id}>
+                                    <td className="fw-bold">{r.code}<br /><small className="text-muted">{r.title}</small></td>
+                                    <td>{r.assignedRecruiter}</td>
+                                    <td>{r.tatStartDate}</td>
+                                    <td>30 Days</td>
+                                    <td style={{ width: 180 }}>
+                                      <div className="tat-tracker">
+                                        <div className="d-flex justify-content-between small">
+                                          <span>{tat.elapsedDays} elapsed</span>
+                                          <span>{tat.daysRemaining}d left</span>
+                                        </div>
+                                        <div className="tat-bar-container">
+                                          <div className={`tat-bar-fill ${tat.isOverdue ? 'overdue' : tat.elapsedDays >= 20 ? 'warning' : 'normal'}`} style={{ width: `${tat.progress}%` }}></div>
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <span className={`badge-status ${tat.isOverdue ? 'critical' : tat.elapsedDays >= 20 ? 'pending' : 'approved'}`}>
+                                        {tat.isOverdue ? 'OVERDUE' : 'ON TRACK'}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-12 col-lg-4">
+                      <div className="card-portal p-3">
+                        <h6 className="fw-bold text-navy mb-3">Recruiter Task Checklist</h6>
+                        {tasks.map(t => (
+                          <div key={t.id} className="p-2 mb-2 rounded border bg-light d-flex align-items-start gap-2">
+                            <input type="checkbox" className="form-check-input mt-1" defaultChecked={t.status === 'COMPLETED'} />
+                            <div className="flex-grow-1">
+                              <div className="fw-semibold small">{t.title}</div>
+                              <div className="text-muted" style={{ fontSize: '0.72rem' }}>Due: {t.dueDate} • {t.recruiter}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 03: Departments */}
+              {activeTab === 'departments' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>03. Department & Designation Master</h2>
+                      <p>Manage organizational hierarchy, department codes and designations.</p>
+                    </div>
+                  </div>
+                  <div className="row g-4">
+                    <div className="col-md-6">
+                      <div className="card-portal p-3">
+                        <h5 className="mb-3">Departments</h5>
+                        <ul className="list-group list-group-flush">
+                          {departments.map(d => (
+                            <li key={d.id} className="list-group-item d-flex justify-content-between align-items-center">
+                              <div>
+                                <span className="fw-bold">{d.name}</span>
+                                <div className="text-muted small">{d.code} • Head: {d.head}</div>
+                              </div>
+                              <span className="badge bg-success-subtle text-success border">Active</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="card-portal p-3">
+                        <h5 className="mb-3">Designation Master</h5>
+                        <ul className="list-group list-group-flush">
+                          {designations.map(ds => (
+                            <li key={ds.id} className="list-group-item d-flex justify-content-between align-items-center">
+                              <div>
+                                <span className="fw-bold">{ds.name}</span>
+                                <div className="text-muted small">{ds.code} • Level: {ds.level}</div>
+                              </div>
+                              <span className="badge bg-primary-subtle text-primary border">Active</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 04: Employees */}
+              {activeTab === 'employees' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>04. Employee Management</h2>
+                      <p>Employee master directory, reporting managers, and employment status.</p>
+                    </div>
+                  </div>
+                  <div className="card-portal">
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Code & Name</th>
+                            <th>Department</th>
+                            <th>Designation</th>
+                            <th>Reporting Manager</th>
+                            <th>Joining Date</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {employees.map(e => (
+                            <tr key={e.id}>
+                              <td>
+                                <div className="fw-bold">{e.name}</div>
+                                <span className="text-muted small">{e.code}</span>
+                              </td>
+                              <td>{e.dept}</td>
+                              <td>{e.desig}</td>
+                              <td>{e.manager}</td>
+                              <td>{e.joiningDate}</td>
+                              <td>{e.location}</td>
+                              <td><span className="badge-status approved">{e.status}</span></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 05: Documents */}
+              {activeTab === 'documents' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>05. Employee Documents & Protected Storage</h2>
+                      <p>Secured employee files, confidentiality access flags, and versions.</p>
+                    </div>
+                  </div>
+                  <div className="card-portal">
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Employee</th>
+                            <th>Document</th>
+                            <th>Category</th>
+                            <th>Size</th>
+                            <th>Version</th>
+                            <th>Access Control</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {documents.map(doc => (
+                            <tr key={doc.id}>
+                              <td>
+                                <div className="fw-bold">{doc.empName}</div>
+                                <span className="text-muted small">{doc.empCode}</span>
+                              </td>
+                              <td className="fw-bold text-navy"><i className="bi bi-file-earmark-lock-fill text-primary me-1"></i> {doc.name}</td>
+                              <td><span className="badge bg-secondary-subtle text-secondary">{doc.category}</span></td>
+                              <td>{doc.size}</td>
+                              <td><span className="badge bg-light border text-dark">{doc.version}</span></td>
+                              <td>
+                                {doc.confidential ? (
+                                  <span className="badge bg-danger-subtle text-danger border"><i className="bi bi-lock me-1"></i> Restricted HR</span>
+                                ) : (
+                                  <span className="badge bg-success-subtle text-success border">General</span>
+                                )}
+                              </td>
+                              <td>
+                                <button className="btn btn-sm btn-outline-navy" onClick={() => showToast(`Authorized token verified for: ${doc.name}`)}>
+                                  <i className="bi bi-download"></i> Download
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 12: Reports */}
+              {activeTab === 'reports' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>12. Reports & Analytics</h2>
+                      <p>SLA compliance rate, hiring velocity, and department fulfillment metrics.</p>
+                    </div>
+                    <button className="btn btn-navy" onClick={() => showToast('Generated complete recruitment CSV report.')}>
+                      <i className="bi bi-file-earmark-spreadsheet me-1"></i> Export Report
+                    </button>
+                  </div>
+
+                  <div className="row g-4 mb-4">
+                    <div className="col-md-4">
+                      <div className="card-portal p-3 text-center">
+                        <h3 className="fw-bold text-success">87.5%</h3>
+                        <p className="text-muted mb-0">30-Day TAT SLA Compliance</p>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="card-portal p-3 text-center">
+                        <h3 className="fw-bold text-primary">22.4 Days</h3>
+                        <p className="text-muted mb-0">Average Time to Hire</p>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="card-portal p-3 text-center">
+                        <h3 className="fw-bold text-info">92%</h3>
+                        <p className="text-muted mb-0">Offer Acceptance Rate</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 13: Notifications */}
+              {activeTab === 'notifications' && (
+                <div>
+                  <div className="page-header d-flex justify-content-between align-items-center">
+                    <div>
+                      <h2>13. Email Notifications & Alert Center</h2>
+                      <p>Automated transactional alerts, approval queues, and SLA escalation records.</p>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-primary fw-semibold"
+                        onClick={() => {
+                          setNotifications(prev => prev.map(n => ({ ...n, unread: false, isRead: true, readStatus: 'READ' })));
+                          showToast('All notifications marked as read');
+                        }}
+                        disabled={!notifications.some(n => n.unread)}
+                      >
+                        <i className="bi bi-check2-all me-1"></i> Mark All as Read
+                      </button>
+                    </div>
+                  </div>
+                  <div className="card-portal">
+                    <div className="list-group list-group-flush">
+                      {notifications.map(n => {
+                        const isRead = !n.unread || n.isRead === true || n.readStatus === 'READ';
+                        return (
+                          <div
+                            key={n.id}
+                            className="list-group-item p-3 d-flex align-items-start gap-3"
+                            style={{
+                              backgroundColor: isRead ? '#F1F3F5' : '#FFFFFF',
+                              cursor: isRead ? 'default' : 'pointer',
+                              transition: 'background-color 0.2s ease'
+                            }}
+                            onClick={() => {
+                              if (!isRead) {
+                                setNotifications(prev => prev.map(item => item.id === n.id ? { ...item, unread: false, isRead: true, readStatus: 'READ' } : item));
+                              }
+                            }}
+                          >
+                            <div className="pt-0.5">
+                              {isRead ? (
+                                <i className="bi bi-bell text-secondary fs-5" style={{ color: '#868E96' }}></i>
+                              ) : (
+                                <i className="bi bi-bell-fill text-success fs-5"></i>
+                              )}
+                            </div>
+                            <div className="flex-grow-1 min-w-0">
+                              <div className="d-flex justify-content-between align-items-baseline gap-2 mb-1">
+                                <h6
+                                  className={`mb-1 fw-bold ${isRead ? 'text-muted' : 'text-dark'}`}
+                                  style={{ color: isRead ? '#495057' : '#0F172A' }}
+                                >
+                                  {n.title}
+                                </h6>
+                                <small style={{ color: isRead ? '#868E96' : '#64748B' }}>{n.time}</small>
+                              </div>
+                              <p
+                                className="mb-2 small"
+                                style={{ color: isRead ? '#6C757D' : '#334155', lineHeight: '1.45' }}
+                              >
+                                {n.message}
+                              </p>
+                              <div className="d-flex justify-content-between align-items-center pt-1 border-top border-light-subtle">
+                                {isRead ? (
+                                  <span className="badge bg-light border text-secondary rounded-pill px-2 py-0.5" style={{ fontSize: '0.72rem', color: '#6C757D' }}>
+                                    <i className="bi bi-check2 me-1"></i> Read
+                                  </span>
+                                ) : (
+                                  <div className="d-flex align-items-center gap-2">
+                                    <span className="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5" style={{ fontSize: '0.72rem' }}>
+                                      ● Unread
+                                    </span>
+                                    <button
+                                      type="button"
+                                      className="btn btn-sm btn-link text-primary text-decoration-none p-0 fw-semibold"
+                                      style={{ fontSize: '0.78rem' }}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setNotifications(prev => prev.map(item => item.id === n.id ? { ...item, unread: false, isRead: true, readStatus: 'READ' } : item));
+                                      }}
+                                    >
+                                      Read Message
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 14: Backups */}
+              {activeTab === 'backups' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>14. Database Backup & Disaster Recovery</h2>
+                      <p>Automated daily backups, manual triggers, retention, and SHA-256 checksums.</p>
+                    </div>
+                    <button className="btn btn-navy" onClick={handleTriggerBackup}>
+                      <i className="bi bi-cloud-arrow-up me-1"></i> Trigger Manual Backup
+                    </button>
+                  </div>
+                  <div className="card-portal">
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Snapshot File Name</th>
+                            <th>Type</th>
+                            <th>Size</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Timestamp</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {backups.map(b => (
+                            <tr key={b.id}>
+                              <td className="fw-bold">{b.fileName}</td>
+                              <td><span className="badge bg-secondary-subtle text-secondary">{b.type}</span></td>
+                              <td>{b.size}</td>
+                              <td><code>{b.location}</code></td>
+                              <td><span className="badge-status approved">{b.status}</span></td>
+                              <td>{b.date}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 15: Users & Permissions */}
+              {activeTab === 'users' && (
+                <div>
+                  <div className="page-header">
+                    <div>
+                      <h2>15. User & Permission Management</h2>
+                      <p>Role-based access matrix, security administration, and audit logs.</p>
+                    </div>
+                  </div>
+                  <div className="card-portal mb-4">
+                    <div className="card-header-portal">
+                      <h5>System User Directory</h5>
+                    </div>
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Assigned Role</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {INITIAL_USERS.map(u => (
+                            <tr key={u.id}>
+                              <td className="fw-bold">{u.name}</td>
+                              <td>{u.email}</td>
+                              <td><span className="badge bg-primary-subtle text-primary border">{u.role}</span></td>
+                              <td>{u.dept}</td>
+                              <td><span className="badge-status approved">ACTIVE</span></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div className="card-portal">
+                    <div className="card-header-portal">
+                      <h5>Security Audit Trail</h5>
+                    </div>
+                    <div className="table-responsive">
+                      <table className="table table-portal">
+                        <thead>
+                          <tr>
+                            <th>Timestamp</th>
+                            <th>Actor</th>
+                            <th>Action</th>
+                            <th>Entity</th>
+                            <th>Entity ID</th>
+                            <th>IP Address</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {auditLogs.map(l => (
+                            <tr key={l.id}>
+                              <td>{l.timestamp}</td>
+                              <td className="fw-bold">{l.actor}</td>
+                              <td><span className="badge bg-light text-dark border">{l.action}</span></td>
+                              <td>{l.entity}</td>
+                              <td><code>{l.entityId}</code></td>
+                              <td>{l.ip}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Module 01: Login View */}
+              {activeTab === 'login' && (
+                <div className="py-2">
+                  <div className="alert d-flex justify-content-between align-items-center mb-3" style={{ background: '#0a1e10', color: '#84d623', border: '1px solid rgba(132, 214, 35, 0.3)' }}>
+                    <div>
+                      <strong><i className="bi bi-shield-lock-fill me-2"></i>ATS URJA Corporate Authentication Screen</strong>
+                      <div className="small text-light opacity-75">Urja Foods & Agro Applicant Tracking System live sign-in portal.</div>
+                    </div>
+                    <button className="btn btn-sm btn-outline-light" onClick={() => setIsAuthenticated(false)}>
+                      Go Fullscreen
+                    </button>
+                  </div>
+                  <div style={{ borderRadius: 18, overflow: 'hidden', border: '1px solid rgba(132, 214, 35, 0.25)' }}>
+                    <UrjaLoginPage onLoginSuccess={handleLoginSuccess} initialEmail={currentUser.email} />
+                  </div>
+                </div>
+              )}
+            </main>
+          </div>
+
+          {/* MODAL: Requisition Creation */}
+          {showReqModal && (
+            <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+              <div className="modal-dialog modal-lg">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title fw-bold">Create New Manpower Requisition</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowReqModal(false)}></button>
+                  </div>
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const newReq = {
+                      id: requisitions.length + 1,
+                      code: `REQ-2026-00${requisitions.length + 1}`,
+                      title: formData.get('jobTitle'),
+                      deptName: formData.get('deptName'),
+                      headcount: parseInt(formData.get('headcount')),
+                      type: formData.get('type'),
+                      priority: formData.get('priority'),
+                      budgetMin: `${formData.get('budgetMin')} LPA`,
+                      budgetMax: `${formData.get('budgetMax')} LPA`,
+                      status: 'PENDING_HR_REVIEW',
+                      createdBy: currentUser.name,
+                      assignedRecruiter: null,
+                      tatStartDate: null,
+                      dueDate: null
+                    };
+                    setRequisitions([newReq, ...requisitions]);
+                    setShowReqModal(false);
+                    showToast(`Requisition ${newReq.code} created and routed for HR review!`);
+                  }}>
+                    <div className="modal-body">
+                      <div className="row g-3">
+                        <div className="col-md-8">
+                          <label className="form-label small fw-bold">Job Title</label>
+                          <input name="jobTitle" className="form-control" placeholder="e.g. Senior Security Architect" required />
+                        </div>
+                        <div className="col-md-4">
+                          <label className="form-label small fw-bold">Headcount</label>
+                          <input name="headcount" type="number" min="1" className="form-control" defaultValue="1" required />
+                        </div>
+                        <div className="col-md-6">
+                          <label className="form-label small fw-bold">Department</label>
+                          <select name="deptName" className="form-select">
+                            {departments.map(d => <option key={d.id} value={d.name}>{d.name}</option>)}
+                          </select>
+                        </div>
+                        <div className="col-md-3">
+                          <label className="form-label small fw-bold">Position Type</label>
+                          <select name="type" className="form-select">
+                            <option value="NEW_HEADCOUNT">New Headcount</option>
+                            <option value="REPLACEMENT">Replacement</option>
+                          </select>
+                        </div>
+                        <div className="col-md-3">
+                          <label className="form-label small fw-bold">Priority</label>
+                          <select name="priority" className="form-select">
+                            <option value="CRITICAL">Critical</option>
+                            <option value="HIGH">High</option>
+                            <option value="MEDIUM">Medium</option>
+                          </select>
+                        </div>
+                        <div className="col-md-6">
+                          <label className="form-label small fw-bold">Min Budget (LPA)</label>
+                          <input name="budgetMin" type="number" className="form-control" defaultValue="15" required />
+                        </div>
+                        <div className="col-md-6">
+                          <label className="form-label small fw-bold">Max Budget (LPA)</label>
+                          <input name="budgetMax" type="number" className="form-control" defaultValue="22" required />
+                        </div>
+                        <div className="col-12">
+                          <label className="form-label small fw-bold">Business Justification</label>
+                          <textarea name="justification" className="form-control" rows="2" placeholder="Explain the rationale for this hiring request" required></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-light" onClick={() => setShowReqModal(false)}>Cancel</button>
+                      <button type="submit" className="btn btn-navy">Submit for HR Review</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* MODAL: Approval Decision */}
+          {showApprovalModal && selectedReqForApproval && (
+            <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title fw-bold">Approval Review: {selectedReqForApproval.code}</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowApprovalModal(false)}></button>
+                  </div>
+                  <form onSubmit={handleProcessApproval}>
+                    <div className="modal-body">
+                      <div className="mb-3">
+                        <div className="fw-bold">{selectedReqForApproval.title}</div>
+                        <div className="text-muted small">Department: {selectedReqForApproval.deptName} • Priority: {selectedReqForApproval.priority}</div>
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label small fw-bold">Approval Decision</label>
+                        <select className="form-select" value={approvalDecision} onChange={(e) => setApprovalDecision(e.target.value)}>
+                          <option value="APPROVED">Approve (Advance to Next Stage)</option>
+                          <option value="RETURNED_FOR_CORRECTION">Return for Correction</option>
+                          <option value="REJECTED">Reject Requisition</option>
+                        </select>
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label small fw-bold">Remarks / Justification Notes</label>
+                        <textarea className="form-control" rows="3" value={approvalRemarks} onChange={(e) => setApprovalRemarks(e.target.value)} placeholder="Provide mandatory rationale for your decision..."></textarea>
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-light" onClick={() => setShowApprovalModal(false)}>Cancel</button>
+                      <button type="submit" className="btn btn-navy">Confirm Action</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* MODAL: Recruiter Assignment */}
+          {showAssignModal && selectedReqForAssign && (
+            <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title fw-bold">Assign Recruiter: {selectedReqForAssign.code}</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowAssignModal(false)}></button>
+                  </div>
+                  <form onSubmit={handleAssignRecruiter}>
+                    <div className="modal-body">
+                      <div className="alert alert-info small">
+                        <i className="bi bi-info-circle-fill me-1"></i>
+                        Assigning a recruiter automatically starts the <strong>30 Calendar Days TAT SLA clock</strong>.
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label small fw-bold">Select Dedicated Recruiter</label>
+                        <select className="form-select" value={selectedRecruiterId} onChange={(e) => setSelectedRecruiterId(e.target.value)}>
+                          <option value="3">Anita Deshmukh (Lead Recruiter - Engineering)</option>
+                          <option value="4">Rahul Nair (Senior Recruiter - Technical)</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-light" onClick={() => setShowAssignModal(false)}>Cancel</button>
+                      <button type="submit" className="btn btn-navy">Confirm Assignment & Start TAT</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<TalentPulsePortal />);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1201 @@
+/* ==============================================================================
+   URJA FOODS ATS — EMPLOYEE MANAGEMENT & EMPLOYMENT LIFECYCLE STYLES
+   Visual reference: Accurate Urja Foods ATS dark-green/white/lime design
+   ============================================================================== */
+
+.urja-employees-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  color: #1e293b;
+  font-family: inherit;
+}
+
+/* 1. Header */
+.urja-emp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.urja-emp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.urja-emp-header-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #16a34a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.22);
+}
+
+.urja-emp-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.urja-emp-subtitle {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0.2rem 0 0;
+  font-weight: 500;
+}
+
+.urja-emp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.urja-emp-btn-primary {
+  background: #15803d;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(21, 128, 61, 0.25);
+}
+
+.urja-emp-btn-primary:hover {
+  background: #166534;
+  transform: translateY(-1px);
+}
+
+/* 2. Top Summary Cards (5 Cards) */
+.urja-emp-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 1280px) {
+  .urja-emp-summary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .urja-emp-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-emp-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.urja-emp-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  border-color: #cbd5e1;
+}
+
+.urja-emp-card.active-filter-card {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.urja-emp-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.urja-emp-card-icon.blue {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.urja-emp-card-icon.green {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.urja-emp-card-icon.orange {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.urja-emp-card-icon.red {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.urja-emp-card-icon.calendar {
+  background: #f0f9ff;
+  color: #0284c7;
+}
+
+.urja-emp-card-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.urja-emp-card-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.urja-emp-card-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.urja-emp-card-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.urja-emp-card-trend {
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.urja-emp-card-trend.up {
+  color: #16a34a;
+}
+
+.urja-emp-card-trend.down {
+  color: #dc2626;
+}
+
+.urja-emp-card-trend.neutral {
+  color: #94a3b8;
+}
+
+/* 3. Filters & Search Bar */
+.urja-emp-filters-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.urja-emp-filters-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(130px, 1fr)) 1.8fr auto auto;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+@media (max-width: 1400px) {
+  .urja-emp-filters-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .urja-emp-search-col {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .urja-emp-filters-grid {
+    grid-template-columns: 1fr;
+  }
+  .urja-emp-search-col {
+    grid-column: span 1;
+  }
+}
+
+.urja-emp-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.urja-emp-filter-group label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.urja-emp-select,
+.urja-emp-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #1e293b;
+  background-color: #ffffff;
+  outline: none;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.urja-emp-select:focus,
+.urja-emp-input:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+.urja-emp-search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.urja-emp-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.urja-emp-input.with-search-icon {
+  padding-left: 2.2rem;
+}
+
+.urja-emp-btn-search {
+  background: #16a34a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.58rem 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.urja-emp-btn-search:hover {
+  background: #15803d;
+}
+
+.urja-emp-btn-reset {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.58rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-emp-btn-reset:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* 4. Split Layout (Table on Left, Profile Drawer on Right) */
+.urja-emp-split-view {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.urja-emp-table-wrapper {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-emp-table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.urja-emp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  text-align: left;
+}
+
+.urja-emp-table thead th {
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: capitalize;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.urja-emp-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
+  cursor: pointer;
+}
+
+.urja-emp-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.urja-emp-table tbody tr.row-selected {
+  background: #f0fdf4 !important;
+  border-left: 3px solid #16a34a;
+}
+
+.urja-emp-table td {
+  padding: 0.85rem 1rem;
+  color: #334155;
+  vertical-align: middle;
+}
+
+/* Checkbox Column */
+.urja-emp-th-checkbox,
+.urja-emp-td-checkbox {
+  width: 36px;
+  text-align: center;
+  padding: 0.85rem 0.5rem 0.85rem 1rem !important;
+}
+
+.urja-emp-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #16a34a;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Employee Name & Avatar Cell */
+.urja-emp-cell-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.urja-emp-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #e2e8f0;
+  border: 1px solid #cbd5e1;
+}
+
+.urja-emp-cell-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.urja-emp-user-name {
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.urja-emp-user-email {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+.urja-emp-code-badge {
+  font-family: monospace;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+/* Status Pills */
+.urja-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.urja-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.urja-status-pill.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+.urja-status-pill.active .urja-status-dot {
+  background: #16a34a;
+}
+
+.urja-status-pill.probation {
+  background: #fef3c7;
+  color: #b45309;
+}
+.urja-status-pill.probation .urja-status-dot {
+  background: #d97706;
+}
+
+.urja-status-pill.notice {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+.urja-status-pill.notice .urja-status-dot {
+  background: #7c3aed;
+}
+
+.urja-status-pill.resigned,
+.urja-status-pill.exited {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.urja-status-pill.resigned .urja-status-dot,
+.urja-status-pill.exited .urja-status-dot {
+  background: #dc2626;
+}
+
+.urja-status-pill.terminated {
+  background: #475569;
+  color: #ffffff;
+}
+
+/* Actions Column */
+.urja-emp-actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.urja-emp-action-icon-btn {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.95rem;
+}
+
+.urja-emp-action-icon-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Pagination Footer */
+.urja-emp-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.82rem;
+  color: #64748b;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.urja-emp-pagination-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.urja-emp-rows-per-page {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.urja-emp-rows-select {
+  padding: 0.2rem 0.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  background: #ffffff;
+}
+
+.urja-emp-pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.urja-emp-page-btn {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0 0.4rem;
+}
+
+.urja-emp-page-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.urja-emp-page-btn.active {
+  background: #16a34a;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.urja-emp-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 5. Right Details Profile Panel */
+.urja-emp-profile-panel {
+  width: 480px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: calc(100vh - 130px);
+  max-height: calc(100vh - 130px);
+  overflow: hidden;
+  position: sticky;
+  top: 1rem;
+  animation: drawerFadeIn 0.2s ease-out;
+}
+
+@keyframes drawerFadeIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 1024px) {
+  .urja-emp-split-view {
+    flex-direction: column;
+  }
+  .urja-emp-profile-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    max-height: 100vh;
+    z-index: 1060;
+    border-radius: 0;
+    box-shadow: -6px 0 25px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@media (max-width: 600px) {
+  .urja-emp-profile-panel {
+    max-width: 100%;
+  }
+}
+
+.urja-emp-panel-header {
+  padding: 1.25rem 1.35rem;
+  border-bottom: 1px solid #e2e8f0;
+  position: relative;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.urja-emp-panel-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 1.15rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  z-index: 2;
+}
+
+.urja-emp-panel-close-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.urja-emp-panel-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding-right: 2rem;
+}
+
+.urja-emp-panel-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+  flex-shrink: 0;
+  background: #f8fafc;
+}
+
+.urja-emp-panel-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.urja-emp-panel-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.urja-emp-panel-designation-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.urja-emp-panel-designation {
+  font-size: 0.88rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.urja-emp-panel-contact-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.urja-emp-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  word-break: break-all;
+}
+
+.urja-emp-contact-item i {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+/* Sub-navigation Tabs */
+.urja-emp-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 1.25rem;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.urja-emp-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 0.75rem 0.95rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.urja-emp-tab-btn:hover {
+  color: #0f172a;
+}
+
+.urja-emp-tab-btn.active {
+  color: #16a34a;
+  border-bottom-color: #16a34a;
+  font-weight: 700;
+}
+
+.urja-emp-panel-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.urja-emp-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #64748b;
+}
+
+.urja-emp-empty-state i {
+  font-size: 2.5rem;
+  color: #94a3b8;
+}
+
+.urja-emp-empty-state-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.urja-emp-empty-state-desc {
+  font-size: 0.82rem;
+  color: #64748b;
+  max-width: 320px;
+  line-height: 1.4;
+}
+
+/* Cards inside details panel */
+.urja-emp-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.urja-emp-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.urja-emp-section-icon {
+  color: #16a34a;
+}
+
+.urja-emp-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+  background: #f8fafc;
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+}
+
+.urja-emp-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.urja-emp-info-label {
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.urja-emp-info-value {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: #1e293b;
+  word-break: break-word;
+}
+
+.urja-emp-info-value.highlight-alert {
+  color: #d97706;
+}
+
+.urja-emp-info-value.highlight-danger {
+  color: #dc2626;
+}
+
+/* Panel Action Footer */
+.urja-emp-panel-footer {
+  padding: 1rem 1.2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.urja-emp-btn-secondary {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+
+.urja-emp-btn-secondary:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.urja-emp-btn-dropdown {
+  position: relative;
+}
+
+.urja-emp-actions-menu {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 0.4rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  min-width: 190px;
+  z-index: 50;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-emp-menu-item {
+  background: transparent;
+  border: none;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  font-size: 0.82rem;
+  color: #334155;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.15s ease;
+}
+
+.urja-emp-menu-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.urja-emp-menu-item.danger {
+  color: #dc2626;
+}
+
+.urja-emp-menu-item.danger:hover {
+  background: #fef2f2;
+}
+
+/* History Timeline inside History Tab */
+.urja-emp-history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.urja-emp-history-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 6px;
+  width: 2px;
+  background: #e2e8f0;
+}
+
+.urja-emp-history-entry {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.urja-emp-history-entry::before {
+  content: '';
+  position: absolute;
+  left: -1.25rem;
+  top: 0.35rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #16a34a;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px #dcfce7;
+}
+
+.urja-emp-history-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.urja-emp-history-meta {
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+.urja-emp-history-reason {
+  font-size: 0.8rem;
+  color: #334155;
+  background: #f8fafc;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  margin-top: 0.2rem;
+  border-left: 3px solid #cbd5e1;
+}
+
+/* Modal overlay and card */
+.urja-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.urja-modal-card {
+  background: #ffffff;
+  border-radius: 14px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: urjaModalSlideIn 0.2s ease-out;
+}
+
+@keyframes urjaModalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.urja-modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urja-modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.urja-modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.urja-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* Drawer Loading & Error states */
+.urja-emp-drawer-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  gap: 0.85rem;
+  color: #64748b;
+  min-height: 250px;
+}
+
+.urja-emp-drawer-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #16a34a;
+  border-radius: 50%;
+  animation: urjaSpinner 0.75s linear infinite;
+}
+
+@keyframes urjaSpinner {
+  to { transform: rotate(360deg); }
+}
+
+.urja-emp-drawer-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  gap: 0.75rem;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 8px;
+  margin: 1rem;
+}
+
+.urja-emp-drawer-error i {
+  font-size: 2rem;
+  color: #dc2626;
+}
+
+.urja-emp-drawer-error-text {
+  font-size: 0.86rem;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+/* Document Item Card */
+.urja-emp-doc-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0.95rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.15s ease;
+}
+
+.urja-emp-doc-card:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.urja-emp-doc-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.urja-emp-doc-icon {
+  color: #dc2626;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.urja-emp-doc-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.urja-emp-doc-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.urja-emp-doc-meta {
+  font-size: 0.73rem;
+  color: #64748b;
+  margin-top: 0.1rem;
+}
+
+.urja-emp-doc-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+

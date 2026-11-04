@@ -1,0 +1,1224 @@
+/* ==============================================================================
+   Urja Foods ATS - Precise Reference Mockup Stylesheet
+   - Split-screen layout inside unified canvas
+   - Dark forest green branding panel
+   - Agricultural imagery (Silos, Chick Wedge, Indian Woman)
+   - Pristine WHITE login card with slate typography & green accents
+   - Top-right live IST Clock Badge
+   - 6 Circular Business Division Badges
+   - Full desktop, tablet, and mobile responsiveness
+   ============================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --urja-dark-bg: #030e05;
+  --urja-dark-panel: #051809;
+  --urja-lime: #84d623;
+  --urja-lime-bright: #98ed28;
+  --urja-lime-dark: #65a30d;
+  --urja-lime-glow: rgba(132, 214, 35, 0.45);
+  --urja-slate-900: #0f172a;
+  --urja-slate-800: #1e293b;
+  --urja-slate-700: #334155;
+  --urja-slate-600: #475569;
+  --urja-slate-500: #64748b;
+  --urja-slate-400: #94a3b8;
+  --urja-slate-200: #e2e8f0;
+  --urja-slate-100: #f1f5f9;
+  --urja-white: #ffffff;
+}
+
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ==============================================================================
+   1. MAIN VIEWPORT & BACKGROUND
+   ============================================================================== */
+.urja-login-viewport {
+  height: 100vh;
+  max-height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+  box-sizing: border-box;
+  background-color: var(--urja-dark-bg);
+  background-image: 
+    radial-gradient(circle at 75% 25%, rgba(6, 26, 12, 0.75) 0%, rgba(2, 10, 4, 0.95) 85%),
+    url('/assets/images/leaves_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden; /* Desktop/laptop zero scrollbars */
+  padding: clamp(0.4rem, 1.6vh, 1rem) clamp(0.6rem, 1.8vw, 1.5rem);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* ==============================================================================
+   2. MAIN UNIFIED CARD CANVAS (Exact Mockup Container - Fit to Screen)
+   ============================================================================== */
+.urja-app-canvas {
+  width: 100%;
+  max-width: 1240px;
+  height: min(96vh, 690px);
+  max-height: calc(100vh - 0.8rem);
+  min-height: 0; /* Flexible - never overflows viewport */
+  background: #041407;
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 65px rgba(0, 0, 0, 0.8), 0 0 0 1.5px rgba(132, 214, 35, 0.35);
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin: auto;
+}
+
+/* ==============================================================================
+   3. BACKGROUND PHOTO FACET LAYER (Silos, Chick Wedge, Woman, Foliage)
+   ============================================================================== */
+.urja-canvas-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.canvas-photo-cell {
+  position: absolute;
+  overflow: hidden;
+}
+
+.canvas-photo-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Top Foliage Texture behind Top-Right */
+.cell-foliage {
+  top: 0;
+  right: 0;
+  width: 65%;
+  height: 45%;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+/* Grain Silos Plant (Top-Center) */
+.cell-silos {
+  top: 0;
+  left: 33%;
+  width: 67%;
+  height: 52%;
+  z-index: 2;
+  border-top: 3px solid var(--urja-lime);
+}
+
+.cell-silos img {
+  object-position: center 20%;
+}
+
+/* Fluffy Baby Chick (Middle Center Diagonal Wedge with Lime Glowing Border) */
+.cell-chick {
+  top: 31%;
+  left: 35.5%;
+  width: 27%;
+  height: 45%;
+  z-index: 4;
+  border: 3.5px solid var(--urja-lime);
+  border-radius: 14px;
+  clip-path: polygon(0 0, 100% 14%, 84% 100%, 0% 100%);
+  box-shadow: 0 0 25px rgba(132, 214, 35, 0.5), inset 0 0 15px rgba(132, 214, 35, 0.2);
+}
+
+.cell-chick img {
+  object-position: center 30%;
+}
+
+/* Smiling Indian Corporate Woman (Bottom Center/Right) */
+.cell-woman {
+  bottom: 0;
+  left: 44%;
+  width: 32%;
+  height: 50%;
+  z-index: 3;
+  clip-path: polygon(14% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.cell-woman img {
+  object-position: 25% 15%;
+}
+
+/* Diagonal Glowing Divider */
+.urja-diagonal-divider-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.urja-diagonal-divider-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.urja-diagonal-divider-svg line {
+  filter: drop-shadow(0 0 10px rgba(132, 214, 35, 0.75));
+}
+
+/* ==============================================================================
+   4. TOP RIGHT FLOATING LIVE CLOCK BADGE
+   ============================================================================== */
+.urja-top-right-clock {
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  z-index: 20;
+}
+
+.urja-clock-badge-glass {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  background: rgba(4, 18, 8, 0.94) !important;
+  border: 1.5px solid rgba(132, 214, 35, 0.5) !important;
+  border-radius: 10px !important;
+  padding: 0.5rem 0.95rem !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.urja-clock-badge-glass .urja-req-date-text {
+  display: flex !important;
+  flex-direction: column !important;
+  line-height: 1.25 !important;
+}
+
+.urja-clock-badge-glass .urja-req-date-day {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+}
+
+.urja-clock-badge-glass .urja-req-date-clock {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: var(--urja-lime) !important;
+  white-space: nowrap !important;
+}
+
+/* ==============================================================================
+   5. LEFT BRANDING PANEL (Dark Forest Green with Slanted Edge - Fit to Screen)
+   ============================================================================== */
+.urja-left-panel {
+  position: relative;
+  z-index: 10;
+  width: 48%;
+  height: 100%;
+  min-height: unset;
+  padding: clamp(0.85rem, 1.8vh, 1.5rem) clamp(1rem, 2vw, 2rem) clamp(0.6rem, 1.4vh, 1.1rem);
+  background: linear-gradient(135deg, rgba(4, 18, 8, 0.98) 0%, rgba(3, 14, 6, 0.98) 50%, rgba(2, 9, 4, 0.97) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  clip-path: polygon(0 0, 80% 0, 100% 100%, 0 100%);
+  box-shadow: 10px 0 35px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+}
+
+/* Top Branding Elements */
+.urja-brand-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-logo-text {
+  font-size: clamp(1.65rem, 2.8vh, 2.05rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  line-height: 1;
+}
+
+.urja-logo-white {
+  color: #ffffff;
+}
+
+.urja-logo-foods {
+  color: var(--urja-lime);
+  display: flex;
+  flex-direction: column;
+  line-height: 0.85;
+}
+
+.urja-logo-tagline {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.urja-company-name {
+  color: #f1f5f9;
+  font-size: clamp(0.82rem, 1.3vh, 0.94rem);
+  font-weight: 600;
+  margin-top: 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.urja-company-devanagari {
+  color: #cbd5e1;
+  font-size: clamp(0.72rem, 1.1vh, 0.82rem);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+/* Accent Lime Bar */
+.urja-lime-accent-bar {
+  width: 34px;
+  height: 2.5px;
+  background: var(--urja-lime);
+  border-radius: 3px;
+  margin: clamp(0.25rem, 0.6vh, 0.4rem) 0;
+  box-shadow: 0 0 10px var(--urja-lime-glow);
+}
+
+/* ATS URJA Sub-Brand */
+.urja-ats-badge {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.05rem;
+}
+
+.urja-ats-title {
+  font-size: clamp(1.3rem, 2.2vh, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.highlight-lime {
+  color: var(--urja-lime);
+}
+
+.urja-ats-subtitle {
+  color: #94a3b8;
+  font-size: clamp(0.75rem, 1.2vh, 0.84rem);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+/* Hero Main Headline & Tagline */
+.urja-hero-content {
+  margin: clamp(0.2rem, 0.6vh, 0.5rem) 0;
+}
+
+.urja-hero-headline {
+  font-size: clamp(1.4rem, 2.5vh, 1.95rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.urja-hero-description {
+  color: #cbd5e1;
+  font-size: clamp(0.75rem, 1.2vh, 0.86rem);
+  line-height: 1.35;
+  max-width: 390px;
+  margin-top: 0.3rem;
+  margin-bottom: 0;
+}
+
+/* Six (6) Circular Business Division Badges */
+.urja-divisions-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.3rem;
+  margin-top: clamp(0.25rem, 0.6vh, 0.5rem);
+  padding-top: clamp(0.25rem, 0.6vh, 0.5rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  z-index: 5;
+}
+
+.urja-division-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.urja-division-item:hover {
+  transform: translateY(-2px);
+}
+
+.urja-division-circle {
+  width: clamp(32px, 4.2vh, 42px);
+  height: clamp(32px, 4.2vh, 42px);
+  border-radius: 50%;
+  border: 1.6px solid var(--urja-lime);
+  background: #041407;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--urja-lime);
+  box-shadow: 0 0 10px rgba(132, 214, 35, 0.25);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.urja-division-circle svg {
+  width: clamp(14px, 1.9vh, 18px);
+  height: clamp(14px, 1.9vh, 18px);
+}
+
+.urja-division-item:hover .urja-division-circle {
+  background: var(--urja-lime);
+  color: #041206;
+  box-shadow: 0 0 16px rgba(132, 214, 35, 0.6);
+  transform: scale(1.05);
+}
+
+.urja-division-label {
+  font-size: clamp(0.56rem, 0.9vh, 0.64rem);
+  font-weight: 600;
+  color: #cbd5e1;
+  line-height: 1.15;
+  white-space: normal;
+  max-width: 65px;
+}
+
+/* Bottom Organic Green Waves */
+.urja-bottom-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(28px, 4vh, 45px);
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.urja-bottom-wave svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ==============================================================================
+   6. RIGHT PANEL: PRISTINE WHITE FLOATING LOGIN CARD (Fit to Screen)
+   ============================================================================== */
+.urja-right-panel {
+  position: relative;
+  z-index: 15;
+  width: 52%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: clamp(0.4rem, 1.2vh, 0.8rem) clamp(0.8rem, 2vw, 2.2rem) clamp(0.4rem, 1.2vh, 0.8rem) 0;
+  box-sizing: border-box;
+}
+
+.urja-white-login-card {
+  background: var(--urja-white) !important;
+  color: var(--urja-slate-900) !important;
+  border-radius: 14px;
+  padding: clamp(0.75rem, 1.6vh, 1.2rem) clamp(0.9rem, 1.5vw, 1.35rem);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45), 0 0 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.28rem, 0.7vh, 0.5rem);
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  max-width: 375px;
+  max-height: 100%;
+  box-sizing: border-box;
+}
+
+/* Card Header */
+.urja-card-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-welcome-title {
+  font-size: clamp(0.78rem, 1.4vh, 0.92rem);
+  font-weight: 600;
+  color: var(--urja-slate-700);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.card-ats-title {
+  font-size: clamp(1.35rem, 2.5vh, 1.7rem);
+  font-weight: 800;
+  color: var(--urja-slate-900);
+  margin: 0.05rem 0 0.1rem;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.card-brand-green {
+  color: var(--urja-lime-dark);
+}
+
+.card-instructions {
+  font-size: clamp(0.72rem, 1.1vh, 0.78rem);
+  color: var(--urja-slate-500);
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Card Form */
+.urja-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.32rem, 0.7vh, 0.55rem);
+}
+
+.urja-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.urja-field-label {
+  font-size: clamp(0.7rem, 1.1vh, 0.75rem);
+  font-weight: 600;
+  color: var(--urja-slate-800);
+}
+
+.urja-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.urja-clean-input {
+  width: 100%;
+  padding: clamp(0.42rem, 0.8vh, 0.52rem) 0.8rem clamp(0.42rem, 0.8vh, 0.52rem) 35px;
+  background: var(--urja-white);
+  border: 1.5px solid var(--urja-slate-200);
+  border-radius: 7px;
+  font-size: clamp(0.78rem, 1.25vh, 0.85rem);
+  font-family: inherit;
+  color: var(--urja-slate-900);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.urja-clean-input::placeholder {
+  color: var(--urja-slate-400);
+  font-size: clamp(0.74rem, 1.15vh, 0.8rem);
+}
+
+.urja-clean-input:focus {
+  border-color: var(--urja-lime);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(132, 214, 35, 0.22);
+}
+
+.password-toggle-action {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--urja-slate-500);
+  transition: color 0.2s;
+}
+
+.password-toggle-action:hover {
+  color: var(--urja-slate-800);
+}
+
+/* Options: Remember Me & Forgot Password */
+.urja-card-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: clamp(0.72rem, 1.1vh, 0.76rem);
+  margin-top: -0.1rem;
+}
+
+.urja-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.urja-checkbox-label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  transition: all 0.2s ease;
+  margin: 0;
+}
+
+.urja-checkbox-label input[type="checkbox"]:checked {
+  background: var(--urja-lime-dark);
+  border-color: var(--urja-lime-dark);
+}
+
+.urja-checkbox-label input[type="checkbox"]:checked::before {
+  content: "✓";
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.checkbox-text {
+  color: var(--urja-slate-700);
+  font-weight: 500;
+}
+
+.forgot-link-btn {
+  background: none;
+  border: none;
+  color: var(--urja-lime-dark);
+  font-weight: 600;
+  font-size: clamp(0.72rem, 1.1vh, 0.76rem);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.forgot-link-btn:hover {
+  color: #15803d;
+  text-decoration: underline;
+}
+
+/* Vibrant Green Sign In Button */
+.urja-green-submit-btn {
+  width: 100%;
+  padding: clamp(0.48rem, 0.95vh, 0.6rem) 1rem;
+  border: none;
+  border-radius: 7px;
+  background: linear-gradient(90deg, #78c61d 0%, #3e8810 100%);
+  color: #ffffff;
+  font-size: clamp(0.82rem, 1.35vh, 0.92rem);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(62, 136, 16, 0.35);
+  transition: all 0.25s ease;
+}
+
+.urja-green-submit-btn:hover {
+  background: linear-gradient(90deg, #85db22 0%, #469c13 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(62, 136, 16, 0.45);
+}
+
+.urja-green-submit-btn:active {
+  transform: translateY(0);
+}
+
+.urja-btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.urja-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Card Divider */
+.urja-card-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--urja-slate-400);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: clamp(0.08rem, 0.35vh, 0.2rem) 0;
+}
+
+.urja-card-divider::before,
+.urja-card-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--urja-slate-200);
+}
+
+.urja-card-divider span {
+  padding: 0 0.65rem;
+}
+
+/* Microsoft SSO Button */
+.urja-ms-sso-btn {
+  width: 100%;
+  padding: clamp(0.42rem, 0.8vh, 0.5rem) 0.8rem;
+  background: #ffffff;
+  border: 1.5px solid var(--urja-slate-200);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.urja-ms-sso-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.ms-icon-tiles {
+  display: grid;
+  grid-template-columns: 6.5px 6.5px;
+  grid-template-rows: 6.5px 6.5px;
+  gap: 2px;
+}
+
+.tile-red { background: #f25022; }
+.tile-green { background: #7fba00; }
+.tile-blue { background: #00a4ef; }
+.tile-yellow { background: #ffb900; }
+
+.ms-btn-text {
+  color: var(--urja-slate-800);
+  font-weight: 600;
+  font-size: clamp(0.74rem, 1.15vh, 0.8rem);
+}
+
+/* Security Footer */
+.urja-security-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: clamp(0.62rem, 1vh, 0.66rem);
+  color: var(--urja-slate-500);
+  margin-top: 0.05rem;
+}
+
+.urja-security-footer svg {
+  stroke: var(--urja-slate-500);
+}
+
+/* Error Alert */
+.urja-card-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 0.42rem 0.65rem;
+  border-radius: 7px;
+  font-size: clamp(0.72rem, 1.1vh, 0.76rem);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+
+
+/* ==============================================================================
+   7. MODAL DIALOG (White Theme)
+   ============================================================================== */
+.urja-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.urja-modal-box-white {
+  background: #ffffff;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 460px;
+  padding: 1.8rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  color: var(--urja-slate-900);
+}
+
+.urja-modal-header-clean {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--urja-slate-200);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.urja-modal-header-clean h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--urja-slate-900);
+  margin: 0;
+}
+
+.urja-close-modal-btn {
+  background: transparent;
+  border: none;
+  color: var(--urja-slate-400);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.urja-close-modal-btn:hover {
+  color: var(--urja-slate-800);
+}
+
+.forgot-modal-desc {
+  color: var(--urja-slate-600);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin-top: 0;
+}
+
+.urja-ghost-btn {
+  background: var(--urja-slate-100);
+  border: 1px solid var(--urja-slate-200);
+  color: var(--urja-slate-700);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.urja-ghost-btn:hover {
+  background: var(--urja-slate-200);
+}
+
+.urja-modal-success-state {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.success-icon-badge {
+  width: 52px;
+  height: 52px;
+  background: #dcfce7;
+  border: 2px solid #22c55e;
+  color: #16a34a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 auto 1rem;
+}
+
+.urja-modal-success-state h5 {
+  color: var(--urja-slate-900);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.urja-modal-success-state p {
+  color: var(--urja-slate-600);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* ==============================================================================
+   8. COMPREHENSIVE RESPONSIVE DESIGN (Desktop, Laptop, Tablet, Mobile)
+   ============================================================================== */
+
+/* Medium Laptops & Compact Desktops (861px to 1199px) */
+@media (max-width: 1199px) and (min-width: 861px) {
+  .urja-app-canvas {
+    max-width: 100%;
+    height: min(96vh, 670px);
+    min-height: 0; /* Flexible - never overflows viewport */
+  }
+  .urja-left-panel {
+    width: 48%;
+    padding: clamp(0.75rem, 1.6vh, 1.3rem) clamp(0.9rem, 1.8vw, 1.6rem) clamp(0.5rem, 1.2vh, 0.9rem);
+    clip-path: polygon(0 0, 80% 0, 100% 100%, 0 100%);
+  }
+  .urja-right-panel {
+    width: 52%;
+    padding: clamp(0.4rem, 1vh, 0.8rem) clamp(0.8rem, 1.8vw, 1.6rem) clamp(0.4rem, 1vh, 0.8rem) 0;
+  }
+  .urja-white-login-card {
+    max-width: 360px;
+    padding: clamp(0.7rem, 1.4vh, 1.15rem) clamp(0.85rem, 1.4vw, 1.25rem);
+  }
+}
+
+/* Height-Constrained Laptops (viewport height <= 720px, e.g. 1366x768 with browser tabs) */
+@media (max-height: 720px) and (min-width: 861px) {
+  .urja-login-viewport {
+    padding: 0.35rem 0.75rem;
+    overflow: hidden;
+  }
+  .urja-app-canvas {
+    height: calc(100vh - 0.7rem);
+    max-height: 98vh;
+    min-height: 0;
+  }
+  .urja-top-right-clock {
+    top: 8px;
+    right: 14px;
+  }
+  .urja-clock-badge-glass {
+    padding: 0.3rem 0.65rem !important;
+    gap: 0.45rem !important;
+  }
+  .urja-clock-badge-glass .urja-req-date-day,
+  .urja-clock-badge-glass .urja-req-date-clock {
+    font-size: 0.72rem !important;
+  }
+  .urja-left-panel {
+    padding: 0.75rem 1.3rem 0.55rem;
+  }
+  .urja-logo-text {
+    font-size: 1.65rem;
+  }
+  .urja-ats-title {
+    font-size: 1.28rem;
+  }
+  .urja-hero-headline {
+    font-size: 1.48rem;
+  }
+  .urja-hero-description {
+    font-size: 0.76rem;
+    line-height: 1.3;
+    max-width: 360px;
+  }
+  .urja-division-circle {
+    width: 34px;
+    height: 34px;
+  }
+  .urja-division-circle svg {
+    width: 15px;
+    height: 15px;
+  }
+  .urja-division-label {
+    font-size: 0.58rem;
+    max-width: 58px;
+  }
+  .urja-right-panel {
+    padding: 0.4rem 1.2rem 0.4rem 0;
+  }
+  .urja-white-login-card {
+    padding: 0.7rem 1.1rem;
+    gap: 0.32rem;
+    max-width: 355px;
+  }
+  .card-welcome-title {
+    font-size: 0.8rem;
+  }
+  .card-ats-title {
+    font-size: 1.36rem;
+  }
+  .card-instructions {
+    font-size: 0.72rem;
+  }
+  .urja-card-form {
+    gap: 0.34rem;
+  }
+  .urja-field-label {
+    font-size: 0.7rem;
+  }
+  .urja-clean-input {
+    padding: 0.38rem 0.7rem 0.38rem 32px;
+    font-size: 0.8rem;
+  }
+  .urja-green-submit-btn {
+    padding: 0.46rem 0.9rem;
+    font-size: 0.84rem;
+  }
+  .urja-ms-sso-btn {
+    padding: 0.38rem 0.7rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Ultra-Compact Viewport Heights (viewport height <= 590px, e.g. 150% scaled displays or split-screen) */
+@media (max-height: 590px) and (min-width: 861px) {
+  .urja-login-viewport {
+    padding: 0.2rem 0.4rem;
+    overflow: hidden;
+  }
+  .urja-app-canvas {
+    height: calc(100vh - 0.4rem);
+    max-height: 99vh;
+    min-height: 0;
+  }
+  .urja-left-panel {
+    padding: 0.5rem 1rem 0.4rem;
+  }
+  .urja-hero-description {
+    display: none; /* Hide secondary description text to give full space to division badges */
+  }
+  .urja-hero-headline {
+    font-size: 1.3rem;
+  }
+  .urja-division-circle {
+    width: 28px;
+    height: 28px;
+  }
+  .urja-division-circle svg {
+    width: 13px;
+    height: 13px;
+  }
+  .urja-division-label {
+    display: none; /* Hide labels, keep division icons visible and clear */
+  }
+  .urja-bottom-wave {
+    height: 22px;
+  }
+  .urja-top-right-clock {
+    top: 6px;
+    right: 10px;
+  }
+  .urja-clock-badge-glass {
+    padding: 0.25rem 0.55rem !important;
+  }
+  .urja-white-login-card {
+    padding: 0.5rem 0.9rem;
+    gap: 0.22rem;
+    max-width: 335px;
+  }
+  .card-welcome-title {
+    font-size: 0.76rem;
+  }
+  .card-ats-title {
+    font-size: 1.25rem;
+  }
+  .card-instructions {
+    display: none;
+  }
+  .urja-card-form {
+    gap: 0.26rem;
+  }
+  .urja-clean-input {
+    padding: 0.32rem 0.65rem 0.32rem 30px;
+    font-size: 0.78rem;
+  }
+  .urja-green-submit-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  .urja-ms-sso-btn {
+    padding: 0.34rem 0.65rem;
+    font-size: 0.72rem;
+  }
+  .card-or-divider {
+    margin: 0.1rem 0;
+  }
+  .urja-security-footer {
+    display: none;
+  }
+}
+
+/* Tablets Portrait & Mobile Devices (width <= 860px) */
+@media (max-width: 860px) {
+  .urja-login-viewport {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding: 1rem 0.65rem 2rem;
+    align-items: flex-start;
+  }
+  .urja-app-canvas {
+    flex-direction: column;
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    overflow: visible;
+    border-radius: 16px;
+  }
+  .urja-diagonal-divider-svg {
+    display: none;
+  }
+  .urja-top-right-clock {
+    top: 12px;
+    right: 12px;
+  }
+  .urja-clock-badge-glass {
+    padding: 0.35rem 0.7rem !important;
+    gap: 0.5rem !important;
+  }
+  .urja-clock-badge-glass .urja-req-date-day,
+  .urja-clock-badge-glass .urja-req-date-clock {
+    font-size: 0.72rem !important;
+  }
+  .urja-canvas-bg {
+    position: relative;
+    height: 180px;
+    width: 100%;
+  }
+  .cell-silos {
+    left: 0;
+    width: 50%;
+    height: 100%;
+    clip-path: none;
+  }
+  .cell-chick {
+    left: 45%;
+    top: 8px;
+    width: 32%;
+    height: 90%;
+    clip-path: none;
+  }
+  .cell-woman {
+    left: 72%;
+    width: 28%;
+    height: 100%;
+    clip-path: none;
+  }
+  .cell-foliage {
+    display: none;
+  }
+  .urja-left-panel {
+    width: 100%;
+    min-height: auto;
+    clip-path: none;
+    border-right: none;
+    border-bottom: 2px solid var(--urja-lime);
+    padding: 1.5rem 1.15rem;
+  }
+  .urja-logo-text {
+    font-size: 1.9rem;
+  }
+  .urja-ats-title {
+    font-size: 1.45rem;
+  }
+  .urja-hero-headline {
+    font-size: 1.65rem;
+  }
+  .urja-hero-description {
+    font-size: 0.85rem;
+  }
+  .urja-divisions-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem 0.4rem;
+  }
+  .urja-division-circle {
+    width: 42px;
+    height: 42px;
+  }
+  .urja-division-circle svg {
+    width: 18px;
+    height: 18px;
+  }
+  .urja-division-label {
+    font-size: 0.66rem;
+    max-width: 100%;
+  }
+  .urja-right-panel {
+    width: 100%;
+    padding: 1.5rem 1rem;
+    justify-content: center;
+  }
+  .urja-white-login-card {
+    padding: 1.4rem 1.15rem;
+    border-radius: 14px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+  .card-ats-title {
+    font-size: 1.65rem;
+  }
+  .card-welcome-title {
+    font-size: 1rem;
+  }
+  .urja-clean-input {
+    padding: 0.65rem 0.85rem 0.65rem 40px;
+    font-size: 0.88rem;
+  }
+  .urja-green-submit-btn {
+    padding: 0.7rem;
+    font-size: 0.92rem;
+  }
+  .urja-ms-sso-btn {
+    padding: 0.65rem;
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,4548 @@
+/* ==============================================================================
+   Urja Foods & Agro ATS Portal - Exact Design System & Theme Styles
+   Matches the corporate Urja Foods UI Mockups (Dashboard & Job Requisitions)
+   ============================================================================== */
+
+:root {
+  --urja-dark-bg: #0D1217;
+  --urja-sidebar-bg: #0A0E13;
+  --urja-header-bg: #0D1217;
+  --urja-lime: #98E843;
+  --urja-lime-hover: #8DE035;
+  --urja-lime-glow: rgba(152, 232, 67, 0.3);
+  --urja-forest: #195333;
+  --urja-amber: #FACC15;
+  --urja-orange: #FB923C;
+  --urja-coral: #EF4444;
+  --urja-purple: #8B5CF6;
+  --urja-blue: #0284C7;
+  
+  --urja-surface: #FFFFFF;
+  --urja-page-bg: #F4F6F9;
+  --urja-border: #E5E9F0;
+  --urja-border-light: #EDF2F7;
+  
+  --urja-text-dark: #0F172A;
+  --urja-text-body: #334155;
+  --urja-text-muted: #64748B;
+  --urja-text-light: #94A3B8;
+  
+  --urja-sidebar-width: 215px;
+  --urja-sidebar-collapsed: 68px;
+  --urja-header-height: 64px;
+}
+
+/* Master Layout */
+.urja-app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--urja-page-bg);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--urja-text-body);
+  overflow-x: hidden;
+}
+
+/* ==============================================================================
+   TOP NAVBAR (Exact match to screenshot)
+   ============================================================================== */
+.urja-navbar {
+  height: var(--urja-header-height);
+  background-color: var(--urja-header-bg);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1050;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.urja-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+/* Brand Logo */
+.urja-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.urja-brand-logo-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-logo-row-main {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  line-height: 1;
+}
+
+.urja-logo-text-urja {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+}
+
+.urja-logo-text-foods {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--urja-lime);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.urja-logo-tagline {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #94A3B8;
+  margin-top: 2px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.urja-logo-tagline span {
+  color: var(--urja-lime);
+}
+
+.urja-nav-toggle {
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.35rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.urja-nav-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Center Search Bar */
+.urja-nav-center {
+  flex: 1;
+  max-width: 540px;
+  margin: 0 1.25rem;
+  position: relative;
+}
+
+.urja-search-capsule {
+  display: flex;
+  align-items: center;
+  background-color: #161D24;
+  border: 1px solid #28333F;
+  border-radius: 8px;
+  padding: 0.35rem 0.45rem 0.35rem 0.95rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.urja-search-capsule:focus-within {
+  border-color: #4A5D70;
+  background-color: #19222B;
+  box-shadow: 0 0 0 1px #4A5D70, 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.urja-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  font-size: 0.86rem;
+  width: 100%;
+  padding: 0.2rem 0;
+}
+
+.urja-search-input::placeholder {
+  color: #64748B;
+  font-size: 0.84rem;
+}
+
+.urja-search-btn {
+  background-color: #1C242D;
+  border: 1px solid #2E3A47;
+  color: #94A3B8;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.urja-search-btn:hover {
+  background-color: #232D38;
+  color: #FFFFFF;
+  border-color: #3E4D5E;
+}
+
+.urja-search-btn i {
+  font-size: 0.85rem;
+}
+
+.urja-search-clear-btn {
+  background: transparent;
+  border: none;
+  color: #64748B;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-right: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.urja-search-clear-btn:hover {
+  color: #CBD5E1;
+}
+
+/* Global Live Search Results Dropdown */
+.urja-search-results-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background-color: #141B22;
+  border: 1px solid #28333F;
+  border-radius: 12px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 1100;
+  overflow: hidden;
+  max-height: 440px;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInSearch 0.18s ease-out;
+}
+
+@keyframes fadeInSearch {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.urja-search-results-body {
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.urja-search-section-title {
+  padding: 0.45rem 1rem 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.urja-search-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  text-decoration: none;
+  color: inherit;
+}
+
+.urja-search-item:hover {
+  background-color: #1C242E;
+}
+
+.urja-search-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.urja-search-item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.urja-search-item-icon.job {
+  background-color: rgba(152, 232, 67, 0.12);
+  color: #98E843;
+}
+
+.urja-search-item-icon.candidate {
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+}
+
+.urja-search-item-icon.page {
+  background-color: rgba(139, 92, 246, 0.12);
+  color: #A78BFA;
+}
+
+.urja-search-item-text {
+  min-width: 0;
+}
+
+.urja-search-item-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #F1F5F9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.urja-search-item-sub {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.urja-search-item-badge {
+  font-size: 0.68rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.urja-search-results-footer {
+  padding: 0.65rem 1rem;
+  background-color: #0E141A;
+  border-top: 1px solid #202A35;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #64748B;
+}
+
+.urja-search-view-all-btn {
+  color: #98E843;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-size: 0.75rem;
+  padding: 0;
+}
+
+.urja-search-view-all-btn:hover {
+  text-decoration: underline;
+}
+
+.urja-search-no-results {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: #94A3B8;
+}
+
+.urja-search-no-results i {
+  font-size: 1.75rem;
+  color: #475569;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Right Nav Controls */
+.urja-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.urja-create-job-btn {
+  background-color: var(--urja-lime);
+  color: #0A0E13;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: none;
+  padding: 0.5rem 1.15rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--urja-lime-glow);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.urja-create-job-btn:hover {
+  background-color: var(--urja-lime-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--urja-lime-glow);
+}
+
+.urja-nav-icon-btn {
+  background: transparent;
+  border: none;
+  color: #CBD5E1;
+  font-size: 1.15rem;
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.urja-nav-icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+}
+
+.urja-nav-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #EF4444;
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--urja-header-bg);
+}
+
+/* User Profile Header Dropdown */
+.urja-user-profile-wrap {
+  position: relative;
+}
+
+.urja-user-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  text-align: left;
+}
+
+.urja-user-profile-btn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.urja-avatar-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  background-color: #1E293B;
+}
+
+.urja-user-text-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.urja-user-name {
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.urja-user-role {
+  color: #94A3B8;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.urja-user-chevron {
+  color: #94A3B8;
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+}
+
+/* User Dropdown Menu */
+.urja-profile-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: #171E25;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  width: 250px;
+  padding: 0.5rem 0;
+  z-index: 1060;
+  animation: fadeInMenu 0.18s ease-out;
+}
+
+@keyframes fadeInMenu {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.urja-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  color: #CBD5E1;
+  text-decoration: none;
+  font-size: 0.84rem;
+  cursor: pointer;
+  background: none;
+  width: 100%;
+  border: none;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.urja-dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+}
+
+.urja-dropdown-item.active-role {
+  color: var(--urja-lime);
+  font-weight: 700;
+}
+
+.urja-dropdown-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.08);
+  margin: 0.4rem 0;
+}
+
+/* ==============================================================================
+   BODY WITH SIDEBAR & MAIN CONTENT
+   ============================================================================== */
+.urja-content-wrapper {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  max-width: 100vw;
+  min-width: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Dark Sidebar */
+.urja-sidebar {
+  width: var(--urja-sidebar-width);
+  background-color: var(--urja-sidebar-bg);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.85rem 0.5rem 1rem;
+  min-height: calc(100vh - var(--urja-header-height));
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  transition: width 0.25s ease;
+  box-sizing: border-box;
+}
+
+.urja-sidebar.collapsed {
+  width: var(--urja-sidebar-collapsed);
+  padding: 0.85rem 0.4rem;
+}
+
+.urja-sidebar-title-badge {
+  padding: 0.5rem 0.85rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 0.75rem;
+}
+
+.urja-sidebar-title-main {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.urja-sidebar-title-sub {
+  font-size: 0.68rem;
+  color: #94A3B8;
+  margin-top: 3px;
+  letter-spacing: 0.02em;
+}
+
+.urja-sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.urja-menu-item-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.65rem 0.95rem;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: #94A3B8;
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.urja-menu-item-btn i {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.urja-menu-item-btn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+}
+
+.urja-menu-item-btn.active {
+  background-color: var(--urja-lime);
+  color: #0A0E13;
+  font-weight: 700;
+  box-shadow: 0 2px 10px var(--urja-lime-glow);
+}
+
+.urja-menu-item-btn.active i {
+  color: #0A0E13;
+}
+
+.urja-sidebar.collapsed .urja-menu-label,
+.urja-sidebar.collapsed .urja-sidebar-title-badge,
+.urja-sidebar.collapsed .urja-sidebar-bottom-banner {
+  display: none;
+}
+
+.urja-sidebar.collapsed .urja-menu-item-btn {
+  justify-content: center;
+  padding: 0.75rem 0;
+}
+
+/* Sidebar Bottom Banner (Growing People Building Together) */
+.urja-sidebar-bottom-banner {
+  margin-top: auto;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  padding: 1.25rem 1rem;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(180deg, rgba(10, 14, 19, 0.2) 0%, rgba(10, 14, 19, 0.92) 100%), url('/assets/images/soya.jpg') center/cover no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.urja-sidebar-bottom-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at bottom left, rgba(152, 232, 67, 0.2) 0%, transparent 70%);
+}
+
+.urja-banner-text-grow {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.1;
+  position: relative;
+  z-index: 1;
+}
+
+.urja-banner-text-build {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--urja-lime);
+  line-height: 1.1;
+  position: relative;
+  z-index: 1;
+}
+
+/* Main Viewport */
+.urja-main-viewport {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.15rem 1.25rem 2.5rem;
+  background-color: var(--urja-page-bg);
+  box-sizing: border-box;
+}
+
+/* ==============================================================================
+   JOB REQUISITIONS HERO HEADER (Exact match to second screenshot)
+   ============================================================================== */
+.urja-req-hero-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--urja-border);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px rgba(15, 23, 42, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 110px;
+  padding: 1.25rem 1.75rem;
+}
+
+.urja-req-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  position: relative;
+  z-index: 2;
+  max-width: 60%;
+}
+
+.urja-req-hero-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #0F172A;
+  color: var(--urja-lime);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+
+.urja-req-hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--urja-text-dark);
+  margin: 0 0 4px;
+  letter-spacing: -0.02em;
+}
+
+.urja-req-hero-desc {
+  font-size: 0.88rem;
+  color: var(--urja-text-muted);
+  margin: 0;
+}
+
+/* Hero Right Silo Graphics Banner */
+.urja-req-hero-graphic-wrap {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  overflow: hidden;
+  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.urja-req-hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.urja-req-hero-graphic-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, transparent 40%, rgba(10, 14, 19, 0.25) 100%);
+}
+
+/* Hero Date/Time Pill on right */
+.urja-req-date-badge {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 3;
+  background-color: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.4rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.78rem;
+}
+
+.urja-req-date-badge i {
+  color: var(--urja-lime);
+  font-size: 0.95rem;
+}
+
+.urja-req-date-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.urja-req-date-day {
+  font-weight: 600;
+  color: #E2E8F0;
+}
+
+.urja-req-date-clock {
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+/* ==============================================================================
+   5 REQUISITION KPI CARDS ROW (ARRANGED IN ONE SINGLE FRAME)
+   ============================================================================== */
+.urja-req-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .urja-req-kpi-grid {
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+}
+
+@media (max-width: 600px) {
+  .urja-req-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: visible;
+  }
+}
+
+.urja-req-kpi-card {
+  background-color: var(--urja-surface);
+  border: 1px solid var(--urja-border);
+  border-radius: 12px;
+  padding: 0.85rem 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px rgba(15, 23, 42, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.urja-req-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.urja-req-kpi-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.urja-req-kpi-icon.green {
+  background-color: #EDFADB;
+  color: #15803D;
+}
+
+.urja-req-kpi-icon.blue {
+  background-color: #E0F2FE;
+  color: #0284C7;
+}
+
+.urja-req-kpi-icon.orange {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+.urja-req-kpi-icon.purple {
+  background-color: #F3E8FF;
+  color: #7E22CE;
+}
+
+.urja-req-kpi-icon.red {
+  background-color: #FEE2E2;
+  color: #DC2626;
+}
+
+.urja-req-kpi-icon.gray {
+  background-color: #F1F5F9;
+  color: #475569;
+}
+
+.urja-req-kpi-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.urja-req-kpi-num {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--urja-text-dark);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.urja-req-kpi-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--urja-text-muted);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.urja-req-kpi-trend {
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.urja-req-kpi-trend.up {
+  color: #16A34A;
+}
+
+.urja-req-kpi-trend.down {
+  color: #DC2626;
+}
+
+/* ==============================================================================
+   JOB REQUISITIONS MODULE (Status Tabs, Actions, Filters & Data Table)
+   ============================================================================== */
+
+/* Wrapper */
+.urja-job-requisitions-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* KPI Card Active Filter Highlight */
+.urja-req-kpi-card {
+  cursor: pointer;
+  position: relative;
+}
+
+.urja-req-kpi-card.active-filter {
+  border-color: #84CC16 !important;
+  background-color: #F7FEE7 !important;
+  box-shadow: 0 0 0 2px rgba(132, 204, 22, 0.35), 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* ==============================================================================
+   2. REQUISITIONS STATUS TABS & CREATE BUTTON ROW
+   ============================================================================== */
+.urja-status-tabs-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--urja-border);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0;
+  gap: 1.25rem;
+  background-color: transparent;
+}
+
+.urja-status-tabs-scroll-area {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.urja-status-tabs-scroll-area::-webkit-scrollbar {
+  display: none;
+}
+
+.urja-status-tabs-list {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0;
+  margin: 0;
+}
+
+.urja-status-tab-item {
+  background: transparent;
+  border: none;
+  padding: 0.65rem 0.35rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--urja-text-muted);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  outline: none;
+}
+
+.urja-status-tab-item:hover {
+  color: var(--urja-text-dark);
+}
+
+.urja-status-tab-item.active {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+.urja-status-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  background-color: #E2E8F0;
+  color: #475569;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.urja-status-tab-badge.active {
+  background-color: #EDFADB;
+  color: #15803D;
+  border: 1px solid rgba(132, 204, 22, 0.4);
+}
+
+.urja-status-tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--urja-lime);
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 -1px 6px var(--urja-lime-glow);
+}
+
+/* Prominent + Create Requisition Button */
+.urja-status-tabs-actions {
+  flex-shrink: 0;
+  padding-bottom: 0.5rem;
+}
+
+.urja-btn-create-requisition {
+  background: linear-gradient(135deg, #A3E635 0%, #84CC16 100%);
+  color: #0A0E13;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: none;
+  padding: 0.6rem 1.35rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(132, 204, 22, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.urja-btn-create-requisition:hover {
+  background: linear-gradient(135deg, #bef264 0%, #84cc16 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(132, 204, 22, 0.5);
+  color: #000000;
+}
+
+.urja-btn-create-requisition:active {
+  transform: translateY(0);
+}
+
+.urja-btn-create-requisition i {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+/* ==============================================================================
+   3. FILTERS ROW (Department, Location, Status, Reset Filters & Search)
+   ============================================================================== */
+.urja-filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1.25rem;
+}
+
+.urja-filters-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Search Box */
+.urja-filter-search-box {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid var(--urja-border);
+  border-radius: 8px;
+  padding: 0 0.85rem;
+  height: 40px;
+  flex: 1 1 240px;
+  min-width: 200px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.urja-filter-search-box:focus-within {
+  border-color: #84CC16;
+  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.2);
+}
+
+.urja-filter-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.84rem;
+  color: var(--urja-text-dark);
+  padding: 0 0.5rem;
+}
+
+.urja-filter-search-input::placeholder {
+  color: #94A3B8;
+}
+
+.urja-filter-clear-btn {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.urja-filter-clear-btn:hover {
+  color: var(--urja-text-dark);
+}
+
+/* Dropdown Wrapper */
+.urja-filter-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid var(--urja-border);
+  border-radius: 8px;
+  height: 40px;
+  flex: 0 1 auto;
+  min-width: 175px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.urja-filter-select-wrapper:hover {
+  border-color: #CBD5E1;
+}
+
+.urja-filter-select-wrapper:focus-within {
+  border-color: #84CC16;
+  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.2);
+}
+
+.urja-filter-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: #64748B;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.urja-filter-chevron {
+  position: absolute;
+  right: 0.85rem;
+  color: #94A3B8;
+  font-size: 0.72rem;
+  pointer-events: none;
+}
+
+.urja-filter-select {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--urja-text-body);
+  padding: 0 2rem 0 2.25rem;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Reset Filters Button */
+.urja-btn-reset-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: #FFFFFF;
+  border: 1px solid var(--urja-border);
+  border-radius: 8px;
+  height: 40px;
+  padding: 0 1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--urja-text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.urja-btn-reset-filters:hover {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: var(--urja-text-dark);
+}
+
+.urja-btn-reset-filters.highlight {
+  background-color: #FEF2F2;
+  border-color: #FCA5A5;
+  color: #DC2626;
+}
+
+.urja-btn-reset-filters.highlight:hover {
+  background-color: #FEE2E2;
+}
+
+.urja-filter-status-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--urja-text-muted);
+  background-color: #F8FAFC;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  border: 1px dashed var(--urja-border);
+}
+
+.urja-filter-clear-all-link {
+  background: transparent;
+  border: none;
+  color: #DC2626;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* ==============================================================================
+   4. REQUISITIONS DATA TABLE
+   ============================================================================== */
+.urja-table-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--urja-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px rgba(15, 23, 42, 0.02);
+  width: 100%;
+}
+
+.urja-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.urja-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  text-align: left;
+}
+
+.urja-data-table thead {
+  background-color: #F8FAFC;
+  border-bottom: 1px solid var(--urja-border);
+}
+
+.urja-data-table th {
+  padding: 0.85rem 1rem;
+  font-weight: 700;
+  color: #475569;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.urja-data-table tbody tr {
+  border-bottom: 1px solid #F1F5F9;
+  transition: background-color 0.15s ease;
+}
+
+.urja-data-table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+.urja-data-table tbody tr.selected {
+  background-color: #F0FDF4;
+}
+
+.urja-data-table td {
+  padding: 0.85rem 1rem;
+  color: var(--urja-text-body);
+  vertical-align: middle;
+}
+
+/* Checkbox */
+.urja-custom-checkbox {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  border: 1.5px solid #CBD5E1;
+  cursor: pointer;
+  accent-color: #16A34A;
+  vertical-align: middle;
+}
+
+/* Req ID Link */
+.urja-link-code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #1D4ED8;
+  font-weight: 700;
+  font-size: 0.84rem;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  transition: color 0.15s ease;
+}
+
+.urja-link-code:hover {
+  color: #1E40AF;
+  text-decoration: underline;
+}
+
+/* Job Title & Meta */
+.urja-job-title-clickable {
+  cursor: pointer;
+}
+
+.urja-job-title-text {
+  font-weight: 700;
+  color: var(--urja-text-dark);
+  font-size: 0.88rem;
+  transition: color 0.15s ease;
+}
+
+.urja-job-title-clickable:hover .urja-job-title-text {
+  color: #15803D;
+}
+
+.urja-job-meta-sub {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 3px;
+  font-size: 0.75rem;
+  color: var(--urja-text-muted);
+}
+
+.urja-meta-chip {
+  background-color: #F1F5F9;
+  color: #475569;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.urja-meta-salary {
+  color: #64748B;
+  font-weight: 600;
+}
+
+/* Department & Location */
+.urja-dept-tag {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.urja-loc-text {
+  font-size: 0.82rem;
+  color: #64748B;
+  white-space: nowrap;
+}
+
+/* Openings Chip */
+.urja-openings-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: #EDF2F7;
+  color: #0F172A;
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+
+/* Status Badges */
+.urja-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.urja-status-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.urja-badge-status-open {
+  background-color: #DCFCE7;
+  color: #15803D;
+}
+.urja-dot-open {
+  background-color: #16A34A;
+}
+
+.urja-badge-status-approval {
+  background-color: #FEF3C7;
+  color: #B45309;
+}
+.urja-dot-approval {
+  background-color: #D97706;
+}
+
+.urja-badge-status-filled {
+  background-color: #F3E8FF;
+  color: #7E22CE;
+}
+.urja-dot-filled {
+  background-color: #9333EA;
+}
+
+.urja-badge-status-hold {
+  background-color: #F1F5F9;
+  color: #475569;
+}
+.urja-dot-hold {
+  background-color: #64748B;
+}
+
+.urja-badge-status-closed {
+  background-color: #E2E8F0;
+  color: #334155;
+}
+.urja-dot-closed {
+  background-color: #64748B;
+}
+
+.urja-badge-status-neutral {
+  background-color: #F1F5F9;
+  color: #64748B;
+}
+.urja-dot-neutral {
+  background-color: #94A3B8;
+}
+
+/* Approval Stage Badges */
+.urja-approval-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.urja-approval-approved {
+  background-color: #DCFCE7;
+  color: #15803D;
+}
+
+.urja-approval-dgm {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+}
+
+.urja-approval-hod {
+  background-color: #FEF3C7;
+  color: #B45309;
+}
+
+.urja-approval-closed {
+  background-color: #F1F5F9;
+  color: #475569;
+}
+
+.urja-approval-neutral {
+  background-color: #F1F5F9;
+  color: #64748B;
+}
+
+/* Date Text */
+.urja-date-text {
+  font-size: 0.8rem;
+  color: #64748B;
+  white-space: nowrap;
+}
+
+.urja-target-date {
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Action Buttons Group */
+.urja-action-buttons-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  position: relative;
+}
+
+.urja-btn-icon-action {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+}
+
+.urja-btn-icon-action:hover {
+  background-color: #F1F5F9;
+  border-color: #E2E8F0;
+  color: var(--urja-text-dark);
+}
+
+.urja-dropdown-action-wrapper {
+  position: relative;
+}
+
+.urja-action-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 4px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--urja-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  min-width: 190px;
+  padding: 0.4rem;
+  animation: modalPop 0.15s ease;
+}
+
+.urja-action-menu-item {
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--urja-text-dark);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.15s ease;
+}
+
+.urja-action-menu-item:hover {
+  background-color: #F8FAFC;
+  color: #15803D;
+}
+
+/* Empty State */
+.urja-empty-table-cell {
+  padding: 3rem 1rem !important;
+  text-align: center;
+}
+
+.urja-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.urja-empty-icon-box {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.urja-empty-state h5 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--urja-text-dark);
+  margin-bottom: 0.35rem;
+}
+
+.urja-empty-state p {
+  font-size: 0.84rem;
+  color: var(--urja-text-muted);
+  max-width: 380px;
+  margin: 0 0 1rem;
+}
+
+/* ==============================================================================
+   5. TABLE FOOTER & PAGINATION CONTROLS
+   ============================================================================== */
+.urja-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--urja-border);
+  background-color: #FFFFFF;
+  font-size: 0.82rem;
+  color: var(--urja-text-muted);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.urja-table-footer-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.urja-rows-per-page-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.urja-rows-label {
+  color: var(--urja-text-muted);
+  font-size: 0.82rem;
+}
+
+.urja-rows-select {
+  border: 1px solid var(--urja-border);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.82rem;
+  outline: none;
+  background-color: #FFFFFF;
+  color: var(--urja-text-dark);
+  cursor: pointer;
+}
+
+.urja-pagination-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.urja-page-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--urja-border);
+  background-color: #FFFFFF;
+  color: var(--urja-text-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: all 0.15s ease;
+}
+
+.urja-page-nav-btn:hover:not(:disabled) {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.urja-page-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.urja-page-number-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--urja-border);
+  background-color: #FFFFFF;
+  color: var(--urja-text-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.urja-page-number-btn:hover {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.urja-page-number-btn.active {
+  background-color: #15803D;
+  border-color: #15803D;
+  color: #FFFFFF;
+}
+
+/* ==============================================================================
+   RESPONSIVE MEDIA QUERIES FOR REQUISITIONS
+   ============================================================================== */
+@media (max-width: 992px) {
+  .urja-requisitions-view .urja-status-tabs-container,
+  .urja-req-body .urja-status-tabs-container,
+  .urja-status-tabs-container:has(.urja-status-tabs-actions) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .urja-status-tabs-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 0.75rem;
+  }
+  
+  .urja-filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .urja-filter-search-box,
+  .urja-filter-select-wrapper,
+  .urja-btn-reset-filters {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
+/* Modals & Popups in Urja Theme */
+.urja-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(10, 14, 19, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1.5rem;
+}
+
+.urja-modal-card {
+  background-color: #FFFFFF;
+  border-radius: 14px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.urja-modal-header {
+  padding: 1.25rem 1.5rem;
+  background-color: #0D1217;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urja-modal-header h4 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.urja-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.urja-modal-close-btn:hover {
+  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.urja-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.urja-modal-footer {
+  padding: 1rem 1.5rem;
+  background-color: #F8FAFC;
+  border-top: 1px solid var(--urja-border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ==============================================================================
+   URJA FOODS ATS DASHBOARD VIEW (Pixel-Perfect match to screenshot)
+   ============================================================================== */
+
+/* Greeting Header */
+.urja-greeting-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding: 0.25rem 0;
+}
+
+.urja-greeting-left {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+}
+
+.urja-greeting-leaf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: transparent;
+  color: #65A30D;
+  flex-shrink: 0;
+}
+
+.urja-greeting-leaf svg {
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 2px 4px rgba(101, 163, 13, 0.25));
+}
+
+.urja-greeting-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 3px 0;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.urja-greeting-subtitle {
+  font-size: 0.88rem;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Date Range Pill */
+.urja-date-capsule {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.urja-date-capsule:hover {
+  border-color: #CBD5E1;
+  background-color: #F8FAFC;
+}
+
+.urja-date-capsule i.bi-calendar4-week {
+  color: #0F172A;
+  font-size: 0.95rem;
+}
+
+/* Top 6 KPI Metric Cards Grid */
+.urja-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.urja-kpi-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E9F0;
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 3px 8px rgba(15, 23, 42, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 104px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.urja-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
+}
+
+.urja-kpi-top {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.urja-kpi-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
+.urja-kpi-icon-box svg {
+  width: 18px;
+  height: 18px;
+}
+
+.urja-kpi-icon-box.green {
+  background-color: #ECFDF5;
+  color: #059669;
+}
+
+.urja-kpi-icon-box.blue {
+  background-color: #E0F2FE;
+  color: #0284C7;
+}
+
+.urja-kpi-data {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.urja-kpi-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #64748B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+.urja-kpi-val-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.urja-kpi-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.urja-kpi-trend {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #16A34A;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.urja-kpi-footer {
+  margin-top: 0.5rem;
+  padding-top: 0.2rem;
+}
+
+.urja-kpi-link {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #16A34A;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.urja-kpi-link:hover {
+  color: #15803D;
+  text-decoration: underline;
+}
+
+/* 2x2 Analytics Widgets Grid (Hiring Pipeline, Vacancies by Dept, Monthly Trend, Recent Activities) */
+.urja-widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.urja-widget-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E9F0;
+  border-radius: 14px;
+  padding: 1.25rem 1.35rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 3px 8px rgba(15, 23, 42, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 310px;
+  height: 100%;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.urja-widget-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.urja-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.25rem;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
+}
+
+.urja-widget-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.urja-widget-icon {
+  font-size: 1.05rem;
+  color: #16A34A;
+  flex-shrink: 0;
+}
+
+.urja-widget-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.urja-widget-viewall {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #16A34A;
+  cursor: pointer;
+  transition: color 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.urja-widget-viewall:hover {
+  color: #15803D;
+  text-decoration: underline;
+}
+
+/* Widget 1: Hiring Pipeline */
+.urja-pipeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+
+.urja-pipeline-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.urja-pipeline-stage-label {
+  width: 68px;
+  font-size: 0.78rem;
+  color: #334155;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.urja-pipeline-track {
+  flex: 1;
+  height: 12px;
+  background-color: #F1F5F9;
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+}
+
+.urja-pipeline-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.urja-pipeline-count {
+  width: 28px;
+  text-align: right;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0F172A;
+  flex-shrink: 0;
+}
+
+/* Widget 2: Vacancies by Department (Donut Chart & Legend) */
+.urja-dept-donut-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.urja-donut-chart-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.urja-donut-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.urja-donut-center-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.urja-donut-center-total {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1;
+}
+
+.urja-donut-center-label {
+  font-size: 0.7rem;
+  color: #64748B;
+  font-weight: 600;
+  margin-top: 1px;
+}
+
+.urja-dept-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.urja-dept-legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+
+.urja-dept-legend-left {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.urja-dept-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.urja-dept-legend-name {
+  color: #334155;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.urja-dept-legend-count {
+  color: #0F172A;
+  font-weight: 700;
+  margin-left: 0.25rem;
+}
+
+/* Widget 3: Recent Activities Timeline */
+.urja-activity-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+
+.urja-activity-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.urja-activity-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.urja-activity-avatar.green {
+  background-color: #ECFDF5;
+  color: #10B981;
+}
+
+.urja-activity-avatar.red {
+  background-color: #FEF2F2;
+  color: #EF4444;
+}
+
+.urja-activity-avatar.blue {
+  background-color: #EFF6FF;
+  color: #3B82F6;
+}
+
+.urja-activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.urja-activity-action {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0F172A;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.urja-activity-sub {
+  font-size: 0.72rem;
+  color: #64748B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.urja-activity-time {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 0.25rem;
+}
+
+@media (max-width: 1024px) {
+  .urja-kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .urja-widgets-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 680px) {
+  .urja-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .urja-main-viewport {
+    padding: 0.75rem 0.65rem 2rem;
+  }
+}
+
+/* ==============================================================================
+   SCREEN 2: MONTHLY HIRING TREND CHART & DASHBOARD ENHANCEMENTS
+   ============================================================================== */
+.urja-trend-chart-box {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem 0.5rem 0.5rem;
+}
+
+.urja-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.urja-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.urja-legend-rect {
+  width: 12px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+/* ==============================================================================
+   SCREEN 4: CREATE REQUISITION 3-STEP WIZARD
+   ============================================================================== */
+.urja-wizard-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.urja-wizard-step {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.urja-wizard-step.active {
+  color: #0F172A;
+}
+
+.urja-wizard-step.completed {
+  color: #16A34A;
+}
+
+.urja-wizard-step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  background: #E2E8F0;
+  color: #475569;
+  transition: all 0.2s;
+}
+
+.urja-wizard-step.active .urja-wizard-step-circle {
+  background: #0284C7;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+}
+
+.urja-wizard-step.completed .urja-wizard-step-circle {
+  background: #16A34A;
+  color: #FFFFFF;
+}
+
+.urja-wizard-divider {
+  flex: 1;
+  height: 2px;
+  background: #E2E8F0;
+  margin: 0 1rem;
+}
+
+/* ==============================================================================
+   SCREEN 5: REQUISITION DETAILS & APPROVAL HISTORY
+   ============================================================================== */
+.urja-req-details-header {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #E2E8F0;
+  margin-bottom: 1.25rem;
+}
+
+.urja-req-submeta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.75rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F1F5F9;
+  font-size: 0.82rem;
+}
+
+.urja-req-submeta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #64748B;
+}
+
+.urja-req-submeta-item strong {
+  color: #0F172A;
+}
+
+.urja-tab-pill-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 2px solid #E2E8F0;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+}
+
+.urja-tab-pill-item {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748B;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.urja-tab-pill-item:hover {
+  color: #0F172A;
+  background: #F1F5F9;
+}
+
+.urja-tab-pill-item.active {
+  background: #0F172A;
+  color: #FFFFFF;
+}
+
+.urja-approval-timeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+  padding-bottom: 1.75rem;
+}
+
+.urja-approval-timeline-step:last-child {
+  padding-bottom: 0;
+}
+
+.urja-approval-timeline-step::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 30px;
+  bottom: 0;
+  width: 2px;
+  background: #E2E8F0;
+}
+
+.urja-approval-timeline-step:last-child::before {
+  display: none;
+}
+
+.urja-approval-timeline-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.urja-approval-timeline-icon.approved {
+  background: #DCFCE7;
+  color: #16A34A;
+}
+
+.urja-approval-timeline-icon.pending {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.urja-comments-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.urja-comment-bubble {
+  background: #F8FAFC;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  border: 1px solid #E2E8F0;
+}
+
+/* ==============================================================================
+   SCREEN 7: CANDIDATE PROFILE & RESUME VIEWER
+   ============================================================================== */
+.urja-candidate-split-layout {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .urja-candidate-split-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-candidate-profile-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.urja-candidate-avatar-lg {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--urja-lime);
+  margin-bottom: 0.85rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.urja-resume-viewer-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.urja-resume-doc-sheet {
+  background: #FAFAFA;
+  padding: 2rem;
+  min-height: 480px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.urja-resume-paper {
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 2.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #E2E8F0;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.urja-resume-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #1E293B;
+  border-bottom: 2px solid #E2E8F0;
+  padding-bottom: 0.35rem;
+  margin: 1.25rem 0 0.75rem;
+}
+
+/* ==============================================================================
+   SCREEN 8 & 15: CALENDAR VIEW
+   ============================================================================== */
+.urja-calendar-grid-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.urja-calendar-day-header {
+  padding: 0.65rem;
+  background: #F8FAFC;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748B;
+  text-align: center;
+  border-bottom: 1px solid #E2E8F0;
+  border-right: 1px solid #E2E8F0;
+}
+
+.urja-calendar-day-cell {
+  min-height: 90px;
+  padding: 0.4rem;
+  border-right: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: #FFFFFF;
+  transition: background-color 0.2s;
+}
+
+.urja-calendar-day-cell:hover {
+  background: #F8FAFC;
+}
+
+.urja-calendar-day-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 2px;
+}
+
+.urja-calendar-event-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.urja-calendar-event-tag.blue { background: #E0F2FE; color: #0284C7; }
+.urja-calendar-event-tag.green { background: #DCFCE7; color: #16A34A; }
+.urja-calendar-event-tag.orange { background: #FFEDD5; color: #EA580C; }
+.urja-calendar-event-tag.purple { background: #EDE9FE; color: #7C3AED; }
+
+/* ==============================================================================
+   SCREEN 9: INTERVIEW FEEDBACK MODAL
+   ============================================================================== */
+.urja-star-rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.urja-star-group {
+  display: flex;
+  gap: 4px;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.urja-star-group i {
+  color: #CBD5E1;
+  transition: color 0.15s;
+}
+
+.urja-star-group i.filled {
+  color: #F59E0B;
+}
+
+/* ==============================================================================
+   SCREEN 11: TALENT POOL CARD GRID
+   ============================================================================== */
+.urja-talent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.urja-talent-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.urja-talent-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.urja-talent-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #0F172A;
+  margin-bottom: 0.75rem;
+}
+
+.urja-avail-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0.5rem;
+}
+
+.urja-avail-pill.available {
+  background: #DCFCE7;
+  color: #16A34A;
+}
+
+.urja-avail-pill.not-available {
+  background: #F3E8FF;
+  color: #9333EA;
+}
+
+/* ==============================================================================
+   SCREEN 12 & 13: APPROVALS & EMPLOYEES STATUS TOGGLE & BUTTONS
+   ============================================================================== */
+.urja-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+}
+
+.urja-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.urja-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #CBD5E1;
+  transition: .3s;
+  border-radius: 20px;
+}
+
+.urja-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+.urja-toggle-switch input:checked + .urja-toggle-slider {
+  background-color: #16A34A;
+}
+
+.urja-toggle-switch input:checked + .urja-toggle-slider:before {
+  transform: translateX(18px);
+}
+
+.urja-btn-approve {
+  background: #16A34A;
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.urja-btn-approve:hover {
+  background: #15803D;
+}
+
+.urja-btn-reject {
+  background: #EF4444;
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.urja-btn-reject:hover {
+  background: #DC2626;
+}
+
+/* ==============================================================================
+   RESPONSIVE DESIGN SYSTEM FOR ALL SCREENS (4K, DESKTOP, LAPTOP, TABLET, MOBILE)
+   ============================================================================== */
+
+/* Ultra-Wide Monitors (>= 1600px) */
+@media (min-width: 1600px) {
+  .urja-kpi-grid {
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 1.25rem;
+  }
+  .urja-main-viewport {
+    max-width: 1720px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+/* Standard Laptops & Landscape Tablets (<= 1200px) */
+@media (max-width: 1200px) {
+  .urja-kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.85rem;
+  }
+  .urja-widgets-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .urja-nav-center {
+    max-width: 340px;
+  }
+}
+
+/* Tablets Landscape & Portrait (<= 992px) */
+@media (max-width: 992px) {
+  .urja-nav-center {
+    max-width: 240px;
+    margin: 0 0.5rem;
+  }
+
+  /* Off-Canvas Slide Drawer Sidebar */
+  .urja-sidebar {
+    position: fixed !important;
+    top: var(--urja-header-height) !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 250px !important;
+    z-index: 1060 !important;
+    box-shadow: 6px 0 28px rgba(0, 0, 0, 0.55) !important;
+    transform: translateX(0);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    overflow-y: auto;
+  }
+
+  .urja-sidebar.collapsed {
+    transform: translateX(-100%) !important;
+    width: 250px !important;
+    box-shadow: none !important;
+  }
+
+  /* Backdrop for Mobile Sidebar */
+  .urja-sidebar-mobile-backdrop {
+    position: fixed;
+    top: var(--urja-header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(2px);
+    z-index: 1055;
+    animation: fadeInBackdrop 0.2s ease-out;
+  }
+
+  @keyframes fadeInBackdrop {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .urja-main-viewport {
+    padding: 1.25rem 1rem 2.5rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .urja-filters-row {
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .urja-filter-search-box {
+    min-width: 100%;
+  }
+
+  .urja-filter-select-wrapper {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 140px;
+  }
+
+  .urja-btn-reset-filters {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Tablets Portrait & Large Phones (<= 768px) */
+@media (max-width: 768px) {
+  :root {
+    --urja-header-height: 58px;
+  }
+
+  .urja-navbar {
+    padding: 0 0.75rem;
+    height: 58px;
+  }
+
+  .urja-nav-left {
+    gap: 0.5rem;
+  }
+
+  .urja-logo-text-urja {
+    font-size: 1.25rem;
+  }
+
+  .urja-logo-text-foods {
+    font-size: 0.82rem;
+  }
+
+  .urja-logo-tagline {
+    display: none;
+  }
+
+  /* Hide Create Job text, keep clean + button */
+  .urja-create-job-btn span {
+    display: none;
+  }
+
+  .urja-create-job-btn {
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+  }
+
+  .urja-user-text-info {
+    display: none;
+  }
+
+  .urja-user-chevron {
+    display: none;
+  }
+
+  .urja-user-profile-btn {
+    padding: 0.2rem;
+  }
+
+  /* KPI Grid on Mobile */
+  .urja-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.6rem;
+  }
+
+  .urja-kpi-card {
+    padding: 0.85rem 0.75rem;
+    border-radius: 10px;
+  }
+
+  .urja-kpi-value {
+    font-size: 1.45rem;
+  }
+
+  .urja-req-hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.15rem 1rem;
+  }
+
+  .urja-req-hero-left {
+    width: 100%;
+  }
+
+  /* Status Tabs Horizontal Scroll */
+  .urja-requisitions-view .urja-status-tabs-container,
+  .urja-req-body .urja-status-tabs-container,
+  .urja-status-tabs-container:has(.urja-status-tabs-actions) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .urja-status-tabs-scroll-area {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    width: 100%;
+  }
+
+  .urja-status-tabs-list {
+    display: flex;
+    white-space: nowrap;
+    min-width: max-content;
+    gap: 0.35rem;
+  }
+
+  .urja-btn-create-requisition {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Data Table Smooth Horizontal Scroll */
+  .urja-table-card {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .urja-table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  .urja-data-table {
+    min-width: 780px;
+  }
+
+  /* Table Footer Pagination Controls */
+  .urja-table-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1rem;
+  }
+
+  .urja-table-footer-controls {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    align-items: center;
+  }
+
+  /* Modals on Mobile */
+  .urja-modal-card {
+    max-width: 95vw !important;
+    width: 100% !important;
+    margin: 10px auto;
+    max-height: 92vh;
+    border-radius: 14px;
+  }
+
+  .urja-wizard-stepper {
+    padding: 0.75rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .urja-wizard-step {
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+/* Standard Mobile Phones (<= 576px - iPhone 12/13/14/15/16, Samsung Galaxy, Pixel) */
+@media (max-width: 576px) {
+  .urja-navbar {
+    padding: 0 0.5rem;
+  }
+
+  .urja-nav-center {
+    display: none; /* Top search bar collapses, tab-level search is primary */
+  }
+
+  .urja-main-viewport {
+    padding: 0.85rem 0.5rem 2.5rem;
+  }
+
+  .urja-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem;
+  }
+
+  .urja-kpi-card {
+    padding: 0.75rem 0.6rem;
+  }
+
+  .urja-kpi-label {
+    font-size: 0.68rem;
+  }
+
+  .urja-kpi-value {
+    font-size: 1.3rem;
+  }
+
+  .urja-filter-select-wrapper {
+    flex: 1 1 100%;
+  }
+
+  .urja-req-hero-title {
+    font-size: 1.25rem;
+  }
+
+  .urja-req-hero-desc {
+    font-size: 0.8rem;
+  }
+
+  .urja-talent-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .urja-trend-chart-box {
+    height: 150px;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .urja-chart-legend {
+    font-size: 0.68rem;
+    gap: 0.5rem;
+  }
+}
+
+/* Compact Mobile Phones (<= 380px) */
+@media (max-width: 380px) {
+  .urja-kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .urja-kpi-card {
+    padding: 0.75rem;
+  }
+  .urja-logo-text-urja {
+    font-size: 1.15rem;
+  }
+}
+
+/* ==============================================================================
+   URJA FOODS ATS - PERSONALIZED DASHBOARD & LAYOUT STYLES (MATCHING MOCKUP)
+   ============================================================================== */
+
+/* Layout & Containers */
+.urja-app-layout-v2 {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  background-color: #F8FAFC;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1E293B;
+  position: relative;
+  width: 100%;
+}
+
+/* Sidebar Left Dark Green - Viewport Fixed Compact Icon-Only Sidebar (72px) */
+.urja-sidebar-v2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 72px;
+  min-width: 72px;
+  max-width: 72px;
+  height: 100vh;
+  height: 100dvh;
+  background-color: #062B1B;
+  background: #062B1B;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.16);
+  padding: clamp(14px, 2vh, 20px) 0 clamp(10px, 1.5vh, 16px);
+  overflow-x: visible;
+  overflow-y: visible;
+  box-sizing: border-box;
+  user-select: none;
+  transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.urja-sidebar-v2.collapsed {
+  width: 72px;
+  min-width: 72px;
+  max-width: 72px;
+  padding: clamp(14px, 2vh, 20px) 0 clamp(10px, 1.5vh, 16px);
+}
+
+.urja-sidebar-brand-v2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: clamp(14px, 2.2vh, 24px);
+  padding: 0;
+  flex-shrink: 0;
+  user-select: none;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.urja-sidebar-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.urja-sidebar-logo-leaf {
+  width: clamp(28px, 3.5vh, 32px);
+  height: clamp(28px, 3.5vh, 32px);
+  flex-shrink: 0;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(152, 232, 67, 0.35));
+  transition: transform 0.2s ease;
+}
+
+.urja-sidebar-brand-v2:hover .urja-sidebar-logo-leaf {
+  transform: scale(1.08);
+}
+
+/* Hide brand name, cleaner energy tagline, and ATS subtitle in icon-only mode */
+.urja-sidebar-brand-name,
+.urja-sidebar-tagline,
+.urja-sidebar-ats-label {
+  display: none !important;
+}
+
+/* Sidebar Navigation Items - Fixed Non-Scrollable Layout */
+.urja-sidebar-nav-v2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(4px, 0.8vh, 8px);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  flex: 1;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.urja-sidebar-nav-v2::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.urja-sidebar-nav-v2 > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.urja-nav-item-v2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(42px, 5.2vh, 48px);
+  height: clamp(42px, 5.2vh, 48px);
+  min-width: clamp(42px, 5.2vh, 48px);
+  min-height: clamp(42px, 5.2vh, 48px);
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: #9DBAA9;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.urja-nav-item-v2 i {
+  font-size: clamp(18px, 2.2vh, 21px);
+  color: #9DBAA9;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.urja-nav-item-text {
+  display: none !important;
+}
+
+.urja-nav-item-v2:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+}
+
+.urja-nav-item-v2:hover i {
+  color: #FFFFFF;
+  transform: scale(1.08);
+}
+
+/* Active navigation item: bright green rounded rectangle #159447 */
+.urja-nav-item-v2.active {
+  background-color: #159447 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(21, 148, 71, 0.45);
+}
+
+.urja-nav-item-v2.active i {
+  color: #FFFFFF !important;
+  transform: none;
+}
+
+.urja-nav-item-v2:focus-visible {
+  outline: 2px solid #22C55E;
+  outline-offset: 2px;
+}
+
+/* Notification badge on Approvals */
+.urja-nav-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background-color: #E11D48;
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  line-height: 1;
+  border: 2px solid #062B1B;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.urja-nav-item-v2.active .urja-nav-badge {
+  border-color: #159447;
+}
+
+/* Floating Tooltip to the right */
+.urja-nav-item-v2::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  background-color: #0A3D24;
+  color: #FFFFFF;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.15s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 1050;
+}
+
+/* Tooltip triangle arrow */
+.urja-nav-item-v2::before {
+  content: '';
+  position: absolute;
+  left: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  border-width: 5px 6px 5px 0;
+  border-style: solid;
+  border-color: transparent #0A3D24 transparent transparent;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.15s;
+  z-index: 1050;
+}
+
+.urja-nav-item-v2:hover::after,
+.urja-nav-item-v2:focus::after,
+.urja-nav-item-v2:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) scale(1);
+}
+
+.urja-nav-item-v2:hover::before,
+.urja-nav-item-v2:focus::before,
+.urja-nav-item-v2:focus-visible::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) scale(1);
+}
+
+/* Sidebar Bottom Leaf Graphic - Absolute Background Decor */
+.urja-sidebar-footer-leaf {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 72px;
+  height: clamp(50px, 8vh, 80px);
+  pointer-events: none;
+  opacity: 0.35;
+  overflow: hidden;
+  z-index: 0;
+  flex-shrink: 0;
+}
+
+@media (max-height: 720px) {
+  .urja-sidebar-v2 {
+    padding: 10px 0 8px;
+  }
+  .urja-sidebar-brand-v2 {
+    margin-bottom: 10px;
+  }
+  .urja-sidebar-logo-leaf {
+    width: 26px;
+    height: 26px;
+  }
+  .urja-sidebar-nav-v2 {
+    gap: 3px;
+  }
+  .urja-nav-item-v2 {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 10px;
+  }
+  .urja-nav-item-v2 i {
+    font-size: 17px;
+  }
+}
+
+/* Right Main Wrapper - Offset by 72px Left Sidebar Width */
+.urja-main-wrapper-v2 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+  margin-left: 72px;
+  width: calc(100% - 72px);
+  max-width: calc(100% - 72px);
+  background-color: #F8FAFC;
+  box-sizing: border-box;
+  transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), width 0.28s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.urja-app-layout-v2.sidebar-collapsed .urja-main-wrapper-v2,
+.urja-sidebar-v2.collapsed ~ .urja-main-wrapper-v2 {
+  margin-left: 72px;
+  width: calc(100% - 72px);
+  max-width: calc(100% - 72px);
+}
+
+/* Top Clean White Header */
+.urja-top-header-v2 {
+  height: 68px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  box-sizing: border-box;
+}
+
+.urja-header-left-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  max-width: 520px;
+}
+
+.urja-sidebar-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-right: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #475569;
+  cursor: pointer;
+  font-size: 1.15rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.urja-sidebar-toggle-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+  border-color: #CBD5E1;
+}
+
+@media (min-width: 769px) {
+  .urja-sidebar-toggle-btn {
+    display: none !important;
+  }
+}
+
+.urja-sidebar-mobile-backdrop {
+  display: none;
+}
+
+.urja-header-search-wrap-v2 {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 0.55rem 1.15rem;
+  width: 440px;
+  max-width: 100%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.urja-header-search-wrap-v2:focus-within {
+  border-color: #16A34A;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+.urja-header-search-icon-v2 {
+  color: #64748B;
+  font-size: 0.95rem;
+  margin-right: 0.65rem;
+}
+
+.urja-header-search-input-v2 {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.88rem;
+  color: #1E293B;
+  width: 100%;
+}
+
+.urja-header-search-input-v2::placeholder {
+  color: #94A3B8;
+}
+
+/* Top Right Actions */
+.urja-header-right-v2 {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.urja-header-bell-btn-v2 {
+  background: transparent;
+  border: none;
+  color: #475569;
+  font-size: 1.25rem;
+  position: relative;
+  cursor: pointer;
+  padding: 0.45rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.urja-header-bell-btn-v2:hover {
+  background-color: #F1F5F9;
+  color: #0F172A;
+}
+
+.urja-header-bell-badge-v2 {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #EF4444;
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #FFFFFF;
+}
+
+/* HRMS Notifications Panel Read/Unread States */
+.urja-notif-card-unread {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.urja-notif-card-unread:hover {
+  background-color: #F8FAFC !important;
+  border-color: #94A3B8 !important;
+}
+
+.urja-notif-card-read {
+  background-color: #F1F3F5 !important;
+  border-color: #E2E8F0 !important;
+}
+
+.urja-notif-card-read:hover {
+  background-color: #ECEFF1 !important;
+}
+
+/* Header User Pill */
+.urja-header-user-pill-v2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.35rem 0.65rem;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.urja-header-user-pill-v2:hover {
+  background-color: #F1F5F9;
+}
+
+.urja-header-avatar-v2 {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #E2E8F0;
+}
+
+.urja-header-user-info-v2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-header-user-name-v2 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.2;
+}
+
+.urja-header-user-title-v2 {
+  font-size: 0.75rem;
+  color: #64748B;
+  line-height: 1.2;
+}
+
+.urja-header-chevron-v2 {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  margin-left: 2px;
+}
+
+@media (max-width: 768px) {
+  .urja-header-search-wrap-v2 {
+    max-width: 180px;
+  }
+}
+
+@media (max-width: 576px) {
+  .urja-header-search-wrap-v2 {
+    display: none;
+  }
+  .urja-header-user-info-v2,
+  .urja-header-chevron-v2 {
+    display: none;
+  }
+  .urja-header-right-v2 {
+    gap: 0.5rem;
+  }
+}
+
+/* User Profile Dropdown */
+.urja-profile-dropdown-v2 {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  width: 270px;
+  z-index: 1000;
+  padding: 0.5rem 0;
+  animation: fadeInSearch 0.15s ease-out;
+}
+
+.urja-dropdown-header-v2 {
+  padding: 0.85rem 1.2rem;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.urja-dropdown-header-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.urja-dropdown-header-email {
+  font-size: 0.78rem;
+  color: #64748B;
+  margin-top: 1px;
+}
+
+.urja-dropdown-header-dept {
+  font-size: 0.75rem;
+  color: #16A34A;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.urja-dropdown-item-v2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.65rem 1.2rem;
+  background: transparent;
+  border: none;
+  color: #334155;
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.urja-dropdown-item-v2:hover {
+  background-color: #F8FAFC;
+  color: #0F172A;
+}
+
+.urja-dropdown-item-v2.active-persona {
+  color: #16A34A;
+  font-weight: 700;
+  background-color: #F0FDF4;
+}
+
+.urja-dropdown-item-v2.logout {
+  color: #DC2626;
+  border-top: 1px solid #F1F5F9;
+  margin-top: 0.35rem;
+  padding-top: 0.75rem;
+}
+
+.urja-dropdown-item-v2.logout:hover {
+  background-color: #FEF2F2;
+}
+
+/* ==============================================================================
+   PERSONALIZED DASHBOARD CONTENT AREA
+   ============================================================================== */
+.urja-dashboard-body-v2 {
+  padding: 1.75rem 2rem 3rem;
+  max-width: 1400px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Personalized Dynamic Greeting */
+.urja-greeting-banner-v2 {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  margin-bottom: 1.75rem;
+}
+
+.urja-greeting-leaf-wrap-v2 {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.urja-greeting-title-v2 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.urja-name-highlight-v2 {
+  color: #0F172A;
+  font-weight: 800;
+}
+
+.urja-greeting-sub-v2 {
+  font-size: 0.92rem;
+  color: #64748B;
+  margin: 4px 0 0;
+}
+
+/* 4 Metric KPI Cards Row */
+.urja-kpi-row-4-v2 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.urja-metric-card-v2 {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.urja-metric-card-v2:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.urja-metric-top-v2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.urja-metric-icon-box-v2 {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.urja-metric-icon-box-v2.green {
+  background-color: #E8F8EC;
+  color: #16A34A;
+}
+
+.urja-metric-icon-box-v2.blue {
+  background-color: #EAF4FF;
+  color: #0284C7;
+}
+
+.urja-metric-icon-box-v2.purple {
+  background-color: #F3E8FF;
+  color: #9333EA;
+}
+
+.urja-metric-icon-box-v2.amber {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+.urja-metric-info-v2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-metric-label-v2 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #475569;
+  line-height: 1.3;
+}
+
+.urja-metric-val-v2 {
+  font-size: 1.95rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-top: 0.35rem;
+  line-height: 1;
+}
+
+.urja-metric-link-v2 {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #16A34A;
+  text-decoration: none;
+  margin-top: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.urja-metric-link-v2:hover {
+  color: #15803D;
+  text-decoration: underline;
+}
+
+/* 2x2 Main Grid Widgets */
+.urja-dashboard-grid-2x2-v2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.urja-widget-card-v2 {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1.4rem 1.6rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-widget-header-v2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.urja-widget-title-v2 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.urja-widget-viewall-v2 {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #16A34A;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.urja-widget-viewall-v2:hover {
+  text-decoration: underline;
+  color: #15803D;
+}
+
+/* Widget 1: Activities Timeline */
+.urja-activities-timeline-v2 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.urja-activity-item-v2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  position: relative;
+}
+
+.urja-activity-item-v2:last-child {
+  padding-bottom: 0;
+}
+
+.urja-activity-connector-v2 {
+  position: absolute;
+  top: 36px;
+  left: 17px;
+  bottom: 0;
+  width: 2px;
+  background-color: #E2E8F0;
+}
+
+.urja-activity-item-v2:last-child .urja-activity-connector-v2 {
+  display: none;
+}
+
+.urja-activity-icon-v2 {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.urja-activity-icon-v2.green {
+  background-color: #E8F8EC;
+  color: #16A34A;
+}
+
+.urja-activity-icon-v2.purple {
+  background-color: #F3E8FF;
+  color: #9333EA;
+}
+
+.urja-activity-icon-v2.blue {
+  background-color: #EAF4FF;
+  color: #0284C7;
+}
+
+.urja-activity-icon-v2.amber {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+.urja-activity-details-v2 {
+  flex: 1;
+  min-width: 0;
+}
+
+.urja-activity-title-v2 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.25;
+}
+
+.urja-activity-sub-v2 {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.urja-activity-time-v2 {
+  font-size: 0.78rem;
+  color: #64748B;
+  white-space: nowrap;
+}
+
+/* Widget 2: Open Requisitions Table */
+.urja-req-table-v2 {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.urja-req-table-v2 th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748B;
+  text-align: left;
+  padding: 0.5rem 0.65rem 0.75rem;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.urja-req-table-v2 td {
+  padding: 0.85rem 0.65rem;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 0.86rem;
+  color: #1E293B;
+  vertical-align: middle;
+}
+
+.urja-req-table-v2 tr:last-child td {
+  border-bottom: none;
+}
+
+.urja-req-title-cell-v2 {
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.urja-status-badge-v2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.22rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.urja-status-badge-v2.open {
+  background-color: #DCFCE7;
+  color: #15803D;
+}
+
+.urja-status-badge-v2.in-progress {
+  background-color: #E0F2FE;
+  color: #0369A1;
+}
+
+.urja-status-badge-v2.on-hold {
+  background-color: #FEF3C7;
+  color: #B45309;
+}
+
+.urja-req-candidates-v2 {
+  color: #64748B;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Widget 3: Upcoming Interviews */
+.urja-interviews-list-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.urja-interview-item-v2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  background-color: #F8FAFC;
+  border: 1px solid #EDF2F7;
+  transition: background-color 0.15s ease;
+}
+
+.urja-interview-item-v2:hover {
+  background-color: #F1F5F9;
+}
+
+.urja-interview-left-v2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.urja-interview-date-box-v2 {
+  width: 44px;
+  height: 44px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.urja-date-day-v2 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1;
+}
+
+.urja-date-month-v2 {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+.urja-interview-info-v2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-interview-name-v2 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.urja-interview-role-v2 {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin-top: 1px;
+}
+
+.urja-interview-meta-v2 {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.urja-interview-pill-v2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: #475569;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+.urja-interview-arrow-v2 {
+  color: #94A3B8;
+  font-size: 0.85rem;
+}
+
+/* Widget 4: My Tasks */
+.urja-tasks-list-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.urja-task-row-v2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid #F1F5F9;
+  cursor: pointer;
+  user-select: none;
+}
+
+.urja-task-row-v2:last-child {
+  border-bottom: none;
+}
+
+.urja-task-left-v2 {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.urja-task-checkbox-v2 {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #94A3B8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.urja-task-checkbox-v2.checked {
+  background-color: #16A34A;
+  border-color: #16A34A;
+  color: #FFFFFF;
+}
+
+.urja-task-title-v2 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1E293B;
+  transition: color 0.15s ease;
+}
+
+.urja-task-title-v2.done {
+  text-decoration: line-through;
+  color: #94A3B8;
+}
+
+.urja-task-date-v2 {
+  font-size: 0.78rem;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1200px) {
+  .urja-kpi-row-4-v2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .urja-dashboard-grid-2x2-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .urja-app-layout-v2 {
+    flex-direction: row;
+  }
+
+  .urja-sidebar-v2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 270px;
+    min-width: 270px;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 1200;
+    transform: translateX(0);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.45);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .urja-sidebar-v2.collapsed {
+    transform: translateX(-100%);
+    width: 270px;
+    min-width: 270px;
+    box-shadow: none;
+    pointer-events: none;
+    display: flex;
+  }
+
+  /* Unhide navigation text labels in mobile drawer */
+  .urja-sidebar-v2 .urja-nav-item-text,
+  .urja-sidebar-v2 .urja-sidebar-ats-label,
+  .urja-sidebar-v2 .urja-sidebar-tagline,
+  .urja-sidebar-v2 .urja-sidebar-brand-name {
+    display: block !important;
+  }
+
+  .urja-sidebar-v2 .urja-nav-item-v2 {
+    width: 100% !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    justify-content: flex-start !important;
+    padding: clamp(0.45rem, 0.9vh, 0.65rem) 0.85rem !important;
+    gap: 0.75rem !important;
+    border-radius: 8px !important;
+  }
+
+  .urja-sidebar-v2 .urja-nav-item-v2::after,
+  .urja-sidebar-v2 .urja-nav-item-v2::before {
+    display: none !important;
+  }
+
+  .urja-sidebar-mobile-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 28, 16, 0.65);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 1150;
+    cursor: pointer;
+  }
+
+  .urja-main-wrapper-v2 {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .urja-app-layout-v2.sidebar-collapsed .urja-main-wrapper-v2,
+  .urja-sidebar-v2.collapsed ~ .urja-main-wrapper-v2 {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .urja-top-header-v2 {
+    padding: 0 1rem;
+  }
+
+  .urja-header-left-cluster {
+    max-width: calc(100% - 90px);
+  }
+
+  .urja-header-search-wrap-v2 {
+    width: 100%;
+    min-width: 130px;
+  }
+
+  .urja-dashboard-body-v2 {
+    padding: 1rem;
+  }
+
+  .urja-kpi-row-4-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+

@@ -1,0 +1,759 @@
+/* ==============================================================================
+   URJA FOODS ATS — TASK ASSIGNMENT & RECRUITMENT WORKLOAD STYLES
+   ============================================================================== */
+
+.urja-tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* 1. Page Header */
+.urja-tasks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.urja-tasks-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.urja-tasks-header-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #144d2d;
+  color: #98e843;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(20, 77, 45, 0.25);
+}
+
+.urja-tasks-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.urja-tasks-subtitle {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0.2rem 0 0;
+  font-weight: 500;
+}
+
+.urja-tasks-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.urja-btn-lime {
+  background: #98e843;
+  color: #144d2d;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(152, 232, 67, 0.35);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.urja-btn-lime:hover {
+  background: #84d632;
+  color: #0b341d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(152, 232, 67, 0.45);
+}
+
+/* 2. Summary Cards (5 Cards Grid) */
+.urja-tasks-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.urja-tasks-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.1rem 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.urja-tasks-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.urja-tasks-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.urja-tasks-card-icon.blue {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.urja-tasks-card-icon.purple {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.urja-tasks-card-icon.amber {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.urja-tasks-card-icon.green {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.urja-tasks-card-icon.red {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.urja-tasks-card-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.urja-tasks-card-val {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.urja-tasks-card-label {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 3. Filter Controls Box */
+.urja-tasks-filter-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.urja-tasks-filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.urja-tasks-search-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.urja-tasks-search-input-wrap {
+  flex: 1 1 320px;
+  min-width: 240px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.urja-tasks-search-input-wrap input {
+  width: 100%;
+  height: 38px;
+  padding: 0 2.2rem 0 2.2rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.86rem;
+  outline: none;
+  background: #ffffff;
+  color: #1e293b;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.urja-tasks-search-input-wrap input:focus {
+  border-color: #15803d;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
+}
+
+.urja-tasks-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.urja-tasks-search-clear {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.2rem;
+}
+
+.urja-tasks-search-clear:hover {
+  color: #475569;
+}
+
+.urja-tasks-btn-search {
+  height: 38px;
+  padding: 0 1.25rem;
+  background: #144d2d;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.urja-tasks-btn-search:hover {
+  background: #0f3d24;
+}
+
+.urja-tasks-dropdowns-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.urja-tasks-select-group {
+  flex: 1 1 180px;
+  min-width: 150px;
+}
+
+.urja-tasks-select {
+  width: 100%;
+  height: 38px;
+  padding: 0 2rem 0 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.85rem;
+  background-color: #ffffff;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+
+.urja-tasks-select:focus {
+  border-color: #15803d;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
+}
+
+.urja-tasks-reset-btn {
+  height: 38px;
+  padding: 0 1rem;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.urja-tasks-reset-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* 4. Tasks Table Layout */
+.urja-tasks-table-wrapper {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Horizontal scroll area confined strictly to the table */
+.urja-tasks-table-scroll {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.urja-tasks-table-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.urja-tasks-table-scroll::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+
+.urja-tasks-table-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.urja-tasks-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.urja-tasks-table {
+  width: 100%;
+  min-width: 1060px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.urja-tasks-table th {
+  background: #f8fafc;
+  padding: 0.8rem 0.6rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #475569;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: normal;
+  line-height: 1.25;
+  vertical-align: middle;
+}
+
+.urja-tasks-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s;
+}
+
+.urja-tasks-table th.sortable:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.sort-icon {
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.sort-icon.active {
+  color: #15803d;
+  font-weight: bold;
+}
+
+.urja-tasks-table td {
+  padding: 0.85rem 0.6rem;
+  font-size: 0.84rem;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.urja-tasks-table tr:last-child td {
+  border-bottom: none;
+}
+
+.urja-tasks-table tr:hover td {
+  background: #f8fafc;
+}
+
+/* Multi-line wrapping typography */
+.task-title-text {
+  font-weight: 700;
+  color: #0f172a;
+  word-break: break-word;
+  line-height: 1.35;
+  font-size: 0.88rem;
+}
+
+.task-desc-text {
+  font-size: 0.78rem;
+  color: #64748b;
+  word-break: break-word;
+  line-height: 1.35;
+  margin-top: 0.25rem;
+}
+
+.task-related-box {
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+/* Badges & Pills */
+.task-type-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.task-type-badge.screening {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.task-type-badge.feedback {
+  background: #faf5ff;
+  color: #7e22ce;
+}
+
+.task-type-badge.offer {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.task-type-badge.coordination {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.task-priority-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.task-priority-pill.urgent {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.task-priority-pill.high {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.task-priority-pill.medium {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.task-priority-pill.low {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.task-status-pill {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.task-status-pill.assigned {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.task-status-pill.in_progress {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.task-status-pill.completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.task-status-pill.cancelled {
+  background: #f1f5f9;
+  color: #64748b;
+  text-decoration: line-through;
+}
+
+/* User Avatar & Info */
+.task-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.task-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1e293b;
+  flex-shrink: 0;
+}
+
+.task-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Pinned Full-Width Table Footer */
+.urja-tasks-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Modals */
+.urja-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.urja-modal-dialog {
+  background: #ffffff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+.urja-modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urja-modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.urja-modal-body {
+  padding: 1.5rem;
+}
+
+.urja-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* Details Drawer */
+.urja-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1060;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.urja-drawer-panel {
+  background: #ffffff;
+  width: 100%;
+  max-width: 520px;
+  height: 100%;
+  box-shadow: -4px 0 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.25s ease-out;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* ==============================================================================
+   RESPONSIVE MEDIA QUERIES
+   ============================================================================== */
+
+@media (max-width: 1200px) {
+  .urja-tasks-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .urja-tasks-search-row {
+    flex-wrap: wrap;
+  }
+  .urja-tasks-search-input-wrap {
+    flex: 1 1 100%;
+  }
+  .urja-tasks-btn-search {
+    flex-grow: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .urja-tasks-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .urja-tasks-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .urja-tasks-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .urja-tasks-dropdowns-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .urja-tasks-select-group {
+    width: 100%;
+    min-width: 100%;
+  }
+  .urja-tasks-reset-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .urja-modal-dialog {
+    max-width: 96vw;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .urja-tasks-summary-grid {
+    grid-template-columns: 1fr;
+  }
+  .urja-tasks-card {
+    padding: 0.9rem 1rem;
+  }
+  .urja-tasks-card-val {
+    font-size: 1.45rem;
+  }
+  .urja-tasks-table-footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}

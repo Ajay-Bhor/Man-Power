@@ -1,0 +1,1680 @@
+/* ==============================================================================
+   URJA FOODS HRMS — SYSTEM ADMINISTRATION INNER CONTENT STYLES
+   Premium Enterprise Corporate UI (Green & White Theme)
+   ============================================================================== */
+
+.urja-sysadmin-inner-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.25rem 0 2rem 0;
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ------------------------------------------------------------------------------
+   1. PAGE HEADING SECTION
+   ------------------------------------------------------------------------------ */
+.urja-sysadmin-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.urja-sysadmin-title-cluster {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.urja-sysadmin-main-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background-color: #064E29;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(6, 78, 41, 0.22);
+}
+
+.urja-sysadmin-title-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.urja-sysadmin-title-line {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.urja-sysadmin-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.urja-scope-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #E8F5EC;
+  border: 1px solid #CCE8D4;
+  color: #166534;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.urja-scope-pill-badge i {
+  font-size: 0.85rem;
+  color: #16A34A;
+}
+
+.urja-sysadmin-subtitle {
+  font-size: 0.88rem;
+  color: #64748B;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Primary Top Action Button */
+.urja-btn-primary-backup {
+  background-color: #15803D;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.65rem 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 10px rgba(21, 128, 61, 0.28);
+  white-space: nowrap;
+}
+
+.urja-btn-primary-backup:hover:not(:disabled) {
+  background-color: #166534;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.38);
+  color: #FFFFFF;
+}
+
+.urja-btn-primary-backup:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.urja-btn-primary-backup:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------------------
+   2. LOCAL CONTENT TABS
+   ------------------------------------------------------------------------------ */
+.urja-sysadmin-tabs-nav-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #D1E7DD;
+  padding-bottom: 0.75rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.urja-sysadmin-tabs-nav-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.urja-sysadmin-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.urja-sysadmin-tab-btn:hover:not(.active) {
+  background-color: #F1F5F9;
+  color: #0F172A;
+}
+
+.urja-sysadmin-tab-btn.active {
+  background-color: #064E29;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(6, 78, 41, 0.25);
+}
+
+.urja-tab-counter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background-color: #E8F5EC;
+  color: #166534;
+  line-height: 1.2;
+}
+
+.urja-sysadmin-tab-btn.active .urja-tab-counter-badge {
+  background-color: #FFFFFF;
+  color: #064E29;
+  font-weight: 800;
+}
+
+/* Active tab underline accent directly on the dividing border */
+.urja-sysadmin-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  background-color: #064E29;
+  border-radius: 3px 3px 0 0;
+}
+
+/* ------------------------------------------------------------------------------
+   3. PREMIUM ENTERPRISE WHITE CARDS
+   ------------------------------------------------------------------------------ */
+.urja-admin-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  padding: 1.5rem 1.75rem;
+  box-sizing: border-box;
+}
+
+.urja-admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.urja-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.urja-card-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: #E8F5EC;
+  color: #166534;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.urja-card-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-card-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.urja-card-desc {
+  font-size: 0.86rem;
+  color: #64748B;
+  margin: 0.2rem 0 0 0;
+  line-height: 1.4;
+}
+
+/* Subtle separator inside cards */
+.urja-card-divider {
+  border-top: 1px solid #F1F5F9;
+  margin: 1.25rem 0;
+}
+
+/* ------------------------------------------------------------------------------
+   4. CARD 1: BACKUP METADATA 4-COLUMN GRID
+   ------------------------------------------------------------------------------ */
+.urja-backup-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 1024px) {
+  .urja-backup-meta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .urja-backup-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-meta-info-col {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-right: 0.5rem;
+}
+
+.urja-meta-info-col:not(:last-child) {
+  border-right: 1px solid #F1F5F9;
+}
+
+@media (max-width: 1024px) {
+  .urja-meta-info-col:not(:last-child) {
+    border-right: none;
+  }
+}
+
+.urja-meta-col-icon {
+  font-size: 1.55rem;
+  color: #166534;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.urja-meta-col-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.urja-meta-col-label {
+  font-size: 0.78rem;
+  color: #64748B;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.urja-meta-col-value {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Status Pill: Emerald Green Success */
+.urja-pill-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: #15803D;
+  color: #FFFFFF;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.urja-pill-success i {
+  font-size: 0.75rem;
+}
+
+/* S3 Link in Column 3 */
+.urja-s3-location-link {
+  color: #15803D;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color 0.15s ease;
+}
+
+.urja-s3-location-link:hover {
+  color: #166534;
+  text-decoration: underline;
+}
+
+.urja-s3-location-link i {
+  font-size: 0.8rem;
+}
+
+/* ------------------------------------------------------------------------------
+   5. CARD 2: DATABASE BACKUP ARCHIVE TABLE
+   ------------------------------------------------------------------------------ */
+.urja-archive-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #E8F5EC;
+  color: #166534;
+  border: 1px solid #CCE8D4;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+}
+
+.urja-archive-count-badge i {
+  font-size: 0.9rem;
+  color: #16A34A;
+}
+
+.urja-admin-table-container {
+  margin-top: 1.15rem;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.urja-admin-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.urja-admin-data-table th {
+  background-color: #EAF5EE;
+  color: #0F172A;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #D1E7DD;
+  white-space: nowrap;
+}
+
+.urja-admin-data-table td {
+  padding: 0.85rem 1rem;
+  font-size: 0.86rem;
+  color: #334155;
+  border-bottom: 1px solid #F1F5F9;
+  vertical-align: middle;
+}
+
+.urja-admin-data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.urja-admin-data-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.urja-admin-data-table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+/* File Name Column */
+.urja-file-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.urja-file-icon {
+  font-size: 1.25rem;
+  color: #16A34A;
+  flex-shrink: 0;
+}
+
+.urja-file-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+/* Type Badges */
+.urja-type-pill {
+  display: inline-block;
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.urja-type-pill.manual {
+  background-color: #E0F2FE;
+  color: #0369A1;
+}
+
+.urja-type-pill.scheduled {
+  background-color: #F3E8FF;
+  color: #7E22CE;
+}
+
+/* SHA-256 Checksum with Copy Button */
+.urja-checksum-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.urja-btn-icon-copy {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.urja-btn-icon-copy:hover {
+  color: #0F172A;
+  background-color: #F1F5F9;
+}
+
+.urja-btn-icon-copy.copied {
+  color: #16A34A;
+}
+
+/* Status Column Badge */
+.urja-status-pill-table {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: #DCFCE7;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+  border-radius: 999px;
+  padding: 0.22rem 0.75rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.urja-status-pill-table i {
+  font-size: 0.75rem;
+  color: #16A34A;
+}
+
+/* Actions Column Buttons */
+.urja-actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.urja-btn-table-action {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-btn-table-action:hover {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.urja-btn-table-action.restore:hover {
+  color: #D97706;
+  border-color: #FDE68A;
+  background-color: #FEF3C7;
+}
+
+/* ------------------------------------------------------------------------------
+   6. DUAL-CLOUD BACKUP (AWS S3 + MICROSOFT ONEDRIVE)
+   ------------------------------------------------------------------------------ */
+.urja-cloud-targets-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.urja-cloud-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.urja-cloud-badge.s3 {
+  background-color: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.urja-cloud-badge.onedrive {
+  background-color: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.urja-cloud-badge.active-check i {
+  color: #16A34A;
+}
+
+.urja-cloud-locations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.urja-onedrive-location-link {
+  color: #0284C7;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color 0.15s ease;
+}
+
+.urja-onedrive-location-link:hover {
+  color: #0369A1;
+  text-decoration: underline;
+}
+
+.urja-onedrive-location-link i {
+  font-size: 0.82rem;
+}
+
+/* Dual Replication Status Bar inside Card 1 */
+.urja-dual-cloud-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  margin-top: 1.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.urja-dual-cloud-targets {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.urja-target-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.urja-target-icon-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.urja-target-icon-box.s3 {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+.urja-target-icon-box.onedrive {
+  background-color: #EFF6FF;
+  color: #2563EB;
+}
+
+.urja-target-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-target-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.urja-target-path {
+  font-size: 0.74rem;
+  color: #64748B;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.urja-btn-secondary-sm {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-btn-secondary-sm:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+  color: #0F172A;
+}
+
+/* OneDrive Action Button in table */
+.urja-btn-table-action.onedrive:hover {
+  color: #0284C7;
+  border-color: #BAE6FD;
+  background-color: #F0F9FF;
+}
+
+/* Destination Badges in Table */
+.urja-dest-pills-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.urja-dest-badge-micro {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.urja-dest-badge-micro.s3 {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.urja-dest-badge-micro.onedrive {
+  background: #E0F2FE;
+  color: #0369A1;
+}
+
+/* OneDrive Modal */
+.urja-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.urja-onedrive-modal-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  max-width: 620px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.urja-onedrive-modal-header {
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #0A58CA 0%, #03429E 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urja-onedrive-modal-body {
+  padding: 1.5rem;
+}
+
+.urja-onedrive-modal-footer {
+  padding: 1rem 1.5rem;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ==============================================================================
+   URJA FOODS HRMS — AUDIT LOGS PREMIUM ENTERPRISE REDESIGN
+   ============================================================================== */
+
+/* 1. Audit KPI Summary Grid */
+.urja-audit-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 1100px) {
+  .urja-audit-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .urja-audit-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-audit-kpi-card {
+  background: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.urja-audit-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+/* Subtle corner wave decoration matching reference design */
+.urja-audit-kpi-card:nth-child(1)::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 10px;
+  width: 100px;
+  height: 90px;
+  background: radial-gradient(circle at 70% 40%, rgba(19, 138, 69, 0.08) 0%, rgba(19, 138, 69, 0.02) 60%, transparent 80%);
+  border-radius: 50% 40% 60% 50%;
+  pointer-events: none;
+}
+
+.urja-audit-kpi-card:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 10px;
+  width: 100px;
+  height: 90px;
+  background: radial-gradient(circle at 70% 40%, rgba(13, 148, 136, 0.08) 0%, rgba(13, 148, 136, 0.02) 60%, transparent 80%);
+  border-radius: 50% 40% 60% 50%;
+  pointer-events: none;
+}
+
+.urja-audit-kpi-card:nth-child(3)::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 10px;
+  width: 100px;
+  height: 90px;
+  background: radial-gradient(circle at 70% 40%, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0.02) 60%, transparent 80%);
+  border-radius: 50% 40% 60% 50%;
+  pointer-events: none;
+}
+
+.urja-audit-kpi-card:nth-child(4)::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 10px;
+  width: 100px;
+  height: 90px;
+  background: radial-gradient(circle at 70% 40%, rgba(5, 150, 105, 0.08) 0%, rgba(5, 150, 105, 0.02) 60%, transparent 80%);
+  border-radius: 50% 40% 60% 50%;
+  pointer-events: none;
+}
+
+.urja-audit-kpi-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.urja-audit-kpi-icon-box.green {
+  background-color: #E8F6ED;
+  color: #075B35;
+}
+
+.urja-audit-kpi-icon-box.teal {
+  background-color: #E6F7ED;
+  color: #138A45;
+}
+
+.urja-audit-kpi-icon-box.purple {
+  background-color: #EEF2FF;
+  color: #4F46E5;
+}
+
+.urja-audit-kpi-icon-box.emerald {
+  background-color: #ECFDF5;
+  color: #059669;
+}
+
+.urja-audit-kpi-content {
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.urja-audit-kpi-value {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #17233C;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.urja-audit-kpi-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748B;
+  margin-top: 0.25rem;
+}
+
+/* ------------------------------------------------------------------------------
+   2. Audit Search & Filter Toolbar
+   ------------------------------------------------------------------------------ */
+.urja-audit-filter-bar {
+  background: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.02);
+  margin-bottom: 1.25rem;
+}
+
+.urja-audit-search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+}
+
+.urja-audit-search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94A3B8;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.urja-audit-search-input {
+  width: 100%;
+  padding: 0.55rem 2.2rem 0.55rem 2.35rem;
+  border: 1px solid #DFE7EE;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: #17233C;
+  background-color: #FFFFFF;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.urja-audit-search-input::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.urja-audit-search-input:focus {
+  border-color: #138A45;
+  box-shadow: 0 0 0 3px rgba(19, 138, 69, 0.12);
+}
+
+.urja-audit-search-clear {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #94A3B8;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.urja-audit-search-clear:hover {
+  color: #0F172A;
+  background-color: #F1F5F9;
+}
+
+.urja-audit-select-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: 1px solid #DFE7EE;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  padding: 0 0.5rem 0 0.75rem;
+  transition: border-color 0.15s ease;
+}
+
+.urja-audit-select-group:focus-within {
+  border-color: #138A45;
+  box-shadow: 0 0 0 3px rgba(19, 138, 69, 0.12);
+}
+
+.urja-audit-select-icon {
+  color: #138A45;
+  font-size: 0.95rem;
+  margin-right: 0.45rem;
+}
+
+.urja-audit-select {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0.55rem 0.5rem 0.55rem 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #17233C;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+.urja-audit-btn-reset {
+  background: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 8px;
+  color: #475569;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-audit-btn-reset:hover {
+  background-color: #F8FAFC;
+  color: #17233C;
+  border-color: #CBD5E1;
+}
+
+.urja-audit-btn-apply {
+  background-color: #075B35;
+  border: none;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.58rem 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(7, 91, 53, 0.2);
+}
+
+.urja-audit-btn-apply:hover {
+  background-color: #064E29;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(7, 91, 53, 0.3);
+}
+
+.urja-audit-btn-apply:active {
+  transform: translateY(0);
+}
+
+/* ------------------------------------------------------------------------------
+   3. Audit Data Table Card
+   ------------------------------------------------------------------------------ */
+.urja-audit-table-card {
+  background: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  overflow: hidden;
+}
+
+.urja-audit-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.urja-audit-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+}
+
+.urja-audit-table th {
+  background-color: #EBF5EF;
+  color: #17233C;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #D1E7DD;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.urja-audit-table th {
+  background-color: #EBF5EF;
+  color: #17233C;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.75rem 0.65rem;
+  border-bottom: 1px solid #D1E7DD;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.urja-audit-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.urja-audit-table th.sortable:hover {
+  color: #075B35;
+}
+
+.urja-audit-table td {
+  padding: 0.7rem 0.65rem;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 0.82rem;
+  color: #17233C;
+  vertical-align: middle;
+}
+
+.urja-audit-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.urja-audit-table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+.urja-audit-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Date & Time Column */
+.urja-audit-datetime-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  white-space: nowrap;
+}
+
+.urja-audit-cal-icon {
+  font-size: 1.05rem;
+  color: #138A45;
+  flex-shrink: 0;
+}
+
+.urja-audit-datetime-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.urja-audit-date {
+  font-weight: 700;
+  color: #17233C;
+  font-size: 0.8rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: nowrap;
+}
+
+.urja-audit-time {
+  font-size: 0.74rem;
+  color: #64748B;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: nowrap;
+}
+
+/* Actor / User Column */
+.urja-audit-actor-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  white-space: nowrap;
+}
+
+.urja-audit-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.74rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.urja-audit-avatar.green {
+  background-color: #DCFCE7;
+  color: #166534;
+}
+
+.urja-audit-avatar.purple {
+  background-color: #EDE9FE;
+  color: #6D28D9;
+}
+
+.urja-audit-avatar.blue {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+
+.urja-audit-avatar.amber {
+  background-color: #FEF3C7;
+  color: #B45309;
+}
+
+.urja-audit-actor-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.urja-audit-actor-name {
+  font-weight: 700;
+  color: #17233C;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.urja-audit-actor-title {
+  font-size: 0.74rem;
+  color: #64748B;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Action Badges */
+.urja-audit-action-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  padding: 0.24rem 0.55rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.urja-audit-action-badge.blue {
+  background-color: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #DBEAFE;
+}
+
+.urja-audit-action-badge.light-blue {
+  background-color: #F0F9FF;
+  color: #0284C7;
+  border: 1px solid #BAE6FD;
+}
+
+.urja-audit-action-badge.green {
+  background-color: #DCFCE7;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+}
+
+.urja-audit-action-badge.red {
+  background-color: #FEE2E2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+
+.urja-audit-action-badge.amber {
+  background-color: #FEF3C7;
+  color: #D97706;
+  border: 1px solid #FDE68A;
+}
+
+.urja-audit-action-badge.teal {
+  background-color: #CCFBF1;
+  color: #0D9488;
+  border: 1px solid #99F6E4;
+}
+
+.urja-audit-action-badge.grey {
+  background-color: #F1F5F9;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+}
+
+/* Entity Type & Reference */
+.urja-audit-entity-badge {
+  display: inline-block;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.18rem 0.5rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.urja-audit-ref-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #17233C;
+}
+
+/* Details & Changes Preview */
+.urja-audit-details-cell {
+  max-width: 190px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.urja-audit-details-cell:hover {
+  background-color: #F1F5F9;
+  color: #075B35;
+  text-decoration: underline;
+}
+
+/* IP Address */
+.urja-audit-ip-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.urja-audit-ip-cell i {
+  font-size: 0.95rem;
+  color: #64748B;
+}
+
+/* Security Status */
+.urja-audit-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: #DCFCE7;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.24rem 0.65rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.urja-audit-status-badge i {
+  color: #16A34A;
+  font-size: 0.85rem;
+}
+
+/* Actions Menu Button & Dropdown */
+.urja-audit-actions-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.urja-audit-btn-dots {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #DFE7EE;
+  background-color: #FFFFFF;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-audit-btn-dots:hover {
+  background-color: #F8FAFC;
+  color: #17233C;
+  border-color: #CBD5E1;
+}
+
+.urja-audit-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.35rem;
+  background: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  min-width: 190px;
+  z-index: 50;
+  padding: 0.35rem;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.urja-audit-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.12s ease;
+}
+
+.urja-audit-dropdown-item:hover {
+  background-color: #F1F5F9;
+  color: #075B35;
+}
+
+.urja-audit-dropdown-item i {
+  font-size: 0.95rem;
+  color: #138A45;
+}
+
+/* ------------------------------------------------------------------------------
+   4. Pagination Bar
+   ------------------------------------------------------------------------------ */
+.urja-audit-pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid #DFE7EE;
+  background-color: #FFFFFF;
+}
+
+.urja-audit-pagination-info {
+  font-size: 0.84rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.urja-audit-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.urja-audit-page-size-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.urja-audit-page-size-select {
+  border: 1px solid #DFE7EE;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #17233C;
+  cursor: pointer;
+  outline: none;
+}
+
+.urja-audit-page-size-select:focus {
+  border-color: #138A45;
+}
+
+.urja-audit-page-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.urja-audit-page-arrow {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid #DFE7EE;
+  background-color: #FFFFFF;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-audit-page-arrow:hover:not(:disabled) {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.urja-audit-page-arrow:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.urja-audit-page-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid #DFE7EE;
+  background-color: #FFFFFF;
+  color: #475569;
+}
+
+.urja-audit-page-num:hover:not(.active) {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.urja-audit-page-num.active {
+  background-color: #075B35;
+  border-color: #075B35;
+  color: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(7, 91, 53, 0.25);
+}
+
+/* ------------------------------------------------------------------------------
+   5. Audit Details Modal
+   ------------------------------------------------------------------------------ */
+.urja-audit-details-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 1.5rem;
+}
+
+.urja-audit-details-modal-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  max-width: 680px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #DFE7EE;
+  overflow: hidden;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.urja-audit-details-modal-header {
+  padding: 1.15rem 1.5rem;
+  background: #075B35;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urja-audit-details-modal-body {
+  padding: 1.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.urja-audit-details-modal-footer {
+  padding: 1rem 1.5rem;
+  background-color: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.urja-audit-json-box {
+  background: #0F172A;
+  color: #E2E8F0;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  border: 1px solid #1E293B;
+  margin-top: 0.5rem;
+}
+
+

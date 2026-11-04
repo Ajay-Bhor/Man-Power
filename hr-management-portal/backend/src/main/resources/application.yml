@@ -1,0 +1,87 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: hr-management-portal-backend
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/hr_portal_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:125406}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 20000
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    validate-on-migrate: false
+    locations: classpath:db/migration,filesystem:../database/migrations
+
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 20MB
+
+  mail:
+    host: ${SMTP_HOST:smtp.office365.com}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:recruitment-alerts@company.com}
+    password: ${SMTP_PASSWORD:secret}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# Application Specific Properties
+app:
+  jwt:
+    secret: ${JWT_SECRET:9a7f8c6e4d2b0a1f3e5c7a9b8d0e2f4a6b8c0d2e4f6a8b0c2d4e6f8a0b2c4e6f}
+    expiration-ms: 86400000 # 24 Hours
+    refresh-expiration-ms: 604800000 # 7 Days
+
+  tat:
+    default-target-days: 30
+    calculation-mode: CALENDAR_DAYS # Options: CALENDAR_DAYS, WORKING_DAYS
+    company-timezone: Asia/Kolkata
+    escalation-threshold-days: 20
+
+  storage:
+    upload-dir: ${STORAGE_PATH:./uploads/documents}
+    allowed-file-types:
+      - application/pdf
+      - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      - image/jpeg
+      - image/png
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
