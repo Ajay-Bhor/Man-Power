@@ -1,19 +1,23 @@
 package com.company.hr.service;
 
 import com.company.hr.dto.UserCreateRequest;
+import com.company.hr.dto.UserResponseDto;
+import com.company.hr.dto.UserStatsDto;
 import com.company.hr.dto.UserUpdateRequest;
 import com.company.hr.entity.AuditLog;
+import com.company.hr.entity.Department;
+import com.company.hr.entity.RecruitmentTask;
 import com.company.hr.entity.Role;
 import com.company.hr.entity.User;
 import com.company.hr.exception.BadRequestException;
 import com.company.hr.exception.ResourceNotFoundException;
 import com.company.hr.repository.AuditLogRepository;
+import com.company.hr.repository.DepartmentRepository;
+import com.company.hr.repository.RecruitmentTaskRepository;
 import com.company.hr.repository.RoleRepository;
 import com.company.hr.repository.UserRepository;
 import com.company.hr.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
-import com.company.hr.dto.UserResponseDto;
-import com.company.hr.repository.RecruitmentTaskRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +31,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final DepartmentRepository departmentRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditLogRepository auditLogRepository;
     private final RecruitmentTaskRepository taskRepository;
@@ -34,6 +39,25 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public UserStatsDto getUserStats() {
+        long total = userRepository.count();
+        long active = userRepository.countByStatus(User.UserStatus.ACTIVE);
+        long inactive = total - active;
+        long pendingTasks = taskRepository.countByStatusIn(List.of(
+                RecruitmentTask.TaskStatus.ASSIGNED,
+                RecruitmentTask.TaskStatus.PENDING,
+                RecruitmentTask.TaskStatus.IN_PROGRESS,
+                RecruitmentTask.TaskStatus.OVERDUE
+        ));
+        return UserStatsDto.builder()
+                .totalUsers(total)
+                .activeUsers(active)
+                .inactiveUsers(inactive)
+                .pendingTasks(pendingTasks)
+                .build();
     }
 
     @Transactional(readOnly = true)
@@ -47,11 +71,20 @@ public class UserService {
             taskCountMap.put(uid, cnt);
         }
 
+        Map<Long, String> deptMap = departmentRepository.findAll().stream()
+                .collect(Collectors.toMap(Department::getId, Department::getDepartmentName, (a, b) -> a));
+
         return users.stream().map(u -> {
             List<String> roleNames = u.getRoles().stream()
                     .map(Role::getRoleName)
                     .collect(Collectors.toList());
             String primaryRole = roleNames.isEmpty() ? "ROLE_EMPLOYEE" : roleNames.get(0);
+
+            String deptName = "Human Resources";
+            if (u.getDepartmentRestrictionId() != null) {
+                deptName = deptMap.getOrDefault(u.getDepartmentRestrictionId(), "Department #" + u.getDepartmentRestrictionId());
+            }
+
             return UserResponseDto.builder()
                     .id(u.getId())
                     .username(u.getUsername())
@@ -59,8 +92,10 @@ public class UserService {
                     .email(u.getEmail())
                     .role(primaryRole)
                     .roles(roleNames)
-                    .department(u.getDepartmentRestrictionId() != null ? "Department #" + u.getDepartmentRestrictionId() : "Human Resources")
+                    .departmentId(u.getDepartmentRestrictionId())
+                    .department(deptName)
                     .designation(u.getDesignation())
+                    .phoneNumber(u.getPhoneNumber())
                     .status(u.getStatus().name())
                     .assignedTasksCount(taskCountMap.getOrDefault(u.getId(), 0L))
                     .lastLoginAt(u.getLastLoginAt())
@@ -184,6 +219,61 @@ public class UserService {
         auditLogRepository.save(log);
 
         return updated;
+    }
+
+    @Transactional
+    public void deleteUser(Long id, UserPrincipal currentUser) {
+        User user = getUserById(id);
+        if ("itadmin".equalsIgnoreCase(user.getUsername()) || id.equals(1L)) {
+            throw new BadRequestException("Protected root administrator account 'itadmin' cannot be deleted.");
+        }
+        if (currentUser != null && currentUser.getId().equals(id)) {
+            throw new BadRequestException("You cannot delete your own logged-in administrator account.");
+        }
+
+        user.setStatus(User.UserStatus.INACTIVE);
+        userRepository.save(user);
+
+        AuditLog log = AuditLog.builder()
+                .actorId(currentUser != null ? currentUser.getId() : null)
+                .actorName(currentUser != null ? currentUser.getName() : "IT Admin")
+                .action("USER_DEACTIVATED")
+                .entityType("USER")
+                .entityId(String.valueOf(user.getId()))
+                .oldValue("{\"name\":\"" + user.getName() + "\",\"email\":\"" + user.getEmail() + "\"}")
+                .newValue("{\"status\":\"INACTIVE\",\"note\":\"Deactivated by administrator\"}")
+                .ipAddress("127.0.0.1")
+                .build();
+        auditLogRepository.save(log);
+    }
+
+    @Transactional
+    public int bulkDeleteUsers(List<Long> ids, UserPrincipal currentUser) {
+        if (ids == null || ids.isEmpty()) return 0;
+        int count = 0;
+        for (Long id : ids) {
+            if (id == null) continue;
+            if (currentUser != null && currentUser.getId().equals(id)) continue;
+            Optional<User> opt = userRepository.findById(id);
+            if (opt.isEmpty()) continue;
+            User u = opt.get();
+            if ("itadmin".equalsIgnoreCase(u.getUsername()) || u.getId().equals(1L)) continue;
+
+            u.setStatus(User.UserStatus.INACTIVE);
+            userRepository.save(u);
+            count++;
+
+            auditLogRepository.save(AuditLog.builder()
+                    .actorId(currentUser != null ? currentUser.getId() : null)
+                    .actorName(currentUser != null ? currentUser.getName() : "IT Admin")
+                    .action("USER_DEACTIVATED")
+                    .entityType("USER")
+                    .entityId(String.valueOf(u.getId()))
+                    .newValue("{\"status\":\"INACTIVE\",\"reason\":\"Bulk deactivation\"}")
+                    .ipAddress("127.0.0.1")
+                    .build());
+        }
+        return count;
     }
 
     @Transactional(readOnly = true)

@@ -16,8 +16,10 @@ public class UserResponseDto {
     private String email;
     private String role;
     private List<String> roles;
+    private Long departmentId;
     private String department;
     private String designation;
+    private String phoneNumber;
     private String status;
     private long assignedTasksCount;
     private LocalDateTime lastLoginAt;

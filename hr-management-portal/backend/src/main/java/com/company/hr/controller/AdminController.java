@@ -2,6 +2,8 @@ package com.company.hr.controller;
 
 import com.company.hr.dto.ApiResponse;
 import com.company.hr.dto.UserCreateRequest;
+import com.company.hr.dto.UserResponseDto;
+import com.company.hr.dto.UserStatsDto;
 import com.company.hr.dto.UserUpdateRequest;
 import com.company.hr.entity.AccessPolicy;
 import com.company.hr.entity.AuditLog;
@@ -123,8 +125,15 @@ public class AdminController {
     @GetMapping("/users")
     @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
     @Operation(summary = "List all system user accounts, roles, and assigned task workloads")
-    public ResponseEntity<ApiResponse<List<com.company.hr.dto.UserResponseDto>>> getUsers() {
+    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getUsers() {
         return ResponseEntity.ok(ApiResponse.ok(userService.getAllUsersWithTaskCount()));
+    }
+
+    @GetMapping("/users/stats")
+    @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
+    @Operation(summary = "Get user management summary KPI stats")
+    public ResponseEntity<ApiResponse<UserStatsDto>> getUserStats() {
+        return ResponseEntity.ok(ApiResponse.ok(userService.getUserStats()));
     }
 
     @PostMapping("/users")
@@ -157,6 +166,27 @@ public class AdminController {
             @AuthenticationPrincipal UserPrincipal currentUser) {
         User user = userService.updateUserStatus(id, status, currentUser);
         return ResponseEntity.ok(ApiResponse.ok(user, "User status updated to " + status));
+    }
+
+    @DeleteMapping("/users/{id}")
+    @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
+    @Operation(summary = "Delete or deactivate a user account")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserPrincipal currentUser) {
+        userService.deleteUser(id, currentUser);
+        return ResponseEntity.ok(ApiResponse.ok(null, "User removed or deactivated successfully"));
+    }
+
+    @PostMapping("/users/bulk-delete")
+    @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
+    @Operation(summary = "Bulk delete or deactivate user accounts")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> bulkDeleteUsers(
+            @RequestBody Map<String, List<Long>> request,
+            @AuthenticationPrincipal UserPrincipal currentUser) {
+        List<Long> ids = request.getOrDefault("userIds", request.get("ids"));
+        int affected = userService.bulkDeleteUsers(ids, currentUser);
+        return ResponseEntity.ok(ApiResponse.ok(Map.of("affectedCount", affected), affected + " user(s) removed or deactivated successfully"));
     }
 
     @GetMapping("/roles")

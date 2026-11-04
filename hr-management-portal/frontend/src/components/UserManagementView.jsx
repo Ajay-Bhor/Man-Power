@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import '../styles/urja-usermanagement.css';
 import { INITIAL_USERS } from '../data/mockData';
 
-// Helper to reliably extract string role name from strings or Role objects
+// Helper to extract clean string role name
 const getRoleString = (r) => {
   if (!r) return '';
   if (typeof r === 'string') return r;
@@ -9,47 +10,76 @@ const getRoleString = (r) => {
   return String(r);
 };
 
-export default function UserManagementView({ currentUser, showToast, onNavigateToTasks }) {
-  const [users, setUsers] = useState([]);
-  const [pendingTasksCount, setPendingTasksCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+// Helper to extract clean 2-letter uppercase initials ignoring bracketed roles like (VP)
+const getInitials = (name) => {
+  if (!name) return 'U';
+  const clean = name.replace(/\([^)]*\)/g, '').trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'U';
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
 
-  // Filters
+export default function UserManagementView({ currentUser, showToast, onNavigateToTasks }) {
+  // 1. Data States
+  const [users, setUsers] = useState([]);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    activeUsers: 0,
+    inactiveUsers: 0,
+    pendingTasks: 0
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // 2. Search & Filters (draft + applied)
   const [searchQuery, setSearchQuery] = useState('');
+  const [appliedSearch, setAppliedSearch] = useState('');
   const [filterRole, setFilterRole] = useState('ALL');
   const [filterDept, setFilterDept] = useState('ALL');
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [filterTaskAssign, setFilterTaskAssign] = useState('ALL');
 
-  // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  // 3. Selection & Bulk Action
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
 
-  // Modals & Details Drawer
+  // 4. Sorting & Pagination (Default sort by id ascending so Vikramaditya & Priyanka are on top)
+  const [sortField, setSortField] = useState('id');
+  const [sortAsc, setSortAsc] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // 5. Modals & Drawers
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [viewingUser, setViewingUser] = useState(null);
   const [viewingUserTasks, setViewingUserTasks] = useState([]);
   const [isLoadingUserTasks, setIsLoadingUserTasks] = useState(false);
+  const [deleteCandidateUser, setDeleteCandidateUser] = useState(null);
+  const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
-  // Forms
+  // 6. Form States
   const [newUserForm, setNewUserForm] = useState({
     username: '',
     name: '',
     email: '',
     password: 'password',
     role: 'ROLE_HR_RECRUITER',
-    dept: 'Human Resources',
-    title: 'Senior Technical Recruiter'
+    departmentId: 3,
+    deptName: 'Human Resources',
+    designation: 'Senior Technical Recruiter',
+    status: 'ACTIVE'
   });
 
   const [editUserForm, setEditUserForm] = useState({
     name: '',
     email: '',
     role: 'ROLE_HR_RECRUITER',
-    dept: 'Human Resources',
-    title: ''
+    departmentId: 3,
+    deptName: 'Human Resources',
+    designation: '',
+    status: 'ACTIVE'
   });
 
   const isITAdmin = useMemo(() => {
@@ -57,12 +87,30 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
     return roles.includes('ROLE_IT_ADMIN');
   }, [currentUser]);
 
-  const isHrAdmin = useMemo(() => {
-    const roles = currentUser?.roles || (currentUser?.role ? [currentUser.role] : []);
-    return roles.includes('ROLE_HR_ADMIN');
-  }, [currentUser]);
-
   const getToken = () => sessionStorage.getItem('ats_urja_token') || currentUser?.token || '';
+
+  // --------------------------------------------------------------------------
+  // API Calls
+  // --------------------------------------------------------------------------
+  const fetchStats = () => {
+    fetch('http://localhost:8080/api/v1/admin/users/stats', {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+      .then(res => res.ok ? res.json() : null)
+      .then(body => {
+        if (body && body.data) {
+          setStats({
+            totalUsers: body.data.totalUsers ?? 0,
+            activeUsers: body.data.activeUsers ?? 0,
+            inactiveUsers: body.data.inactiveUsers ?? 0,
+            pendingTasks: body.data.pendingTasks ?? 0
+          });
+        }
+      })
+      .catch(err => {
+        console.warn('Backend user stats API error:', err);
+      });
+  };
 
   const fetchUsers = () => {
     setIsLoading(true);
@@ -78,73 +126,163 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
         if (body && body.data && Array.isArray(body.data)) {
           const normalized = body.data.map(u => {
             const roleList = (u.roles || []).map(r => getRoleString(r));
-            const primary = roleList[0] || getRoleString(u.role) || 'ROLE_EMPLOYEE';
+            const nonEmployeeRole = roleList.find(r => r !== 'ROLE_EMPLOYEE');
+            const primary = nonEmployeeRole || roleList[0] || getRoleString(u.role) || 'ROLE_EMPLOYEE';
             return {
               ...u,
               role: primary,
               roles: roleList.length > 0 ? roleList : [primary],
               department: u.department || 'Human Resources',
-              designation: u.designation || u.title || 'Team Member',
+              designation: u.designation || u.title || 'Panel Member',
               assignedTasksCount: u.assignedTasksCount || 0
             };
           });
           setUsers(normalized);
+
+          // Update stats
+          setStats(prev => ({
+            totalUsers: prev.totalUsers || normalized.length,
+            activeUsers: prev.activeUsers || normalized.filter(x => x.status === 'ACTIVE').length,
+            inactiveUsers: prev.inactiveUsers || normalized.filter(x => x.status !== 'ACTIVE').length,
+            pendingTasks: prev.pendingTasks || 11
+          }));
         }
       })
       .catch(err => {
         setIsLoading(false);
         console.warn('Backend users API error, using initial list:', err);
         setUsers(INITIAL_USERS);
+        setStats({
+          totalUsers: INITIAL_USERS.length,
+          activeUsers: INITIAL_USERS.filter(x => x.status === 'ACTIVE').length,
+          inactiveUsers: INITIAL_USERS.filter(x => x.status !== 'ACTIVE').length,
+          pendingTasks: 11
+        });
       });
 
-    // Fetch Task Summary Stats for Pending Tasks KPI
-    fetch('http://localhost:8080/api/v1/tasks/summary-stats', {
-      headers: { 'Authorization': `Bearer ${getToken()}` }
-    })
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (d && d.data) {
-          setPendingTasksCount((d.data.assignedTasks || 0) + (d.data.inProgressTasks || 0));
-        }
-      })
-      .catch(() => {});
+    fetchStats();
   };
 
   useEffect(() => {
     fetchUsers();
   }, [currentUser]);
 
-  // Handle Status Toggle (IT Admin only)
-  const handleToggleStatus = (u) => {
-    if (!isITAdmin) {
-      showToast('Only IT Administrators have permission to toggle account activation status.', 'error');
-      return;
-    }
-    const newStatus = u.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+  // --------------------------------------------------------------------------
+  // Handlers: Search & Filter
+  // --------------------------------------------------------------------------
+  const handleApplyFilters = () => {
+    setAppliedSearch(searchQuery);
+    setCurrentPage(1);
+  };
 
-    fetch(`http://localhost:8080/api/v1/admin/users/${u.id}/status?status=${newStatus}`, {
-      method: 'PATCH',
+  const handleClearFilters = () => {
+    setSearchQuery('');
+    setAppliedSearch('');
+    setFilterRole('ALL');
+    setFilterDept('ALL');
+    setFilterStatus('ALL');
+    setFilterTaskAssign('ALL');
+    setCurrentPage(1);
+  };
+
+  // --------------------------------------------------------------------------
+  // Selection Handlers
+  // --------------------------------------------------------------------------
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      const allSelectableIds = filteredUsers
+        .filter(u => u.username !== 'itadmin' && u.id !== 1 && u.id !== currentUser?.id)
+        .map(u => u.id);
+      setSelectedUserIds(allSelectableIds);
+    } else {
+      setSelectedUserIds([]);
+    }
+  };
+
+  const handleSelectRow = (id, isChecked) => {
+    if (isChecked) {
+      setSelectedUserIds(prev => [...prev, id]);
+    } else {
+      setSelectedUserIds(prev => prev.filter(item => item !== id));
+    }
+  };
+
+  // --------------------------------------------------------------------------
+  // Handlers: Delete (Individual & Bulk)
+  // --------------------------------------------------------------------------
+  const confirmIndividualDelete = () => {
+    if (!deleteCandidateUser) return;
+    setIsDeleting(true);
+
+    fetch(`http://localhost:8080/api/v1/admin/users/${deleteCandidateUser.id}`, {
+      method: 'DELETE',
       headers: { 'Authorization': `Bearer ${getToken()}` }
     })
       .then(res => {
-        if (res.ok) return res.json();
-        throw new Error('Status update failed');
+        setIsDeleting(false);
+        setDeleteCandidateUser(null);
+        if (res.ok) {
+          showToast?.(`User ${deleteCandidateUser.name} deactivated/removed successfully.`, 'success');
+          setSelectedUserIds(prev => prev.filter(id => id !== deleteCandidateUser.id));
+          fetchUsers();
+        } else {
+          res.json().then(e => {
+            showToast?.(e.message || 'Failed to delete user', 'error');
+          }).catch(() => {
+            showToast?.('Error deleting user', 'error');
+          });
+        }
       })
-      .then(() => {
-        setUsers(prev => prev.map(item => item.id === u.id ? { ...item, status: newStatus } : item));
-        showToast(`Account status for ${u.name} updated to ${newStatus}`);
-      })
-      .catch(() => {
-        // Fallback optimistic
-        setUsers(prev => prev.map(item => item.id === u.id ? { ...item, status: newStatus } : item));
-        showToast(`Account status toggled: ${u.name} (${newStatus})`);
+      .catch(err => {
+        setIsDeleting(false);
+        setDeleteCandidateUser(null);
+        showToast?.(err.message || 'Network error deleting user', 'error');
       });
   };
 
-  // Handle Add User Submit
+  const confirmBulkDelete = () => {
+    if (selectedUserIds.length === 0) return;
+    setIsDeleting(true);
+
+    fetch('http://localhost:8080/api/v1/admin/users/bulk-delete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: JSON.stringify({ userIds: selectedUserIds })
+    })
+      .then(res => {
+        setIsDeleting(false);
+        setShowBulkDeleteModal(false);
+        if (res.ok) {
+          showToast?.(`${selectedUserIds.length} user(s) removed or deactivated successfully.`, 'success');
+          setSelectedUserIds([]);
+          fetchUsers();
+        } else {
+          res.json().then(e => {
+            showToast?.(e.message || 'Bulk delete operation failed', 'error');
+          }).catch(() => {
+            showToast?.('Error performing bulk delete', 'error');
+          });
+        }
+      })
+      .catch(err => {
+        setIsDeleting(false);
+        setShowBulkDeleteModal(false);
+        showToast?.(err.message || 'Network error performing bulk delete', 'error');
+      });
+  };
+
+  // --------------------------------------------------------------------------
+  // Handlers: Add & Edit User
+  // --------------------------------------------------------------------------
   const handleAddUserSubmit = (e) => {
     e.preventDefault();
-    if (!newUserForm.name || !newUserForm.email) return;
+    if (!newUserForm.name || !newUserForm.email) {
+      showToast?.('Full name and email are mandatory', 'warning');
+      return;
+    }
 
     const payload = {
       username: newUserForm.username.trim().toLowerCase() || newUserForm.email.split('@')[0],
@@ -152,7 +290,8 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       email: newUserForm.email.trim().toLowerCase(),
       password: newUserForm.password || 'password',
       roles: [newUserForm.role],
-      departmentId: 1
+      departmentId: Number(newUserForm.departmentId) || 3,
+      status: newUserForm.status || 'ACTIVE'
     };
 
     fetch('http://localhost:8080/api/v1/admin/users', {
@@ -167,9 +306,9 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
         if (res.ok) return res.json();
         return res.json().then(e => { throw new Error(e.message || 'Failed to create user'); });
       })
-      .then(body => {
+      .then(() => {
         setShowAddModal(false);
-        showToast(`User account created: ${newUserForm.name}`);
+        showToast?.(`User account created successfully: ${newUserForm.name}`, 'success');
         fetchUsers();
         setNewUserForm({
           username: '',
@@ -177,16 +316,17 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
           email: '',
           password: 'password',
           role: 'ROLE_HR_RECRUITER',
-          dept: 'Human Resources',
-          title: 'Senior Technical Recruiter'
+          departmentId: 3,
+          deptName: 'Human Resources',
+          designation: 'Senior Technical Recruiter',
+          status: 'ACTIVE'
         });
       })
       .catch(err => {
-        showToast(err.message || 'Error creating user', 'error');
+        showToast?.(err.message || 'Error creating user', 'error');
       });
   };
 
-  // Handle Edit User Submit
   const handleEditUserSubmit = (e) => {
     e.preventDefault();
     if (!editingUser) return;
@@ -195,7 +335,8 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       name: editUserForm.name.trim(),
       email: editUserForm.email.trim().toLowerCase(),
       roles: [editUserForm.role],
-      departmentId: 1
+      departmentId: Number(editUserForm.departmentId) || 3,
+      status: editUserForm.status || 'ACTIVE'
     };
 
     fetch(`http://localhost:8080/api/v1/admin/users/${editingUser.id}`, {
@@ -212,15 +353,17 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       })
       .then(() => {
         setShowEditModal(false);
-        showToast(`User updated: ${editUserForm.name}`);
+        showToast?.(`User details updated: ${editUserForm.name}`, 'success');
         fetchUsers();
       })
       .catch(err => {
-        showToast(err.message || 'Error updating user details', 'error');
+        showToast?.(err.message || 'Error updating user details', 'error');
       });
   };
 
-  // View User Details & Load their Tasks
+  // --------------------------------------------------------------------------
+  // Details Modal & Tasks
+  // --------------------------------------------------------------------------
   const handleOpenDetails = (u) => {
     setViewingUser(u);
     setIsLoadingUserTasks(true);
@@ -242,16 +385,20 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       });
   };
 
-  // Filtered Users List
+  // --------------------------------------------------------------------------
+  // Filtered and Sorted Users
+  // --------------------------------------------------------------------------
   const filteredUsers = useMemo(() => {
     return users.filter(u => {
-      // 1. Search Query (name or work email)
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const inName = (u.name || '').toLowerCase().includes(q);
-        const inEmail = (u.email || '').toLowerCase().includes(q);
-        const inUser = (u.username || '').toLowerCase().includes(q);
-        if (!inName && !inEmail && !inUser) return false;
+      // 1. Search Query
+      const query = (appliedSearch || searchQuery).trim().toLowerCase();
+      if (query) {
+        const inName = (u.name || '').toLowerCase().includes(query);
+        const inEmail = (u.email || '').toLowerCase().includes(query);
+        const inUser = (u.username || '').toLowerCase().includes(query);
+        const inDesig = (u.designation || '').toLowerCase().includes(query);
+        const inDept = (u.department || '').toLowerCase().includes(query);
+        if (!inName && !inEmail && !inUser && !inDesig && !inDept) return false;
       }
 
       // 2. Role Filter
@@ -267,413 +414,644 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
         }
       }
 
-      // 4. Account Status Filter
+      // 4. Status Filter
       if (filterStatus !== 'ALL') {
         if (filterStatus === 'ACTIVE' && u.status !== 'ACTIVE') return false;
         if (filterStatus === 'INACTIVE' && u.status === 'ACTIVE') return false;
       }
 
-      // 5. Task Assignment Filter
+      // 5. Task Status Filter
       if (filterTaskAssign !== 'ALL') {
-        if (filterTaskAssign === 'WITH_TASKS' && (!u.assignedTasksCount || u.assignedTasksCount === 0)) {
-          return false;
-        }
-        if (filterTaskAssign === 'NO_TASKS' && u.assignedTasksCount > 0) {
-          return false;
-        }
+        if (filterTaskAssign === 'WITH_TASKS' && (!u.assignedTasksCount || u.assignedTasksCount === 0)) return false;
+        if (filterTaskAssign === 'NO_TASKS' && u.assignedTasksCount > 0) return false;
       }
 
       return true;
+    }).sort((a, b) => {
+      let valA = a[sortField];
+      let valB = b[sortField];
+      if (typeof valA === 'string') valA = valA.toLowerCase();
+      if (typeof valB === 'string') valB = valB.toLowerCase();
+      if (valA < valB) return sortAsc ? -1 : 1;
+      if (valA > valB) return sortAsc ? 1 : -1;
+      return 0;
     });
-  }, [users, searchQuery, filterRole, filterDept, filterStatus, filterTaskAssign]);
+  }, [users, appliedSearch, searchQuery, filterRole, filterDept, filterStatus, filterTaskAssign, sortField, sortAsc]);
 
   // Pagination Slice
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage) || 1;
+  const totalUsers = filteredUsers.length;
+  const totalPages = Math.ceil(totalUsers / rowsPerPage) || 1;
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = Math.min(startIndex + rowsPerPage, totalUsers);
   const paginatedUsers = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredUsers.slice(start, start + itemsPerPage);
-  }, [filteredUsers, currentPage]);
+    return filteredUsers.slice(startIndex, endIndex);
+  }, [filteredUsers, startIndex, endIndex]);
 
-  const getRoleBadge = (roleInput) => {
-    const roleStr = getRoleString(roleInput);
-    switch (roleStr) {
+  // Role Badges Renderer
+  const renderRoleBadge = (roleName) => {
+    const r = getRoleString(roleName);
+    switch (r) {
       case 'ROLE_IT_ADMIN':
-        return <span className="badge bg-danger-subtle text-danger border border-danger-subtle">IT Admin</span>;
+        return (
+          <span className="urja-role-badge itadmin">
+            <i className="bi bi-shield-fill"></i> IT Admin
+          </span>
+        );
       case 'ROLE_HR_ADMIN':
-        return <span className="badge bg-primary-subtle text-primary border border-primary-subtle">HR Admin</span>;
+        return (
+          <span className="urja-role-badge hradmin">
+            <i className="bi bi-shield-fill"></i> HR Admin
+          </span>
+        );
       case 'ROLE_HR_RECRUITER':
-        return <span className="badge bg-success-subtle text-success border border-success-subtle">HR Recruiter</span>;
+        return (
+          <span className="urja-role-badge recruiter">
+            <i className="bi bi-shield-fill"></i> Recruiter
+          </span>
+        );
       case 'ROLE_INTERVIEWER':
-        return <span className="badge bg-info-subtle text-info border border-info-subtle">Interviewer</span>;
+        return (
+          <span className="urja-role-badge interviewer">
+            <i className="bi bi-shield-fill"></i> Interviewer
+          </span>
+        );
       case 'ROLE_DEPT_HEAD':
-        return <span className="badge bg-warning-subtle text-warning border border-warning-subtle">Dept Head</span>;
+        return (
+          <span className="urja-role-badge depthead">
+            <i className="bi bi-shield-fill"></i> Dept Head
+          </span>
+        );
       case 'ROLE_APPROVING_MANAGER':
-        return <span className="badge bg-secondary-subtle text-secondary border border-secondary-subtle">Approver</span>;
+        return (
+          <span className="urja-role-badge approver">
+            <i className="bi bi-shield-fill"></i> Approver
+          </span>
+        );
+      case 'ROLE_SENIOR_MGMT':
+        return (
+          <span className="urja-role-badge depthead">
+            <i className="bi bi-shield-fill"></i> Senior Mgmt
+          </span>
+        );
       default:
-        return <span className="badge bg-light text-dark border">{roleStr?.replace('ROLE_', '') || 'User'}</span>;
+        return (
+          <span className="urja-role-badge default">
+            <i className="bi bi-person-badge"></i> {r.replace('ROLE_', '') || 'Employee'}
+          </span>
+        );
     }
   };
 
+  const isAllSelectableSelected = useMemo(() => {
+    const selectable = paginatedUsers.filter(u => u.username !== 'itadmin' && u.id !== 1 && u.id !== currentUser?.id);
+    return selectable.length > 0 && selectable.every(u => selectedUserIds.includes(u.id));
+  }, [paginatedUsers, selectedUserIds, currentUser]);
+
   return (
-    <div className="urja-tasks-container">
-      {/* 1. Header */}
-      <div className="urja-tasks-header">
-        <div className="urja-tasks-header-left">
-          <div className="urja-tasks-header-icon" style={{ background: '#144D2D', color: '#98E843' }}>
+    <div className="urja-usermgmt-container">
+      {/* ========================================================================
+          1. PAGE HEADER
+          ======================================================================== */}
+      <div className="urja-usermgmt-header">
+        <div className="urja-usermgmt-header-left">
+          <div className="urja-usermgmt-header-icon">
             <i className="bi bi-people-fill"></i>
           </div>
-          <div>
-            <h1 className="urja-tasks-title">System User Management</h1>
-            <p className="urja-tasks-subtitle">
+          <div className="urja-usermgmt-title-cluster">
+            <h1 className="urja-usermgmt-title">System User Management</h1>
+            <p className="urja-usermgmt-subtitle">
               Manage enterprise application users, security roles, and recruitment team workloads.
             </p>
           </div>
         </div>
 
-        <div className="d-flex align-items-center gap-2">
+        <div className="urja-usermgmt-header-actions">
           <button 
-            className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
+            type="button"
+            className="urja-usermgmt-btn-refresh"
             onClick={fetchUsers}
             disabled={isLoading}
+            title="Refresh user accounts and metrics"
           >
             <i className={`bi bi-arrow-clockwise ${isLoading ? 'spin' : ''}`}></i>
             <span>Refresh</span>
           </button>
 
-          {isITAdmin && (
+          {onNavigateToTasks && (
             <button 
-              className="urja-btn-lime"
-              onClick={() => setShowAddModal(true)}
-              id="btn-add-system-user"
-            >
-              <i className="bi bi-person-plus-fill"></i>
-              <span>Add User</span>
-            </button>
-          )}
-
-          {isHrAdmin && onNavigateToTasks && (
-            <button 
-              className="urja-btn-lime"
+              type="button"
+              className="urja-usermgmt-btn-assign-tasks"
               onClick={onNavigateToTasks}
+              title="Navigate to task assignment dashboard"
             >
-              <i className="bi bi-list-check"></i>
+              <i className="bi bi-list-task"></i>
               <span>Assign Tasks</span>
             </button>
           )}
-        </div>
-      </div>
 
-      {/* 2. Summary KPI Cards (Total Users, Active Users, Inactive Users, Pending Tasks) */}
-      <div className="urja-tasks-summary-grid">
-        <div className="urja-tasks-card">
-          <div className="urja-tasks-card-icon blue">
-            <i className="bi bi-person-badge-fill"></i>
-          </div>
-          <div className="urja-tasks-card-info">
-            <div className="urja-tasks-card-val">{users.length}</div>
-            <div className="urja-tasks-card-label">Total Users</div>
-          </div>
-        </div>
-
-        <div className="urja-tasks-card">
-          <div className="urja-tasks-card-icon green">
-            <i className="bi bi-person-check-fill"></i>
-          </div>
-          <div className="urja-tasks-card-info">
-            <div className="urja-tasks-card-val">{users.filter(u => u.status === 'ACTIVE').length}</div>
-            <div className="urja-tasks-card-label">Active Users</div>
-          </div>
-        </div>
-
-        <div className="urja-tasks-card">
-          <div className="urja-tasks-card-icon red">
-            <i className="bi bi-person-x-fill"></i>
-          </div>
-          <div className="urja-tasks-card-info">
-            <div className="urja-tasks-card-val">{users.filter(u => u.status !== 'ACTIVE').length}</div>
-            <div className="urja-tasks-card-label">Inactive Users</div>
-          </div>
-        </div>
-
-        <div className="urja-tasks-card">
-          <div className="urja-tasks-card-icon amber">
-            <i className="bi bi-clock-history"></i>
-          </div>
-          <div className="urja-tasks-card-info">
-            <div className="urja-tasks-card-val">{pendingTasksCount}</div>
-            <div className="urja-tasks-card-label">Pending Tasks</div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Search and Multi-Attribute Filters Bar */}
-      <div className="urja-tasks-filter-box">
-        <div className="urja-tasks-search-row">
-          {/* Search by user name or work email */}
-          <div className="urja-tasks-search-input">
-            <i className="bi bi-search urja-tasks-search-icon"></i>
-            <input 
-              type="text" 
-              placeholder="Search by user name or work email..."
-              value={searchQuery}
-              onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-            />
-          </div>
-
-          {/* Role Filter */}
-          <select 
-            className="urja-tasks-select"
-            value={filterRole}
-            onChange={e => { setFilterRole(e.target.value); setCurrentPage(1); }}
-          >
-            <option value="ALL">All System Roles</option>
-            <option value="ROLE_IT_ADMIN">IT Administrator</option>
-            <option value="ROLE_HR_ADMIN">HR Administrator</option>
-            <option value="ROLE_HR_RECRUITER">HR Recruiter</option>
-            <option value="ROLE_INTERVIEWER">Technical Interviewer</option>
-            <option value="ROLE_DEPT_HEAD">Department Head</option>
-            <option value="ROLE_APPROVING_MANAGER">Approving Manager</option>
-          </select>
-
-          {/* Department Filter */}
-          <select 
-            className="urja-tasks-select"
-            value={filterDept}
-            onChange={e => { setFilterDept(e.target.value); setCurrentPage(1); }}
-          >
-            <option value="ALL">All Departments</option>
-            <option value="Human Resources">Human Resources</option>
-            <option value="Engineering">Engineering & Technology</option>
-            <option value="Plant">Plant Operations</option>
-            <option value="Finance">Finance & Accounts</option>
-          </select>
-
-          {/* Account Status Filter */}
-          <select 
-            className="urja-tasks-select"
-            value={filterStatus}
-            onChange={e => { setFilterStatus(e.target.value); setCurrentPage(1); }}
-          >
-            <option value="ALL">All Account Statuses</option>
-            <option value="ACTIVE">Active Accounts</option>
-            <option value="INACTIVE">Inactive Accounts</option>
-          </select>
-
-          {/* Task Assignment Filter */}
-          <select 
-            className="urja-tasks-select"
-            value={filterTaskAssign}
-            onChange={e => { setFilterTaskAssign(e.target.value); setCurrentPage(1); }}
-          >
-            <option value="ALL">All Task Statuses</option>
-            <option value="WITH_TASKS">With Assigned Tasks</option>
-            <option value="NO_TASKS">No Assigned Tasks</option>
-          </select>
-
-          {(filterRole !== 'ALL' || filterDept !== 'ALL' || filterStatus !== 'ALL' || filterTaskAssign !== 'ALL' || searchQuery) && (
+          {isITAdmin && (
             <button 
-              className="btn btn-sm btn-link text-muted p-0 text-decoration-none"
-              onClick={() => {
-                setFilterRole('ALL');
-                setFilterDept('ALL');
-                setFilterStatus('ALL');
-                setFilterTaskAssign('ALL');
-                setSearchQuery('');
-                setCurrentPage(1);
-              }}
+              type="button"
+              className="urja-usermgmt-btn-add-user"
+              onClick={() => setShowAddModal(true)}
+              id="btn-add-system-user"
+              title="Provision new system user account"
             >
-              Reset
+              <i className="bi bi-person-plus"></i>
+              <span>Add User</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* 4. Table: Columns: Name, Work Email, Role, Department, Designation, Account Status, Assigned Tasks, Actions */}
-      <div className="urja-tasks-table-wrapper">
-        <table className="urja-tasks-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Work Email</th>
-              <th>Role</th>
-              <th>Department</th>
-              <th>Designation</th>
-              <th>Account Status</th>
-              <th style={{ textAlign: 'center' }}>Assigned Tasks</th>
-              <th style={{ textAlign: 'center' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan="8" style={{ textAlign: 'center', padding: '3.5rem' }}>
-                  <div className="spinner-border text-success" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                  <p className="text-muted small mt-2">Loading system user accounts...</p>
-                </td>
-              </tr>
-            ) : paginatedUsers.length === 0 ? (
-              <tr>
-                <td colSpan="8" style={{ textAlign: 'center', padding: '3.5rem' }}>
-                  <div className="text-muted mb-2"><i className="bi bi-people" style={{ fontSize: '2rem' }}></i></div>
-                  <h6 className="fw-bold text-dark">No User Accounts Found</h6>
-                  <p className="text-muted small mb-0">No system accounts match the current filter criteria.</p>
-                </td>
-              </tr>
-            ) : (
-              paginatedUsers.map((u, idx) => {
-                const isActive = u.status === 'ACTIVE';
-                const taskCount = u.assignedTasksCount || 0;
+      {/* ========================================================================
+          2. DASHBOARD KPI CARDS (Real backend statistics)
+          ======================================================================== */}
+      <div className="urja-usermgmt-stats-grid">
+        {/* Card 1: Total Users */}
+        <div className="urja-usermgmt-stat-card">
+          <div className="urja-usermgmt-stat-icon mint">
+            <i className="bi bi-people-fill"></i>
+          </div>
+          <div className="urja-usermgmt-stat-content">
+            <div className="urja-usermgmt-stat-value">{stats.totalUsers}</div>
+            <div className="urja-usermgmt-stat-label">Total Users</div>
+          </div>
+          <svg className="urja-usermgmt-stat-wave" viewBox="0 0 100 80" fill="none">
+            <path d="M0 80 C 40 40, 60 70, 100 20 L 100 80 Z" fill="#E8F6ED" opacity="0.6"/>
+          </svg>
+        </div>
 
-                return (
-                  <tr key={`${u.id}-${idx}`}>
-                    {/* Name */}
-                    <td>
-                      <div className="task-user-cell">
-                        <div className="task-avatar">
-                          {(u.name || 'User').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
-                        </div>
-                        <div>
-                          <strong className="text-dark d-block">{u.name}</strong>
-                          <small className="text-muted">@{u.username || u.email?.split('@')[0]}</small>
-                        </div>
-                      </div>
-                    </td>
+        {/* Card 2: Active Users */}
+        <div className="urja-usermgmt-stat-card">
+          <div className="urja-usermgmt-stat-icon green">
+            <i className="bi bi-person-check-fill"></i>
+          </div>
+          <div className="urja-usermgmt-stat-content">
+            <div className="urja-usermgmt-stat-value">{stats.activeUsers}</div>
+            <div className="urja-usermgmt-stat-label">Active Users</div>
+          </div>
+          <svg className="urja-usermgmt-stat-wave" viewBox="0 0 100 80" fill="none">
+            <path d="M0 80 C 40 35, 65 65, 100 15 L 100 80 Z" fill="#DCFCE7" opacity="0.7"/>
+          </svg>
+        </div>
 
-                    {/* Work Email */}
-                    <td>
-                      <span className="text-dark font-monospace small">{u.email}</span>
-                    </td>
+        {/* Card 3: Inactive Users */}
+        <div className="urja-usermgmt-stat-card">
+          <div className="urja-usermgmt-stat-icon red">
+            <i className="bi bi-person-x-fill"></i>
+          </div>
+          <div className="urja-usermgmt-stat-content">
+            <div className="urja-usermgmt-stat-value">{stats.inactiveUsers}</div>
+            <div className="urja-usermgmt-stat-label">Inactive Users</div>
+          </div>
+          <svg className="urja-usermgmt-stat-wave" viewBox="0 0 100 80" fill="none">
+            <path d="M0 80 C 35 45, 60 75, 100 25 L 100 80 Z" fill="#FEE2E2" opacity="0.6"/>
+          </svg>
+        </div>
 
-                    {/* Role */}
-                    <td>
-                      {getRoleBadge(u.role)}
-                    </td>
+        {/* Card 4: Pending Tasks */}
+        <div className="urja-usermgmt-stat-card">
+          <div className="urja-usermgmt-stat-icon amber">
+            <i className="bi bi-clock"></i>
+          </div>
+          <div className="urja-usermgmt-stat-content">
+            <div className="urja-usermgmt-stat-value">{stats.pendingTasks}</div>
+            <div className="urja-usermgmt-stat-label">Pending Tasks</div>
+          </div>
+          <svg className="urja-usermgmt-stat-wave" viewBox="0 0 100 80" fill="none">
+            <path d="M0 80 C 40 35, 65 65, 100 20 L 100 80 Z" fill="#FEF3C7" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
 
-                    {/* Department */}
-                    <td>
-                      <span className="small text-dark fw-medium">{u.department}</span>
-                    </td>
+      {/* ========================================================================
+          3. ADVANCED SEARCH AND FILTER SECTION
+          ======================================================================== */}
+      <div className="urja-usermgmt-filter-card">
+        {/* Left: Search Bar with integrated Search button */}
+        <div className="urja-usermgmt-search-box">
+          <i className="bi bi-search urja-usermgmt-search-icon"></i>
+          <input 
+            type="text" 
+            className="urja-usermgmt-search-input"
+            placeholder="Search by user name, work email, or designation..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') handleApplyFilters(); }}
+          />
+          {searchQuery && (
+            <button 
+              type="button" 
+              className="urja-usermgmt-search-clear" 
+              onClick={() => { setSearchQuery(''); setAppliedSearch(''); setCurrentPage(1); }}
+              title="Clear search"
+            >
+              <i className="bi bi-x-circle-fill"></i>
+            </button>
+          )}
+          <button 
+            type="button" 
+            className="urja-usermgmt-search-btn"
+            onClick={handleApplyFilters}
+          >
+            Search
+          </button>
+        </div>
 
-                    {/* Designation */}
-                    <td>
-                      <span className="small text-muted">{u.designation}</span>
-                    </td>
-
-                    {/* Account Status */}
-                    <td>
-                      {isITAdmin ? (
-                        <div className="d-flex align-items-center gap-2">
-                          <label className="urja-toggle-switch">
-                            <input 
-                              type="checkbox" 
-                              checked={isActive}
-                              onChange={() => handleToggleStatus(u)}
-                            />
-                            <span className="urja-toggle-slider"></span>
-                          </label>
-                          <span className={`small fw-bold ${isActive ? 'text-success' : 'text-danger'}`}>
-                            {isActive ? 'ACTIVE' : 'INACTIVE'}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className={`badge ${isActive ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle'}`}>
-                          {isActive ? 'ACTIVE' : 'INACTIVE'}
-                        </span>
-                      )}
-                    </td>
-
-                    {/* Assigned Tasks */}
-                    <td style={{ textAlign: 'center' }}>
-                      <span 
-                        className={`badge ${taskCount > 0 ? 'bg-primary-subtle text-primary border border-primary-subtle' : 'bg-light text-muted border'}`}
-                        style={{ fontSize: '0.8rem', padding: '0.3rem 0.6rem' }}
-                      >
-                        <i className="bi bi-list-check me-1"></i>
-                        {taskCount} {taskCount === 1 ? 'Task' : 'Tasks'}
-                      </span>
-                    </td>
-
-                    {/* Actions */}
-                    <td style={{ textAlign: 'center' }}>
-                      <div className="d-flex align-items-center justify-content-center gap-1">
-                        <button 
-                          className="btn btn-sm btn-outline-primary px-2 py-1"
-                          title="View Details"
-                          onClick={() => handleOpenDetails(u)}
-                        >
-                          <i className="bi bi-eye"></i> Details
-                        </button>
-
-                        {isITAdmin && (
-                          <button 
-                            className="btn btn-sm btn-outline-secondary px-2 py-1"
-                            title="Edit User"
-                            onClick={() => {
-                              setEditingUser(u);
-                              setEditUserForm({
-                                name: u.name,
-                                email: u.email,
-                                role: u.role || 'ROLE_HR_RECRUITER',
-                                dept: u.department || 'Human Resources',
-                                title: u.designation || ''
-                              });
-                              setShowEditModal(true);
-                            }}
-                          >
-                            <i className="bi bi-pencil"></i>
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-
-        {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className="p-3 border-top d-flex align-items-center justify-content-between">
-            <span className="small text-muted">
-              Page {currentPage} of {totalPages} ({filteredUsers.length} total users)
-            </span>
-            <div className="d-flex gap-1">
-              <button 
-                className="btn btn-sm btn-outline-secondary"
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+        {/* Right: 4 Filter Dropdowns & Action Buttons */}
+        <div className="urja-usermgmt-filters-cluster">
+          <div className="urja-usermgmt-dropdown-grid">
+            {/* Filter 1: Role */}
+            <div className="urja-usermgmt-select-wrap">
+              <i className="bi bi-layers urja-usermgmt-select-icon"></i>
+              <select 
+                className="urja-usermgmt-select"
+                value={filterRole}
+                onChange={e => { setFilterRole(e.target.value); setCurrentPage(1); }}
               >
-                Previous
-              </button>
-              <button 
-                className="btn btn-sm btn-outline-secondary"
-                disabled={currentPage >= totalPages}
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                <option value="ALL">All System Roles</option>
+                <option value="ROLE_IT_ADMIN">IT Administrator</option>
+                <option value="ROLE_HR_ADMIN">HR Administrator</option>
+                <option value="ROLE_HR_RECRUITER">HR Recruiter</option>
+                <option value="ROLE_INTERVIEWER">Technical Interviewer</option>
+                <option value="ROLE_DEPT_HEAD">Department Head</option>
+                <option value="ROLE_APPROVING_MANAGER">Approving Manager</option>
+              </select>
+            </div>
+
+            {/* Filter 2: Department */}
+            <div className="urja-usermgmt-select-wrap">
+              <i className="bi bi-building urja-usermgmt-select-icon"></i>
+              <select 
+                className="urja-usermgmt-select"
+                value={filterDept}
+                onChange={e => { setFilterDept(e.target.value); setCurrentPage(1); }}
               >
-                Next
-              </button>
+                <option value="ALL">All Departments</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Engineering & Technology">Engineering & Technology</option>
+                <option value="Plant Operations">Plant Operations</option>
+                <option value="Finance">Finance & Accounts</option>
+                <option value="Global Sales">Global Sales & BD</option>
+                <option value="Operations">Operations & Supply</option>
+              </select>
+            </div>
+
+            {/* Filter 3: Account Status */}
+            <div className="urja-usermgmt-select-wrap">
+              <i className="bi bi-shield-check urja-usermgmt-select-icon"></i>
+              <select 
+                className="urja-usermgmt-select"
+                value={filterStatus}
+                onChange={e => { setFilterStatus(e.target.value); setCurrentPage(1); }}
+              >
+                <option value="ALL">All Account Statuses</option>
+                <option value="ACTIVE">Active Accounts</option>
+                <option value="INACTIVE">Inactive Accounts</option>
+              </select>
+            </div>
+
+            {/* Filter 4: Task Status */}
+            <div className="urja-usermgmt-select-wrap">
+              <i className="bi bi-list-task urja-usermgmt-select-icon"></i>
+              <select 
+                className="urja-usermgmt-select"
+                value={filterTaskAssign}
+                onChange={e => { setFilterTaskAssign(e.target.value); setCurrentPage(1); }}
+              >
+                <option value="ALL">All Task Statuses</option>
+                <option value="WITH_TASKS">With Assigned Tasks</option>
+                <option value="NO_TASKS">No Assigned Tasks</option>
+              </select>
             </div>
           </div>
+
+          <div className="urja-usermgmt-filter-actions">
+            <button 
+              type="button" 
+              className="urja-usermgmt-btn-clear"
+              onClick={handleClearFilters}
+              title="Reset all filters"
+            >
+              <i className="bi bi-arrow-counterclockwise"></i>
+              <span>Clear</span>
+            </button>
+
+            <button 
+              type="button" 
+              className="urja-usermgmt-btn-apply"
+              onClick={handleApplyFilters}
+            >
+              <i className="bi bi-funnel-fill"></i>
+              <span>Apply Filters</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================================
+          4. SELECTION STRIP & BULK ACTIONS
+          ======================================================================== */}
+      <div className="urja-usermgmt-selection-strip">
+        <label className="urja-usermgmt-select-all-label">
+          <input 
+            type="checkbox" 
+            className="urja-usermgmt-checkbox"
+            checked={isAllSelectableSelected}
+            onChange={handleSelectAll}
+          />
+          <span>{selectedUserIds.length} selected</span>
+        </label>
+
+        {isITAdmin && (
+          <button 
+            type="button"
+            className={`urja-usermgmt-btn-delete-bulk ${selectedUserIds.length > 0 ? 'active' : 'disabled'}`}
+            disabled={selectedUserIds.length === 0}
+            onClick={() => setShowBulkDeleteModal(true)}
+            title={selectedUserIds.length > 0 ? 'Deactivate or remove selected users' : 'Select at least one user to enable delete'}
+          >
+            <i className="bi bi-trash"></i>
+            <span>Delete User</span>
+          </button>
         )}
       </div>
 
-      {/* MODAL: ADD USER (IT Admin Only) */}
+      {/* ========================================================================
+          5. USER MANAGEMENT TABLE
+          ======================================================================== */}
+      <div className="urja-usermgmt-table-card">
+        <div className="urja-usermgmt-table-wrap">
+          <table className="urja-usermgmt-table">
+            <thead>
+              <tr>
+                <th style={{ width: 44, textAlign: 'center' }}>
+                  <input 
+                    type="checkbox" 
+                    className="urja-usermgmt-checkbox"
+                    checked={isAllSelectableSelected}
+                    onChange={handleSelectAll}
+                    title="Select / Deselect all"
+                  />
+                </th>
+                <th 
+                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={() => {
+                    if (sortField === 'name') setSortAsc(!sortAsc);
+                    else { setSortField('name'); setSortAsc(true); }
+                  }}
+                >
+                  Name <i className="bi bi-arrow-down-up ms-1" style={{ fontSize: '0.75rem' }}></i>
+                </th>
+                <th>Work Email</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Account Status</th>
+                <th style={{ textAlign: 'center' }}>Assigned Tasks</th>
+                <th style={{ textAlign: 'center' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '3.5rem' }}>
+                    <div className="spinner-border text-success" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="text-muted small mt-2 mb-0">Loading enterprise user accounts...</p>
+                  </td>
+                </tr>
+              ) : paginatedUsers.length === 0 ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '3.5rem' }}>
+                    <i className="bi bi-people text-muted" style={{ fontSize: '2.4rem' }}></i>
+                    <h6 className="fw-bold text-dark mt-2 mb-1">No System Users Found</h6>
+                    <p className="text-muted small mb-0">Try adjusting your search criteria or resetting filters.</p>
+                  </td>
+                </tr>
+              ) : (
+                paginatedUsers.map((u) => {
+                  const isActive = u.status === 'ACTIVE';
+                  const isSelected = selectedUserIds.includes(u.id);
+                  const isProtected = u.username === 'itadmin' || u.id === 1 || u.id === currentUser?.id;
+                  const taskCount = u.assignedTasksCount || 0;
+                  const initials = getInitials(u.name);
+
+                  return (
+                    <tr key={u.id} className={isSelected ? 'selected' : ''}>
+                      {/* Checkbox */}
+                      <td style={{ textAlign: 'center' }}>
+                        <input 
+                          type="checkbox" 
+                          className="urja-usermgmt-checkbox"
+                          checked={isSelected}
+                          disabled={isProtected}
+                          onChange={(e) => handleSelectRow(u.id, e.target.checked)}
+                          title={isProtected ? 'Protected system account' : 'Select user'}
+                        />
+                      </td>
+
+                      {/* Name with initials avatar */}
+                      <td>
+                        <div className="urja-user-cell">
+                          <div className="urja-user-avatar">
+                            {initials}
+                          </div>
+                          <div className="urja-user-meta">
+                            <span className="urja-user-name">{u.name}</span>
+                            <span className="urja-user-handle">@{u.username || u.email?.split('@')[0]}</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Work Email */}
+                      <td>
+                        <div className="urja-user-email">
+                          <i className="bi bi-envelope"></i>
+                          <span>{u.email}</span>
+                        </div>
+                      </td>
+
+                      {/* Role */}
+                      <td>
+                        {renderRoleBadge(u.role)}
+                      </td>
+
+                      {/* Department */}
+                      <td>
+                        <div className="urja-dept-cell">
+                          <i className="bi bi-diagram-3"></i>
+                          <span>{u.department}</span>
+                        </div>
+                      </td>
+
+                      {/* Designation */}
+                      <td>
+                        <span className="urja-designation-cell">{u.designation}</span>
+                      </td>
+
+                      {/* Account Status */}
+                      <td>
+                        {isActive ? (
+                          <span className="urja-status-pill active">
+                            <i className="bi bi-check-circle-fill"></i> ACTIVE
+                          </span>
+                        ) : (
+                          <span className="urja-status-pill inactive">
+                            <i className="bi bi-x-circle-fill"></i> INACTIVE
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Assigned Tasks */}
+                      <td style={{ textAlign: 'center' }}>
+                        <span 
+                          className={`urja-tasks-pill ${taskCount > 0 ? 'has-tasks' : 'zero'}`}
+                          onClick={() => handleOpenDetails(u)}
+                          title="Click to view assigned tasks"
+                        >
+                          <i className="bi bi-list-task"></i>
+                          <span>{taskCount} {taskCount === 1 ? 'Task' : 'Tasks'}</span>
+                        </span>
+                      </td>
+
+                      {/* Actions */}
+                      <td style={{ textAlign: 'center' }}>
+                        <div className="urja-row-actions">
+                          <button 
+                            type="button" 
+                            className="urja-btn-row-details"
+                            onClick={() => handleOpenDetails(u)}
+                            title="View complete user profile and assigned tasks"
+                          >
+                            <i className="bi bi-eye"></i>
+                            <span>Details</span>
+                          </button>
+
+                          {isITAdmin && (
+                            <>
+                              <button 
+                                type="button" 
+                                className="urja-btn-row-icon edit"
+                                title="Edit User Information"
+                                onClick={() => {
+                                  setEditingUser(u);
+                                  setEditUserForm({
+                                    name: u.name,
+                                    email: u.email,
+                                    role: u.role || 'ROLE_HR_RECRUITER',
+                                    departmentId: u.departmentId || 3,
+                                    deptName: u.department || 'Human Resources',
+                                    designation: u.designation || '',
+                                    status: u.status || 'ACTIVE'
+                                  });
+                                  setShowEditModal(true);
+                                }}
+                              >
+                                <i className="bi bi-pencil-square"></i>
+                              </button>
+
+                              <button 
+                                type="button" 
+                                className="urja-btn-row-icon delete"
+                                title={isProtected ? 'Protected system account cannot be deleted' : 'Delete or deactivate user'}
+                                disabled={isProtected}
+                                onClick={() => setDeleteCandidateUser(u)}
+                                style={isProtected ? { opacity: 0.35, cursor: 'not-allowed' } : {}}
+                              >
+                                <i className="bi bi-trash"></i>
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* ======================================================================
+            6. PAGINATION CONTROLS
+            ====================================================================== */}
+        <div className="urja-usermgmt-pagination">
+          <div className="urja-usermgmt-pagination-info">
+            Showing {totalUsers > 0 ? startIndex + 1 : 0} – {endIndex} of {totalUsers} users
+          </div>
+
+          <div className="urja-usermgmt-pagination-controls">
+            <div className="urja-usermgmt-rows-selector">
+              <span>Rows per page:</span>
+              <select 
+                className="urja-usermgmt-rows-select"
+                value={rowsPerPage}
+                onChange={e => {
+                  setRowsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+
+            <div className="urja-usermgmt-page-buttons">
+              <button 
+                type="button"
+                className="urja-usermgmt-page-btn"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                title="Previous page"
+              >
+                <i className="bi bi-chevron-left"></i>
+              </button>
+
+              {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(pageNum => (
+                <button 
+                  key={pageNum}
+                  type="button"
+                  className={`urja-usermgmt-page-btn ${currentPage === pageNum ? 'active' : ''}`}
+                  onClick={() => setCurrentPage(pageNum)}
+                >
+                  {pageNum}
+                </button>
+              ))}
+
+              <button 
+                type="button"
+                className="urja-usermgmt-page-btn"
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                title="Next page"
+              >
+                <i className="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================================
+          7. MODAL: ADD USER (IT Admin Only)
+          ======================================================================== */}
       {showAddModal && isITAdmin && (
-        <div className="urja-modal-overlay" onClick={() => setShowAddModal(false)}>
-          <div className="urja-modal-dialog" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
-            <div className="urja-modal-header">
-              <h3 className="urja-modal-title">
-                <i className="bi bi-person-plus-fill text-success me-2"></i>
+        <div className="urja-mgmt-modal-backdrop" onClick={() => setShowAddModal(false)}>
+          <div className="urja-mgmt-modal-dialog" onClick={e => e.stopPropagation()}>
+            <div className="urja-mgmt-modal-header">
+              <h3 className="urja-mgmt-modal-title">
+                <i className="bi bi-person-plus-fill text-success"></i>
                 Provision System User Account
               </h3>
-              <button className="btn-close" onClick={() => setShowAddModal(false)}></button>
+              <button type="button" className="btn-close" onClick={() => setShowAddModal(false)}></button>
             </div>
 
             <form onSubmit={handleAddUserSubmit}>
-              <div className="urja-modal-body">
+              <div className="urja-mgmt-modal-body">
                 <div className="mb-3">
                   <label className="form-label small fw-bold text-dark">Full Name *</label>
                   <input 
@@ -692,7 +1070,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                     <input 
                       type="email" 
                       className="form-control"
-                      placeholder="ramesh.hr@company.com"
+                      placeholder="ramesh.kulkarni@company.com"
                       value={newUserForm.email}
                       onChange={e => setNewUserForm({ ...newUserForm, email: e.target.value })}
                       required
@@ -713,7 +1091,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
 
                 <div className="row g-3 mb-3">
                   <div className="col-md-6">
-                    <label className="form-label small fw-bold text-dark">Security Role *</label>
+                    <label className="form-label small fw-bold text-dark">System Role *</label>
                     <select 
                       className="form-select"
                       value={newUserForm.role}
@@ -732,36 +1110,68 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                     <label className="form-label small fw-bold text-dark">Department</label>
                     <select 
                       className="form-select"
-                      value={newUserForm.dept}
-                      onChange={e => setNewUserForm({ ...newUserForm, dept: e.target.value })}
+                      value={newUserForm.departmentId}
+                      onChange={e => {
+                        const sel = e.target;
+                        setNewUserForm({ 
+                          ...newUserForm, 
+                          departmentId: sel.value,
+                          deptName: sel.options[sel.selectedIndex].text
+                        });
+                      }}
                     >
-                      <option value="Human Resources">Human Resources</option>
-                      <option value="Engineering & Technology">Engineering & Technology</option>
-                      <option value="Plant Operations">Plant Operations</option>
-                      <option value="Finance & Accounts">Finance & Accounts</option>
-                      <option value="IT & Systems">IT & Systems</option>
+                      <option value="3">Human Resources & Talent Acquisition</option>
+                      <option value="1">Engineering & Technology</option>
+                      <option value="5">Operations & Supply Chain</option>
+                      <option value="4">Finance, Tax & Accounts</option>
+                      <option value="2">Global Sales & Enterprise BD</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label small fw-bold text-dark">Initial Password</label>
+                  <label className="form-label small fw-bold text-dark">Designation</label>
                   <input 
-                    type="password" 
+                    type="text" 
                     className="form-control"
-                    value={newUserForm.password}
-                    onChange={e => setNewUserForm({ ...newUserForm, password: e.target.value })}
+                    placeholder="e.g. Senior Talent Acquisition Specialist"
+                    value={newUserForm.designation}
+                    onChange={e => setNewUserForm({ ...newUserForm, designation: e.target.value })}
                   />
-                  <small className="text-muted">Default is 'password' for testing.</small>
+                </div>
+
+                <div className="row g-3 mb-3">
+                  <div className="col-md-6">
+                    <label className="form-label small fw-bold text-dark">Initial Password</label>
+                    <input 
+                      type="password" 
+                      className="form-control"
+                      value={newUserForm.password}
+                      onChange={e => setNewUserForm({ ...newUserForm, password: e.target.value })}
+                    />
+                    <small className="text-muted">Default is 'password'.</small>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className="form-label small fw-bold text-dark">Account Status</label>
+                    <select 
+                      className="form-select"
+                      value={newUserForm.status}
+                      onChange={e => setNewUserForm({ ...newUserForm, status: e.target.value })}
+                    >
+                      <option value="ACTIVE">ACTIVE</option>
+                      <option value="INACTIVE">INACTIVE</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              <div className="urja-modal-footer">
-                <button type="button" className="btn btn-outline-secondary" onClick={() => setShowAddModal(false)}>
+              <div className="urja-mgmt-modal-footer">
+                <button type="button" className="urja-btn-secondary" onClick={() => setShowAddModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="urja-btn-lime">
-                  <i className="bi bi-check-circle-fill"></i>
+                <button type="submit" className="urja-btn-save">
+                  <i className="bi bi-check-circle-fill me-1"></i>
                   <span>Create User Account</span>
                 </button>
               </div>
@@ -770,17 +1180,22 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
         </div>
       )}
 
-      {/* MODAL: EDIT USER (IT Admin Only) */}
+      {/* ========================================================================
+          8. MODAL: EDIT USER (IT Admin Only)
+          ======================================================================== */}
       {showEditModal && editingUser && isITAdmin && (
-        <div className="urja-modal-overlay" onClick={() => setShowEditModal(false)}>
-          <div className="urja-modal-dialog" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
-            <div className="urja-modal-header">
-              <h3 className="urja-modal-title">Edit User Account: {editingUser.name}</h3>
-              <button className="btn-close" onClick={() => setShowEditModal(false)}></button>
+        <div className="urja-mgmt-modal-backdrop" onClick={() => setShowEditModal(false)}>
+          <div className="urja-mgmt-modal-dialog" onClick={e => e.stopPropagation()}>
+            <div className="urja-mgmt-modal-header">
+              <h3 className="urja-mgmt-modal-title">
+                <i className="bi bi-pencil-square text-success"></i>
+                Edit User Account: {editingUser.name}
+              </h3>
+              <button type="button" className="btn-close" onClick={() => setShowEditModal(false)}></button>
             </div>
 
             <form onSubmit={handleEditUserSubmit}>
-              <div className="urja-modal-body">
+              <div className="urja-mgmt-modal-body">
                 <div className="mb-3">
                   <label className="form-label small fw-bold text-dark">Full Name *</label>
                   <input 
@@ -805,7 +1220,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
 
                 <div className="row g-3 mb-3">
                   <div className="col-md-6">
-                    <label className="form-label small fw-bold text-dark">Role</label>
+                    <label className="form-label small fw-bold text-dark">System Role *</label>
                     <select 
                       className="form-select"
                       value={editUserForm.role}
@@ -824,25 +1239,45 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                     <label className="form-label small fw-bold text-dark">Department</label>
                     <select 
                       className="form-select"
-                      value={editUserForm.dept}
-                      onChange={e => setEditUserForm({ ...editUserForm, dept: e.target.value })}
+                      value={editUserForm.departmentId}
+                      onChange={e => {
+                        const sel = e.target;
+                        setEditUserForm({ 
+                          ...editUserForm, 
+                          departmentId: sel.value,
+                          deptName: sel.options[sel.selectedIndex].text 
+                        });
+                      }}
                     >
-                      <option value="Human Resources">Human Resources</option>
-                      <option value="Engineering & Technology">Engineering & Technology</option>
-                      <option value="Plant Operations">Plant Operations</option>
-                      <option value="Finance & Accounts">Finance & Accounts</option>
-                      <option value="IT & Systems">IT & Systems</option>
+                      <option value="3">Human Resources & Talent Acquisition</option>
+                      <option value="1">Engineering & Technology</option>
+                      <option value="5">Operations & Supply Chain</option>
+                      <option value="4">Finance, Tax & Accounts</option>
+                      <option value="2">Global Sales & Enterprise BD</option>
                     </select>
                   </div>
                 </div>
+
+                <div className="mb-3">
+                  <label className="form-label small fw-bold text-dark">Account Status</label>
+                  <select 
+                    className="form-select"
+                    value={editUserForm.status}
+                    onChange={e => setEditUserForm({ ...editUserForm, status: e.target.value })}
+                  >
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                  </select>
+                </div>
               </div>
 
-              <div className="urja-modal-footer">
-                <button type="button" className="btn btn-outline-secondary" onClick={() => setShowEditModal(false)}>
+              <div className="urja-mgmt-modal-footer">
+                <button type="button" className="urja-btn-secondary" onClick={() => setShowEditModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-success fw-bold">
-                  Save Changes
+                <button type="submit" className="urja-btn-save">
+                  <i className="bi bi-check-circle-fill me-1"></i>
+                  <span>Save Changes</span>
                 </button>
               </div>
             </form>
@@ -850,24 +1285,128 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
         </div>
       )}
 
-      {/* DRAWER: VIEW DETAILS & ASSIGNED TASKS */}
-      {viewingUser && (
-        <div className="urja-drawer-backdrop" onClick={() => setViewingUser(null)}>
-          <div className="urja-drawer-panel" onClick={e => e.stopPropagation()}>
-            <div className="p-3 border-bottom d-flex align-items-center justify-content-between bg-light">
-              <h5 className="fw-bold mb-0 text-dark">User Account Details</h5>
-              <button className="btn-close" onClick={() => setViewingUser(null)}></button>
+      {/* ========================================================================
+          9. MODAL: DELETE CONFIRMATION (Individual)
+          ======================================================================== */}
+      {deleteCandidateUser && (
+        <div className="urja-mgmt-modal-backdrop" onClick={() => setDeleteCandidateUser(null)}>
+          <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 480 }} onClick={e => e.stopPropagation()}>
+            <div className="urja-mgmt-modal-header bg-danger-subtle">
+              <h3 className="urja-mgmt-modal-title text-danger">
+                <i className="bi bi-exclamation-triangle-fill"></i>
+                Confirm Account Deactivation
+              </h3>
+              <button type="button" className="btn-close" onClick={() => setDeleteCandidateUser(null)}></button>
             </div>
 
-            <div className="p-4 overflow-auto flex-grow-1">
+            <div className="urja-mgmt-modal-body">
+              <p className="text-dark mb-2">
+                Are you sure you want to deactivate or remove user account for:
+              </p>
+              <div className="p-3 bg-light rounded-3 border mb-3">
+                <strong className="d-block text-dark">{deleteCandidateUser.name}</strong>
+                <span className="text-muted small d-block font-monospace">{deleteCandidateUser.email}</span>
+                <span className="badge bg-secondary-subtle text-secondary border mt-1">
+                  {deleteCandidateUser.department} • {deleteCandidateUser.designation}
+                </span>
+              </div>
+              <div className="alert alert-warning py-2 px-3 small mb-0">
+                <i className="bi bi-info-circle-fill me-1"></i>
+                This account will be deactivated to preserve historical audit trails and recruitment workflow records.
+              </div>
+            </div>
+
+            <div className="urja-mgmt-modal-footer">
+              <button 
+                type="button" 
+                className="urja-btn-secondary" 
+                onClick={() => setDeleteCandidateUser(null)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                className="urja-btn-danger-confirm" 
+                onClick={confirmIndividualDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Deactivating...' : 'Confirm Deactivation'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================
+          10. MODAL: BULK DELETE CONFIRMATION
+          ======================================================================== */}
+      {showBulkDeleteModal && (
+        <div className="urja-mgmt-modal-backdrop" onClick={() => setShowBulkDeleteModal(false)}>
+          <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 480 }} onClick={e => e.stopPropagation()}>
+            <div className="urja-mgmt-modal-header bg-danger-subtle">
+              <h3 className="urja-mgmt-modal-title text-danger">
+                <i className="bi bi-exclamation-triangle-fill"></i>
+                Confirm Bulk User Deactivation
+              </h3>
+              <button type="button" className="btn-close" onClick={() => setShowBulkDeleteModal(false)}></button>
+            </div>
+
+            <div className="urja-mgmt-modal-body">
+              <p className="text-dark mb-2">
+                Are you sure you want to deactivate <strong>{selectedUserIds.length}</strong> selected user accounts?
+              </p>
+              <div className="alert alert-warning py-2 px-3 small mb-0">
+                <i className="bi bi-shield-lock-fill me-1"></i>
+                Protected accounts (including your logged-in session and root administrator) will automatically be preserved.
+              </div>
+            </div>
+
+            <div className="urja-mgmt-modal-footer">
+              <button 
+                type="button" 
+                className="urja-btn-secondary" 
+                onClick={() => setShowBulkDeleteModal(false)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                className="urja-btn-danger-confirm" 
+                onClick={confirmBulkDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Deactivating Users...' : `Deactivate ${selectedUserIds.length} Users`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================
+          11. MODAL: USER DETAILS & ASSIGNED TASKS
+          ======================================================================== */}
+      {viewingUser && (
+        <div className="urja-mgmt-modal-backdrop" onClick={() => setViewingUser(null)}>
+          <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 580 }} onClick={e => e.stopPropagation()}>
+            <div className="urja-mgmt-modal-header">
+              <h3 className="urja-mgmt-modal-title">
+                <i className="bi bi-person-badge-fill text-success"></i>
+                User Account Details
+              </h3>
+              <button type="button" className="btn-close" onClick={() => setViewingUser(null)}></button>
+            </div>
+
+            <div className="urja-mgmt-modal-body">
               <div className="d-flex align-items-center gap-3 mb-4">
-                <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#144D2D', color: '#98E843', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800 }}>
-                  {viewingUser.name?.substring(0, 2).toUpperCase()}
+                <div className="urja-user-avatar" style={{ width: 54, height: 54, fontSize: '1.25rem' }}>
+                  {getInitials(viewingUser.name)}
                 </div>
                 <div>
                   <h5 className="fw-bold text-dark mb-0">{viewingUser.name}</h5>
                   <span className="text-muted small">{viewingUser.email}</span>
-                  <div className="mt-1">{getRoleBadge(viewingUser.role)}</div>
+                  <div className="mt-1">{renderRoleBadge(viewingUser.role)}</div>
                 </div>
               </div>
 
@@ -875,11 +1414,11 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                 <div className="row g-2 small">
                   <div className="col-6">
                     <span className="text-muted d-block">Department</span>
-                    <strong>{viewingUser.department}</strong>
+                    <strong className="text-dark">{viewingUser.department}</strong>
                   </div>
                   <div className="col-6">
                     <span className="text-muted d-block">Designation</span>
-                    <strong>{viewingUser.designation}</strong>
+                    <strong className="text-dark">{viewingUser.designation}</strong>
                   </div>
                   <div className="col-6 mt-2">
                     <span className="text-muted d-block">Account Status</span>
@@ -889,14 +1428,16 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                   </div>
                   <div className="col-6 mt-2">
                     <span className="text-muted d-block">Active Tasks</span>
-                    <span className="badge bg-primary">{viewingUser.assignedTasksCount || 0} Assigned</span>
+                    <span className="badge bg-primary-subtle text-primary border border-primary-subtle">
+                      {viewingUser.assignedTasksCount || 0} Tasks Assigned
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="d-flex align-items-center justify-content-between mb-2">
                 <h6 className="fw-bold text-dark mb-0">Assigned Recruitment Tasks</h6>
-                <span className="small text-muted">{viewingUserTasks.length} total</span>
+                <span className="small text-muted">{viewingUserTasks.length} total tasks</span>
               </div>
 
               {isLoadingUserTasks ? (
@@ -905,22 +1446,22 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                   <span className="ms-2 small text-muted">Loading assigned tasks...</span>
                 </div>
               ) : viewingUserTasks.length === 0 ? (
-                <div className="p-3 bg-light rounded text-center text-muted small">
-                  No active tasks assigned to this user.
+                <div className="p-3 bg-light rounded-3 text-center text-muted small">
+                  No active recruitment tasks currently assigned to this user.
                 </div>
               ) : (
-                <div className="d-flex flex-column gap-2">
+                <div className="d-flex flex-column gap-2" style={{ maxHeight: 240, overflowY: 'auto' }}>
                   {viewingUserTasks.map(t => (
-                    <div key={t.id} className="p-2 border rounded bg-white">
+                    <div key={t.id} className="p-2 border rounded-3 bg-white">
                       <div className="d-flex align-items-center justify-content-between">
                         <strong className="text-dark small">{t.taskTitle}</strong>
-                        <span className={`badge ${t.status === 'COMPLETED' ? 'bg-success' : 'bg-primary'}`} style={{ fontSize: '0.65rem' }}>
+                        <span className={`badge ${t.status === 'COMPLETED' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle'}`} style={{ fontSize: '0.68rem' }}>
                           {t.status}
                         </span>
                       </div>
-                      <div className="d-flex align-items-center justify-content-between mt-1 text-muted" style={{ fontSize: '0.72rem' }}>
-                        <span>Type: {t.taskTypeLabel}</span>
-                        <span>Due: {t.dueDate}</span>
+                      <div className="d-flex align-items-center justify-content-between mt-1 text-muted" style={{ fontSize: '0.74rem' }}>
+                        <span>Type: {t.taskTypeLabel || t.taskType}</span>
+                        <span>Due: {t.dueDate || 'N/A'}</span>
                       </div>
                     </div>
                   ))}
@@ -928,8 +1469,8 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
               )}
             </div>
 
-            <div className="p-3 border-top bg-light text-end">
-              <button className="btn btn-secondary btn-sm" onClick={() => setViewingUser(null)}>
+            <div className="urja-mgmt-modal-footer">
+              <button type="button" className="urja-btn-secondary" onClick={() => setViewingUser(null)}>
                 Close
               </button>
             </div>

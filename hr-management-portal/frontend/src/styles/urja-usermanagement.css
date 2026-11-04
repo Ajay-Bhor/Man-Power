@@ -1,0 +1,1049 @@
+/* ==============================================================================
+   URJA FOODS HRMS — SYSTEM USER MANAGEMENT VIEW STYLES
+   Green-and-White Enterprise Corporate Theme (Matching Reference Screenshot)
+   Palette:
+   - Primary Dark Green: #075B35
+   - Primary Green:      #138A45
+   - Button Green:       #087B35
+   - Light Green Mint:   #E8F6ED / #E9F7EF
+   - Soft Green Border:  #86EFAC / #A7F3D0
+   - Background:         #F5F8FA / #F8FAFC
+   - Card Background:    #FFFFFF
+   - Border:             #DFE7EE
+   - Primary Text:       #17233C
+   - Secondary Text:     #64748B
+   ============================================================================== */
+
+.urja-usermgmt-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #17233C;
+  box-sizing: border-box;
+}
+
+/* ------------------------------------------------------------------------------
+   1. PAGE HEADER
+   ------------------------------------------------------------------------------ */
+.urja-usermgmt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: transparent;
+}
+
+.urja-usermgmt-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.urja-usermgmt-header-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #075B35;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(7, 91, 53, 0.2);
+}
+
+.urja-usermgmt-title-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.urja-usermgmt-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #17233C;
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.urja-usermgmt-subtitle {
+  font-size: 0.88rem;
+  color: #64748B;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.urja-usermgmt-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.urja-usermgmt-btn-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  color: #17233C;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.55rem 1.15rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.urja-usermgmt-btn-refresh:hover:not(:disabled) {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.urja-usermgmt-btn-assign-tasks {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: #FFFFFF;
+  border: 1px solid #86EFAC;
+  color: #075B35;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.55rem 1.15rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.urja-usermgmt-btn-assign-tasks:hover {
+  background-color: #E8F6ED;
+  border-color: #138A45;
+  color: #075B35;
+}
+
+.urja-usermgmt-btn-add-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: #075B35;
+  border: 1px solid #075B35;
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.55rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(7, 91, 53, 0.25);
+}
+
+.urja-usermgmt-btn-add-user:hover {
+  background-color: #064E29;
+  border-color: #064E29;
+  box-shadow: 0 4px 10px rgba(7, 91, 53, 0.35);
+}
+
+/* ------------------------------------------------------------------------------
+   2. KPI DASHBOARD METRIC CARDS
+   ------------------------------------------------------------------------------ */
+.urja-usermgmt-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .urja-usermgmt-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .urja-usermgmt-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-usermgmt-stat-card {
+  position: relative;
+  background-color: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 16px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.025);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.urja-usermgmt-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.urja-usermgmt-stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.urja-usermgmt-stat-icon.mint {
+  background-color: #E8F6ED;
+  color: #138A45;
+}
+
+.urja-usermgmt-stat-icon.green {
+  background-color: #E8F6ED;
+  color: #16A34A;
+}
+
+.urja-usermgmt-stat-icon.red {
+  background-color: #FEE2E2;
+  color: #DC2626;
+}
+
+.urja-usermgmt-stat-icon.amber {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+.urja-usermgmt-stat-content {
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.urja-usermgmt-stat-value {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #17233C;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.urja-usermgmt-stat-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #64748B;
+  margin-top: 0.2rem;
+}
+
+.urja-usermgmt-stat-wave {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 90px;
+  pointer-events: none;
+  opacity: 0.75;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------------------------
+   3. ADVANCED SEARCH AND FILTER SECTION
+   ------------------------------------------------------------------------------ */
+.urja-usermgmt-filter-card {
+  background-color: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 16px;
+  padding: 0.9rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.urja-usermgmt-search-box {
+  flex: 1 1 360px;
+  min-width: 270px;
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1.5px solid #86EFAC;
+  border-radius: 999px;
+  padding: 0.25rem 0.35rem 0.25rem 1rem;
+  gap: 0.6rem;
+  box-shadow: 0 1px 4px rgba(134, 239, 172, 0.15);
+  transition: all 0.2s ease;
+}
+
+.urja-usermgmt-search-box:focus-within {
+  border-color: #138A45;
+  box-shadow: 0 0 0 3px rgba(19, 138, 69, 0.12);
+}
+
+.urja-usermgmt-search-icon {
+  color: #138A45;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.urja-usermgmt-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.88rem;
+  color: #17233C;
+  font-family: inherit;
+}
+
+.urja-usermgmt-search-input::placeholder {
+  color: #94A3B8;
+  font-size: 0.84rem;
+}
+
+.urja-usermgmt-search-clear {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  padding: 0 0.35rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.urja-usermgmt-search-clear:hover {
+  color: #475569;
+}
+
+.urja-usermgmt-search-btn {
+  background-color: #075B35;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 1.25rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+
+.urja-usermgmt-search-btn:hover {
+  background-color: #064E29;
+}
+
+.urja-usermgmt-filters-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 2 1 540px;
+  flex-wrap: wrap;
+}
+
+.urja-usermgmt-dropdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.65rem;
+  flex: 1 1 360px;
+}
+
+@media (max-width: 768px) {
+  .urja-usermgmt-dropdown-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-usermgmt-select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.urja-usermgmt-select-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: #138A45;
+  font-size: 0.92rem;
+  pointer-events: none;
+}
+
+.urja-usermgmt-select {
+  width: 100%;
+  padding: 0.48rem 1.85rem 0.48rem 2.35rem;
+  background-color: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #17233C;
+  font-family: inherit;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-usermgmt-select:focus {
+  outline: none;
+  border-color: #138A45;
+  box-shadow: 0 0 0 3px rgba(19, 138, 69, 0.1);
+}
+
+.urja-usermgmt-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.urja-usermgmt-btn-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  color: #075B35;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-usermgmt-btn-clear:hover {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.urja-usermgmt-btn-apply {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: #075B35;
+  border: 1px solid #075B35;
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1.15rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(7, 91, 53, 0.2);
+}
+
+.urja-usermgmt-btn-apply:hover {
+  background-color: #064E29;
+  border-color: #064E29;
+}
+
+/* ------------------------------------------------------------------------------
+   4. SELECTION STRIP (BULK ACTION)
+   ------------------------------------------------------------------------------ */
+.urja-usermgmt-selection-strip {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.1rem 0.5rem;
+}
+
+.urja-usermgmt-select-all-label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #17233C;
+  cursor: pointer;
+  user-select: none;
+}
+
+.urja-usermgmt-checkbox {
+  width: 17px;
+  height: 17px;
+  accent-color: #075B35;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.urja-usermgmt-btn-delete-bulk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.42rem 0.9rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.urja-usermgmt-btn-delete-bulk.disabled {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #94A3B8;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.urja-usermgmt-btn-delete-bulk.active {
+  background-color: #FEE2E2;
+  border: 1px solid #FCA5A5;
+  color: #DC2626;
+  cursor: pointer;
+}
+
+.urja-usermgmt-btn-delete-bulk.active:hover {
+  background-color: #FDCFCF;
+}
+
+/* ------------------------------------------------------------------------------
+   5. USER MANAGEMENT TABLE
+   ------------------------------------------------------------------------------ */
+.urja-usermgmt-table-card {
+  background-color: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.urja-usermgmt-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.urja-usermgmt-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.84rem;
+}
+
+.urja-usermgmt-table thead th {
+  padding: 0.8rem 0.5rem;
+  color: #075B35;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  border-bottom: 1px solid #C6E6D3;
+}
+
+.urja-usermgmt-table tbody tr {
+  border-bottom: 1px solid #F1F5F9;
+  transition: background-color 0.15s ease;
+}
+
+.urja-usermgmt-table tbody tr:hover {
+  background-color: #F7FAF8;
+}
+
+.urja-usermgmt-table tbody tr.selected {
+  background-color: #EAF7EF;
+}
+
+.urja-usermgmt-table tbody td {
+  padding: 0.68rem 0.5rem;
+  vertical-align: middle;
+  color: #17233C;
+  font-size: 0.83rem;
+}
+
+/* Explicit column widths to ensure Actions never clip */
+.urja-usermgmt-table th:nth-child(1), .urja-usermgmt-table td:nth-child(1) { width: 38px; text-align: center; }
+.urja-usermgmt-table th:nth-child(2), .urja-usermgmt-table td:nth-child(2) { max-width: 175px; }
+.urja-usermgmt-table th:nth-child(3), .urja-usermgmt-table td:nth-child(3) { max-width: 185px; }
+.urja-usermgmt-table th:nth-child(4), .urja-usermgmt-table td:nth-child(4) { width: 110px; }
+.urja-usermgmt-table th:nth-child(5), .urja-usermgmt-table td:nth-child(5) { max-width: 140px; }
+.urja-usermgmt-table th:nth-child(6), .urja-usermgmt-table td:nth-child(6) { max-width: 155px; }
+.urja-usermgmt-table th:nth-child(7), .urja-usermgmt-table td:nth-child(7) { width: 100px; }
+.urja-usermgmt-table th:nth-child(8), .urja-usermgmt-table td:nth-child(8) { width: 105px; text-align: center; }
+.urja-usermgmt-table th:nth-child(9), .urja-usermgmt-table td:nth-child(9) { width: 135px; text-align: center; }
+
+/* Cell Elements */
+.urja-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  white-space: nowrap;
+}
+
+.urja-user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #DCFCE7;
+  color: #166534;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #BBF7D0;
+}
+
+.urja-user-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.urja-user-name {
+  font-weight: 700;
+  color: #17233C;
+  font-size: 0.84rem;
+}
+
+.urja-user-handle {
+  font-size: 0.74rem;
+  color: #64748B;
+  margin-top: 0.05rem;
+}
+
+.urja-user-email {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #17233C;
+  font-size: 0.81rem;
+  white-space: nowrap;
+}
+
+.urja-user-email i {
+  color: #64748B;
+  font-size: 0.85rem;
+}
+
+/* Role Badges */
+.urja-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.urja-role-badge.itadmin {
+  background-color: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+}
+
+.urja-role-badge.hradmin {
+  background-color: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #2563EB;
+}
+
+.urja-role-badge.recruiter {
+  background-color: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  color: #16A34A;
+}
+
+.urja-role-badge.interviewer {
+  background-color: #F0FDFA;
+  border: 1px solid #99F6E4;
+  color: #0D9488;
+}
+
+.urja-role-badge.depthead {
+  background-color: #FFFBEB;
+  border: 1px solid #FDE68A;
+  color: #D97706;
+}
+
+.urja-role-badge.approver {
+  background-color: #FAF5FF;
+  border: 1px solid #E9D5FF;
+  color: #9333EA;
+}
+
+.urja-role-badge.default {
+  background-color: #F8FAFC;
+  border: 1px solid #DFE7EE;
+  color: #475569;
+}
+
+.urja-dept-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.81rem;
+  color: #17233C;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.urja-dept-cell span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.urja-dept-cell i {
+  color: #64748B;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.urja-designation-cell {
+  font-size: 0.81rem;
+  color: #475569;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 160px;
+}
+
+/* Status Pill */
+.urja-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.urja-status-pill.active {
+  background-color: #DCFCE7;
+  border: 1px solid #86EFAC;
+  color: #15803D;
+}
+
+.urja-status-pill.inactive {
+  background-color: #FEE2E2;
+  border: 1px solid #FCA5A5;
+  color: #DC2626;
+}
+
+/* Tasks Badge */
+.urja-tasks-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.urja-tasks-pill.zero {
+  background-color: #F8FAFC;
+  border: 1px solid #DFE7EE;
+  color: #64748B;
+}
+
+.urja-tasks-pill.has-tasks {
+  background-color: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #2563EB;
+  font-weight: 700;
+}
+
+.urja-tasks-pill:hover {
+  filter: brightness(0.96);
+}
+
+/* Row Action Buttons */
+.urja-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.urja-btn-row-details {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background-color: #FFFFFF;
+  border: 1px solid #86EFAC;
+  color: #075B35;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.24rem 0.65rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-btn-row-details:hover {
+  background-color: #E8F6ED;
+  border-color: #138A45;
+}
+
+.urja-btn-row-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background-color: #FFFFFF;
+  font-size: 0.9rem;
+}
+
+.urja-btn-row-icon.edit {
+  border: 1px solid #DFE7EE;
+  color: #138A45;
+}
+
+.urja-btn-row-icon.edit:hover {
+  background-color: #E8F6ED;
+  border-color: #86EFAC;
+}
+
+.urja-btn-row-icon.delete {
+  border: 1px solid #FEE2E2;
+  color: #DC2626;
+}
+
+.urja-btn-row-icon.delete:hover {
+  background-color: #FEE2E2;
+  border-color: #FCA5A5;
+}
+
+/* ------------------------------------------------------------------------------
+   6. PAGINATION CONTROLS
+   ------------------------------------------------------------------------------ */
+.urja-usermgmt-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid #DFE7EE;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.urja-usermgmt-pagination-info {
+  font-size: 0.84rem;
+  color: #17233C;
+  font-weight: 500;
+}
+
+.urja-usermgmt-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.urja-usermgmt-rows-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  color: #17233C;
+}
+
+.urja-usermgmt-rows-select {
+  padding: 0.28rem 1.4rem 0.28rem 0.65rem;
+  border: 1px solid #DFE7EE;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #17233C;
+  background-color: #FFFFFF;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.45rem center;
+  background-size: 12px;
+  cursor: pointer;
+}
+
+.urja-usermgmt-page-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.urja-usermgmt-page-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #DFE7EE;
+  background-color: #FFFFFF;
+  color: #17233C;
+  font-size: 0.84rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-usermgmt-page-btn:hover:not(:disabled):not(.active) {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.urja-usermgmt-page-btn.active {
+  background-color: #075B35;
+  border-color: #075B35;
+  color: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(7, 91, 53, 0.25);
+}
+
+.urja-usermgmt-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------------------
+   7. MODALS & CONFIRMATION DIALOGS
+   ------------------------------------------------------------------------------ */
+.urja-mgmt-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 1.25rem;
+}
+
+.urja-mgmt-modal-dialog {
+  background: #FFFFFF;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 540px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+  border: 1px solid #DFE7EE;
+  overflow: hidden;
+  animation: urjaModalSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes urjaModalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.urja-mgmt-modal-header {
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #F8FAFC;
+}
+
+.urja-mgmt-modal-title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #17233C;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.urja-mgmt-modal-body {
+  padding: 1.5rem;
+  max-height: 72vh;
+  overflow-y: auto;
+}
+
+.urja-mgmt-modal-footer {
+  padding: 1rem 1.5rem;
+  background-color: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.urja-btn-secondary {
+  background-color: #FFFFFF;
+  border: 1px solid #DFE7EE;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-btn-secondary:hover {
+  background-color: #F1F5F9;
+  color: #0F172A;
+}
+
+.urja-btn-save {
+  background-color: #075B35;
+  border: 1px solid #075B35;
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(7, 91, 53, 0.2);
+}
+
+.urja-btn-save:hover {
+  background-color: #064E29;
+}
+
+.urja-btn-danger-confirm {
+  background-color: #DC2626;
+  border: 1px solid #DC2626;
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.2);
+}
+
+.urja-btn-danger-confirm:hover {
+  background-color: #B91C1C;
+}
