@@ -82,11 +82,6 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
     status: 'ACTIVE'
   });
 
-  const isITAdmin = useMemo(() => {
-    const roles = currentUser?.roles || (currentUser?.role ? [currentUser.role] : []);
-    return roles.includes('ROLE_IT_ADMIN');
-  }, [currentUser]);
-
   const getToken = () => sessionStorage.getItem('ats_urja_token') || currentUser?.token || '';
 
   // --------------------------------------------------------------------------
@@ -222,9 +217,10 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
         setIsDeleting(false);
         setDeleteCandidateUser(null);
         if (res.ok) {
-          showToast?.(`User ${deleteCandidateUser.name} deactivated/removed successfully.`, 'success');
+          showToast?.(`User ${deleteCandidateUser.name} deleted or deactivated successfully.`, 'success');
           setSelectedUserIds(prev => prev.filter(id => id !== deleteCandidateUser.id));
           fetchUsers();
+          fetchStats();
         } else {
           res.json().then(e => {
             showToast?.(e.message || 'Failed to delete user', 'error');
@@ -259,6 +255,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
           showToast?.(`${selectedUserIds.length} user(s) removed or deactivated successfully.`, 'success');
           setSelectedUserIds([]);
           fetchUsers();
+          fetchStats();
         } else {
           res.json().then(e => {
             showToast?.(e.message || 'Bulk delete operation failed', 'error');
@@ -279,15 +276,42 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
   // --------------------------------------------------------------------------
   const handleAddUserSubmit = (e) => {
     e.preventDefault();
-    if (!newUserForm.name || !newUserForm.email) {
-      showToast?.('Full name and email are mandatory', 'warning');
+    const trimmedName = newUserForm.name.trim();
+    const trimmedEmail = newUserForm.email.trim().toLowerCase();
+    const trimmedUsername = (newUserForm.username.trim() || trimmedEmail.split('@')[0]).toLowerCase();
+
+    if (!trimmedName) {
+      showToast?.('Please enter user full name', 'warning');
+      return;
+    }
+
+    if (!trimmedEmail) {
+      showToast?.('Please enter a valid work email', 'warning');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      showToast?.('Invalid work email address format', 'warning');
+      return;
+    }
+
+    // Check duplicate email
+    if (users.some(u => (u.email || '').toLowerCase() === trimmedEmail)) {
+      showToast?.(`A user with work email "${trimmedEmail}" already exists.`, 'error');
+      return;
+    }
+
+    // Check duplicate username
+    if (users.some(u => (u.username || '').toLowerCase() === trimmedUsername)) {
+      showToast?.(`Username "${trimmedUsername}" is already taken. Please choose another username.`, 'error');
       return;
     }
 
     const payload = {
-      username: newUserForm.username.trim().toLowerCase() || newUserForm.email.split('@')[0],
-      name: newUserForm.name.trim(),
-      email: newUserForm.email.trim().toLowerCase(),
+      username: trimmedUsername,
+      name: trimmedName,
+      email: trimmedEmail,
       password: newUserForm.password || 'password',
       roles: [newUserForm.role],
       departmentId: Number(newUserForm.departmentId) || 3,
@@ -304,12 +328,13 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
     })
       .then(res => {
         if (res.ok) return res.json();
-        return res.json().then(e => { throw new Error(e.message || 'Failed to create user'); });
+        return res.json().then(errData => { throw new Error(errData.message || 'Failed to create user'); });
       })
       .then(() => {
         setShowAddModal(false);
-        showToast?.(`User account created successfully: ${newUserForm.name}`, 'success');
+        showToast?.(`User account created successfully: ${trimmedName}`, 'success');
         fetchUsers();
+        fetchStats();
         setNewUserForm({
           username: '',
           name: '',
@@ -330,10 +355,23 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
   const handleEditUserSubmit = (e) => {
     e.preventDefault();
     if (!editingUser) return;
+    const trimmedName = editUserForm.name.trim();
+    const trimmedEmail = editUserForm.email.trim().toLowerCase();
+
+    if (!trimmedName || !trimmedEmail) {
+      showToast?.('Name and email are mandatory', 'warning');
+      return;
+    }
+
+    // Check duplicate email with another user
+    if (users.some(u => u.id !== editingUser.id && (u.email || '').toLowerCase() === trimmedEmail)) {
+      showToast?.(`Another user already has the email "${trimmedEmail}".`, 'error');
+      return;
+    }
 
     const payload = {
-      name: editUserForm.name.trim(),
-      email: editUserForm.email.trim().toLowerCase(),
+      name: trimmedName,
+      email: trimmedEmail,
       roles: [editUserForm.role],
       departmentId: Number(editUserForm.departmentId) || 3,
       status: editUserForm.status || 'ACTIVE'
@@ -353,8 +391,9 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       })
       .then(() => {
         setShowEditModal(false);
-        showToast?.(`User details updated: ${editUserForm.name}`, 'success');
+        showToast?.(`User details updated: ${trimmedName}`, 'success');
         fetchUsers();
+        fetchStats();
       })
       .catch(err => {
         showToast?.(err.message || 'Error updating user details', 'error');
@@ -510,7 +549,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
   return (
     <div className="urja-usermgmt-container">
       {/* ========================================================================
-          1. PAGE HEADER
+          1. PAGE HEADER (Mandatory: Refresh, Assign Tasks, Add User)
           ======================================================================== */}
       <div className="urja-usermgmt-header">
         <div className="urja-usermgmt-header-left">
@@ -529,7 +568,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
           <button 
             type="button"
             className="urja-usermgmt-btn-refresh"
-            onClick={fetchUsers}
+            onClick={() => { fetchUsers(); fetchStats(); }}
             disabled={isLoading}
             title="Refresh user accounts and metrics"
           >
@@ -537,30 +576,29 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
             <span>Refresh</span>
           </button>
 
-          {onNavigateToTasks && (
-            <button 
-              type="button"
-              className="urja-usermgmt-btn-assign-tasks"
-              onClick={onNavigateToTasks}
-              title="Navigate to task assignment dashboard"
-            >
-              <i className="bi bi-list-task"></i>
-              <span>Assign Tasks</span>
-            </button>
-          )}
+          <button 
+            type="button"
+            className="urja-usermgmt-btn-assign-tasks"
+            onClick={() => {
+              if (onNavigateToTasks) onNavigateToTasks();
+              else window.location.href = '/?tab=tasks';
+            }}
+            title="Assign recruitment tasks"
+          >
+            <i className="bi bi-list-task"></i>
+            <span>Assign Tasks</span>
+          </button>
 
-          {isITAdmin && (
-            <button 
-              type="button"
-              className="urja-usermgmt-btn-add-user"
-              onClick={() => setShowAddModal(true)}
-              id="btn-add-system-user"
-              title="Provision new system user account"
-            >
-              <i className="bi bi-person-plus"></i>
-              <span>Add User</span>
-            </button>
-          )}
+          <button 
+            type="button"
+            className="urja-usermgmt-btn-add-user"
+            onClick={() => setShowAddModal(true)}
+            id="btn-add-system-user"
+            title="Provision new system user account"
+          >
+            <i className="bi bi-person-plus-fill"></i>
+            <span>Add User</span>
+          </button>
         </div>
       </div>
 
@@ -751,7 +789,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       </div>
 
       {/* ========================================================================
-          4. SELECTION STRIP & BULK ACTIONS
+          4. SELECTION STRIP & BULK ACTIONS (Mandatory: Checkbox, Count, Delete Selected)
           ======================================================================== */}
       <div className="urja-usermgmt-selection-strip">
         <label className="urja-usermgmt-select-all-label">
@@ -764,18 +802,16 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
           <span>{selectedUserIds.length} selected</span>
         </label>
 
-        {isITAdmin && (
-          <button 
-            type="button"
-            className={`urja-usermgmt-btn-delete-bulk ${selectedUserIds.length > 0 ? 'active' : 'disabled'}`}
-            disabled={selectedUserIds.length === 0}
-            onClick={() => setShowBulkDeleteModal(true)}
-            title={selectedUserIds.length > 0 ? 'Deactivate or remove selected users' : 'Select at least one user to enable delete'}
-          >
-            <i className="bi bi-trash"></i>
-            <span>Delete User</span>
-          </button>
-        )}
+        <button 
+          type="button"
+          className={`urja-usermgmt-btn-delete-bulk ${selectedUserIds.length > 0 ? 'active' : 'disabled'}`}
+          disabled={selectedUserIds.length === 0}
+          onClick={() => setShowBulkDeleteModal(true)}
+          title={selectedUserIds.length > 0 ? `Delete ${selectedUserIds.length} selected user(s)` : 'Select one or more users to enable delete'}
+        >
+          <i className="bi bi-trash"></i>
+          <span>Delete Selected</span>
+        </button>
       </div>
 
       {/* ========================================================================
@@ -786,7 +822,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
           <table className="urja-usermgmt-table">
             <thead>
               <tr>
-                <th style={{ width: 44, textAlign: 'center' }}>
+                <th style={{ width: 38, textAlign: 'center' }}>
                   <input 
                     type="checkbox" 
                     className="urja-usermgmt-checkbox"
@@ -881,7 +917,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
 
                       {/* Department */}
                       <td>
-                        <div className="urja-dept-cell">
+                        <div className="urja-dept-cell" title={u.department}>
                           <i className="bi bi-diagram-3"></i>
                           <span>{u.department}</span>
                         </div>
@@ -889,7 +925,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
 
                       {/* Designation */}
                       <td>
-                        <span className="urja-designation-cell">{u.designation}</span>
+                        <span className="urja-designation-cell" title={u.designation}>{u.designation}</span>
                       </td>
 
                       {/* Account Status */}
@@ -917,54 +953,50 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                         </span>
                       </td>
 
-                      {/* Actions */}
+                      {/* Actions: Mandatory [Details] [Edit] [Delete] */}
                       <td style={{ textAlign: 'center' }}>
                         <div className="urja-row-actions">
                           <button 
                             type="button" 
                             className="urja-btn-row-details"
                             onClick={() => handleOpenDetails(u)}
-                            title="View complete user profile and assigned tasks"
+                            title="View Details"
                           >
                             <i className="bi bi-eye"></i>
                             <span>Details</span>
                           </button>
 
-                          {isITAdmin && (
-                            <>
-                              <button 
-                                type="button" 
-                                className="urja-btn-row-icon edit"
-                                title="Edit User Information"
-                                onClick={() => {
-                                  setEditingUser(u);
-                                  setEditUserForm({
-                                    name: u.name,
-                                    email: u.email,
-                                    role: u.role || 'ROLE_HR_RECRUITER',
-                                    departmentId: u.departmentId || 3,
-                                    deptName: u.department || 'Human Resources',
-                                    designation: u.designation || '',
-                                    status: u.status || 'ACTIVE'
-                                  });
-                                  setShowEditModal(true);
-                                }}
-                              >
-                                <i className="bi bi-pencil-square"></i>
-                              </button>
+                          <button 
+                            type="button" 
+                            className="urja-btn-row-icon edit"
+                            title="Edit User"
+                            onClick={() => {
+                              setEditingUser(u);
+                              setEditUserForm({
+                                name: u.name,
+                                email: u.email,
+                                role: u.role || 'ROLE_HR_RECRUITER',
+                                departmentId: u.departmentId || 3,
+                                deptName: u.department || 'Human Resources',
+                                designation: u.designation || '',
+                                status: u.status || 'ACTIVE'
+                              });
+                              setShowEditModal(true);
+                            }}
+                          >
+                            <i className="bi bi-pencil-square"></i>
+                          </button>
 
-                              <button 
-                                type="button" 
-                                className="urja-btn-row-icon delete"
-                                title={isProtected ? 'Protected system account cannot be deleted' : 'Delete or deactivate user'}
-                                disabled={isProtected}
-                                onClick={() => setDeleteCandidateUser(u)}
-                                style={isProtected ? { opacity: 0.35, cursor: 'not-allowed' } : {}}
-                              >
-                                <i className="bi bi-trash"></i>
-                              </button>
-                            </>
-                          )}
+                          <button 
+                            type="button" 
+                            className="urja-btn-row-icon delete"
+                            title={isProtected ? 'Protected system account cannot be deleted' : 'Delete User'}
+                            disabled={isProtected}
+                            onClick={() => setDeleteCandidateUser(u)}
+                            style={isProtected ? { opacity: 0.35, cursor: 'not-allowed' } : {}}
+                          >
+                            <i className="bi bi-trash"></i>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -1037,9 +1069,9 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       </div>
 
       {/* ========================================================================
-          7. MODAL: ADD USER (IT Admin Only)
+          7. MODAL: ADD USER (Mandatory)
           ======================================================================== */}
-      {showAddModal && isITAdmin && (
+      {showAddModal && (
         <div className="urja-mgmt-modal-backdrop" onClick={() => setShowAddModal(false)}>
           <div className="urja-mgmt-modal-dialog" onClick={e => e.stopPropagation()}>
             <div className="urja-mgmt-modal-header">
@@ -1181,14 +1213,14 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       )}
 
       {/* ========================================================================
-          8. MODAL: EDIT USER (IT Admin Only)
+          8. MODAL: EDIT USER
           ======================================================================== */}
-      {showEditModal && editingUser && isITAdmin && (
+      {showEditModal && editingUser && (
         <div className="urja-mgmt-modal-backdrop" onClick={() => setShowEditModal(false)}>
           <div className="urja-mgmt-modal-dialog" onClick={e => e.stopPropagation()}>
             <div className="urja-mgmt-modal-header">
               <h3 className="urja-mgmt-modal-title">
-                <i className="bi bi-pencil-square text-success"></i>
+                <i className="bi bi-pencil-square text-primary"></i>
                 Edit User Account: {editingUser.name}
               </h3>
               <button type="button" className="btn-close" onClick={() => setShowEditModal(false)}></button>
@@ -1286,33 +1318,32 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       )}
 
       {/* ========================================================================
-          9. MODAL: DELETE CONFIRMATION (Individual)
+          9. MODAL: DELETE USER CONFIRMATION (Individual)
           ======================================================================== */}
       {deleteCandidateUser && (
         <div className="urja-mgmt-modal-backdrop" onClick={() => setDeleteCandidateUser(null)}>
           <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 480 }} onClick={e => e.stopPropagation()}>
             <div className="urja-mgmt-modal-header bg-danger-subtle">
               <h3 className="urja-mgmt-modal-title text-danger">
-                <i className="bi bi-exclamation-triangle-fill"></i>
-                Confirm Account Deactivation
+                <i className="bi bi-trash-fill text-danger me-2"></i>
+                Delete User?
               </h3>
               <button type="button" className="btn-close" onClick={() => setDeleteCandidateUser(null)}></button>
             </div>
 
             <div className="urja-mgmt-modal-body">
-              <p className="text-dark mb-2">
-                Are you sure you want to deactivate or remove user account for:
+              <p className="text-dark mb-3" style={{ fontSize: '0.92rem' }}>
+                Are you sure you want to delete this user? This action may affect associated HRMS records.
               </p>
               <div className="p-3 bg-light rounded-3 border mb-3">
-                <strong className="d-block text-dark">{deleteCandidateUser.name}</strong>
-                <span className="text-muted small d-block font-monospace">{deleteCandidateUser.email}</span>
-                <span className="badge bg-secondary-subtle text-secondary border mt-1">
-                  {deleteCandidateUser.department} • {deleteCandidateUser.designation}
-                </span>
-              </div>
-              <div className="alert alert-warning py-2 px-3 small mb-0">
-                <i className="bi bi-info-circle-fill me-1"></i>
-                This account will be deactivated to preserve historical audit trails and recruitment workflow records.
+                <div className="d-flex align-items-center gap-2 mb-1">
+                  <span className="text-muted small fw-bold">User Name:</span>
+                  <strong className="text-dark">{deleteCandidateUser.name}</strong>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="text-muted small fw-bold">Work Email:</span>
+                  <span className="text-dark font-monospace small">{deleteCandidateUser.email}</span>
+                </div>
               </div>
             </div>
 
@@ -1331,7 +1362,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                 onClick={confirmIndividualDelete}
                 disabled={isDeleting}
               >
-                {isDeleting ? 'Deactivating...' : 'Confirm Deactivation'}
+                {isDeleting ? 'Deleting...' : 'Confirm Delete'}
               </button>
             </div>
           </div>
@@ -1346,19 +1377,19 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
           <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 480 }} onClick={e => e.stopPropagation()}>
             <div className="urja-mgmt-modal-header bg-danger-subtle">
               <h3 className="urja-mgmt-modal-title text-danger">
-                <i className="bi bi-exclamation-triangle-fill"></i>
-                Confirm Bulk User Deactivation
+                <i className="bi bi-trash-fill text-danger me-2"></i>
+                Delete Selected Users?
               </h3>
               <button type="button" className="btn-close" onClick={() => setShowBulkDeleteModal(false)}></button>
             </div>
 
             <div className="urja-mgmt-modal-body">
-              <p className="text-dark mb-2">
-                Are you sure you want to deactivate <strong>{selectedUserIds.length}</strong> selected user accounts?
+              <p className="text-dark mb-3" style={{ fontSize: '0.92rem' }}>
+                Are you sure you want to delete <strong>{selectedUserIds.length}</strong> selected users? This action may affect associated HRMS records.
               </p>
               <div className="alert alert-warning py-2 px-3 small mb-0">
                 <i className="bi bi-shield-lock-fill me-1"></i>
-                Protected accounts (including your logged-in session and root administrator) will automatically be preserved.
+                Protected system accounts and your logged-in administrator profile are preserved.
               </div>
             </div>
 
@@ -1377,7 +1408,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                 onClick={confirmBulkDelete}
                 disabled={isDeleting}
               >
-                {isDeleting ? 'Deactivating Users...' : `Deactivate ${selectedUserIds.length} Users`}
+                {isDeleting ? 'Deleting Users...' : 'Confirm Delete'}
               </button>
             </div>
           </div>

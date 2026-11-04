@@ -15,3 +15,4 @@ public class UserStatsDto {
     private long inactiveUsers;
     private long pendingTasks;
 }
+

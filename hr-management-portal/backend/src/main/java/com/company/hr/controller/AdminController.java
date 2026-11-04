@@ -137,7 +137,7 @@ public class AdminController {
     }
 
     @PostMapping("/users")
-    @PreAuthorize("hasRole('IT_ADMIN')")
+    @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
     @Operation(summary = "Create a new user account and assign roles/departments")
     public ResponseEntity<ApiResponse<User>> createUser(
             @Valid @RequestBody UserCreateRequest request,
@@ -147,7 +147,7 @@ public class AdminController {
     }
 
     @PutMapping("/users/{id}")
-    @PreAuthorize("hasRole('IT_ADMIN')")
+    @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
     @Operation(summary = "Update an existing user account details and roles")
     public ResponseEntity<ApiResponse<User>> updateUser(
             @PathVariable Long id,
@@ -158,7 +158,7 @@ public class AdminController {
     }
 
     @PatchMapping("/users/{id}/status")
-    @PreAuthorize("hasRole('IT_ADMIN')")
+    @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
     @Operation(summary = "Activate or deactivate a user account")
     public ResponseEntity<ApiResponse<User>> updateUserStatus(
             @PathVariable Long id,
