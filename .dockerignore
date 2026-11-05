@@ -1,0 +1,15 @@
+target/
+hr-management-portal/backend/target/
+hr-management-portal/frontend/node_modules/
+hr-management-portal/frontend/dist/
+hr-management-portal/scratch/
+.git/
+.gitignore
+.idea/
+.vscode/
+*.log
+*.tmp
+*.png
+.DS_Store
+tools/
+temp_*
