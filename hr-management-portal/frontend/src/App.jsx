@@ -218,9 +218,6 @@ export default function App() {
   // Screen 14: Reports Subtab
   const [reportsSubTab, setReportsSubTab] = useState('trends');
 
-  // Screen 16: User Management Add Modal
-  const [showAddUserModal, setShowAddUserModal] = useState(false);
-  const [newUserForm, setNewUserForm] = useState({ name: '', email: '', role: 'ROLE_HR_RECRUITER', dept: 'Human Resources' });
 
   // Screen 17: Settings Subtab & Backup Runner
   const [settingsSubTab, setSettingsSubTab] = useState('audit');
@@ -762,34 +759,6 @@ export default function App() {
     showToast('Employee status toggled');
   };
 
-  // Screen 16: Add User Submit Handler
-  const handleAddUser = (e) => {
-    e.preventDefault();
-    if (!newUserForm.name || !newUserForm.email) return;
-    const newUser = {
-      id: users.length + 1,
-      username: newUserForm.name.toLowerCase().replace(/\s+/g, '.'),
-      name: newUserForm.name,
-      role: newUserForm.role,
-      email: newUserForm.email,
-      avatar: newUserForm.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase(),
-      title: newUserForm.role === 'ROLE_HR_RECRUITER' ? 'Recruiter' : 'HR Specialist',
-      dept: newUserForm.dept,
-      status: 'ACTIVE'
-    };
-    setUsers([...users, newUser]);
-    setShowAddUserModal(false);
-    setNewUserForm({ name: '', email: '', role: 'ROLE_HR_RECRUITER', dept: 'Human Resources' });
-    showToast(`User account ${newUser.email} provisioned successfully!`);
-  };
-
-  // Screen 16: Toggle User Status
-  const handleToggleUserStatus = (userId) => {
-    setUsers(prev => prev.map(u => 
-      u.id === userId ? { ...u, status: u.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE' } : u
-    ));
-    showToast('User account status updated');
-  };
 
   // Screen 17: Run Live Backup Simulation
   const handleRunBackup = () => {
@@ -2034,60 +2003,6 @@ export default function App() {
               <div className="urja-modal-footer">
                 <button type="button" className="btn btn-light" onClick={() => setShowAddEmpModal(false)}>Cancel</button>
                 <button type="submit" className="btn btn-success fw-bold">Register Employee</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* SCREEN 16: ADD USER MODAL */}
-      {showAddUserModal && (
-        <div className="urja-modal-backdrop" onClick={() => setShowAddUserModal(false)}>
-          <div className="urja-modal-card" style={{ maxWidth: 480 }} onClick={e => e.stopPropagation()}>
-            <div className="urja-modal-header">
-              <h4 className="fw-bold mb-0">Provision User Account</h4>
-              <button className="urja-modal-close-btn" onClick={() => setShowAddUserModal(false)}>✕</button>
-            </div>
-            <form onSubmit={handleAddUser}>
-              <div className="urja-modal-body p-3">
-                <div className="mb-3">
-                  <label className="form-label small fw-bold">Full Name *</label>
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    value={newUserForm.name}
-                    onChange={e => setNewUserForm({ ...newUserForm, name: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label small fw-bold">Email Address *</label>
-                  <input 
-                    type="email" 
-                    className="form-control" 
-                    value={newUserForm.email}
-                    onChange={e => setNewUserForm({ ...newUserForm, email: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label small fw-bold">Role & Permissions *</label>
-                  <select 
-                    className="form-select"
-                    value={newUserForm.role}
-                    onChange={e => setNewUserForm({ ...newUserForm, role: e.target.value })}
-                  >
-                    <option value="ROLE_HRBP">HRBP</option>
-                    <option value="ROLE_HR_RECRUITER">HR Recruiter</option>
-                    <option value="ROLE_INTERVIEWER">Technical Interviewer</option>
-                    <option value="ROLE_APPROVING_MANAGER">Approving Manager</option>
-                    <option value="ROLE_HR_ADMIN">HR Admin</option>
-                  </select>
-                </div>
-              </div>
-              <div className="urja-modal-footer">
-                <button type="button" className="btn btn-light" onClick={() => setShowAddUserModal(false)}>Cancel</button>
-                <button type="submit" className="btn btn-success fw-bold">Create User</button>
               </div>
             </form>
           </div>

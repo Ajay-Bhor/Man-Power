@@ -67,7 +67,6 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
     password: 'password',
     role: 'ROLE_HR_RECRUITER',
     departmentId: 3,
-    deptName: 'Human Resources',
     designation: 'Senior Technical Recruiter',
     status: 'ACTIVE'
   });
@@ -77,8 +76,6 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
     email: '',
     role: 'ROLE_HR_RECRUITER',
     departmentId: 3,
-    deptName: 'Human Resources',
-    designation: '',
     status: 'ACTIVE'
   });
 
@@ -342,7 +339,6 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
           password: 'password',
           role: 'ROLE_HR_RECRUITER',
           departmentId: 3,
-          deptName: 'Human Resources',
           designation: 'Senior Technical Recruiter',
           status: 'ACTIVE'
         });
@@ -977,8 +973,6 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                                 email: u.email,
                                 role: u.role || 'ROLE_HR_RECRUITER',
                                 departmentId: u.departmentId || 3,
-                                deptName: u.department || 'Human Resources',
-                                designation: u.designation || '',
                                 status: u.status || 'ACTIVE'
                               });
                               setShowEditModal(true);
@@ -1143,14 +1137,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                     <select 
                       className="form-select"
                       value={newUserForm.departmentId}
-                      onChange={e => {
-                        const sel = e.target;
-                        setNewUserForm({ 
-                          ...newUserForm, 
-                          departmentId: sel.value,
-                          deptName: sel.options[sel.selectedIndex].text
-                        });
-                      }}
+                      onChange={e => setNewUserForm({ ...newUserForm, departmentId: Number(e.target.value) })}
                     >
                       <option value="3">Human Resources & Talent Acquisition</option>
                       <option value="1">Engineering & Technology</option>
@@ -1272,14 +1259,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                     <select 
                       className="form-select"
                       value={editUserForm.departmentId}
-                      onChange={e => {
-                        const sel = e.target;
-                        setEditUserForm({ 
-                          ...editUserForm, 
-                          departmentId: sel.value,
-                          deptName: sel.options[sel.selectedIndex].text 
-                        });
-                      }}
+                      onChange={e => setEditUserForm({ ...editUserForm, departmentId: Number(e.target.value) })}
                     >
                       <option value="3">Human Resources & Talent Acquisition</option>
                       <option value="1">Engineering & Technology</option>

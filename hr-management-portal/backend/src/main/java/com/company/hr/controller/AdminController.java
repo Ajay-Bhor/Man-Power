@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -38,6 +39,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
@@ -92,8 +94,7 @@ public class AdminController {
 
             return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
         } catch (Exception e) {
-            System.err.println("CRITICAL: Error in exportFullDatabaseExcel: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error in exportFullDatabaseExcel: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -116,8 +117,7 @@ public class AdminController {
 
             return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
         } catch (Exception e) {
-            System.err.println("CRITICAL: Error in exportFullDatabaseExcel: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error in exportDatabaseExcelForSnapshot: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
