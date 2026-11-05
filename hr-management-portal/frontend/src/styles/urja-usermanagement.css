@@ -1067,8 +1067,13 @@
   box-shadow: 0 1px 3px rgba(220, 38, 38, 0.2);
 }
 
-.urja-btn-danger-confirm:hover {
+.urja-btn-danger-confirm:hover:not(:disabled) {
   background-color: #B91C1C;
+}
+
+.urja-btn-danger-confirm:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 

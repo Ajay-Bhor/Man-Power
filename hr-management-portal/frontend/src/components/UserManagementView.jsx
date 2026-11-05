@@ -1340,8 +1340,8 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
           9. MODAL: TWO-STAGE DELETE USER CONFIRMATION (Stage 1 Deactivate / Stage 2 Permanent)
           ======================================================================== */}
       {deleteCandidateUser && (
-        <div className="urja-mgmt-modal-backdrop" onClick={() => setDeleteCandidateUser(null)}>
-          <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 490 }} onClick={e => e.stopPropagation()}>
+        <div className="urja-mgmt-modal-backdrop" onClick={() => !isDeleting && setDeleteCandidateUser(null)}>
+          <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 500 }} onClick={e => e.stopPropagation()}>
             {deleteCandidateUser.status === 'ACTIVE' ? (
               /* -------------------------------------------------------------
                  STAGE 1 – DEACTIVATE CONFIRMATION (Orange/Amber Warning Theme)
@@ -1352,7 +1352,7 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                     <i className="bi bi-person-slash me-2" style={{ color: '#D97706' }}></i>
                     Deactivate User?
                   </h3>
-                  <button type="button" className="btn-close" onClick={() => setDeleteCandidateUser(null)}></button>
+                  <button type="button" className="btn-close" onClick={() => !isDeleting && setDeleteCandidateUser(null)} disabled={isDeleting}></button>
                 </div>
 
                 <div className="urja-mgmt-modal-body">
@@ -1406,32 +1406,46 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                 <div className="urja-mgmt-modal-header bg-danger-subtle">
                   <h3 className="urja-mgmt-modal-title text-danger">
                     <i className="bi bi-trash-fill text-danger me-2"></i>
-                    Permanently Delete User?
+                    Permanently Delete Account?
                   </h3>
-                  <button type="button" className="btn-close" onClick={() => setDeleteCandidateUser(null)}></button>
+                  <button 
+                    type="button" 
+                    className="btn-close" 
+                    onClick={() => !isDeleting && setDeleteCandidateUser(null)} 
+                    disabled={isDeleting}
+                  ></button>
                 </div>
 
                 <div className="urja-mgmt-modal-body">
-                  <p className="text-dark mb-3" style={{ fontSize: '0.92rem' }}>
-                    This user is already inactive. Do you want to permanently delete this account from the database?
+                  <p className="text-dark mb-3 fw-semibold" style={{ fontSize: '0.94rem', lineHeight: 1.5 }}>
+                    Are you sure you want to permanently delete this user account? This action cannot be undone.
                   </p>
+                  
+                  {/* Account Information Card */}
                   <div className="p-3 bg-light rounded-3 border mb-3">
-                    <div className="d-flex align-items-center gap-2 mb-1">
-                      <span className="text-muted small fw-bold">User Name:</span>
+                    <div className="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
+                      <span className="text-muted small fw-bold text-uppercase" style={{ letterSpacing: '0.5px' }}>User Full Name:</span>
                       <strong className="text-dark">{deleteCandidateUser.name}</strong>
                     </div>
-                    <div className="d-flex align-items-center gap-2 mb-1">
-                      <span className="text-muted small fw-bold">Work Email:</span>
+                    <div className="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
+                      <span className="text-muted small fw-bold text-uppercase" style={{ letterSpacing: '0.5px' }}>Work Email:</span>
                       <span className="text-dark font-monospace small">{deleteCandidateUser.email}</span>
                     </div>
-                    <div className="d-flex align-items-center gap-2">
-                      <span className="text-muted small fw-bold">Account Status:</span>
-                      <span className="urja-status-pill inactive" style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem' }}>INACTIVE</span>
+                    <div className="d-flex align-items-center justify-content-between">
+                      <span className="text-muted small fw-bold text-uppercase" style={{ letterSpacing: '0.5px' }}>Current Account Status:</span>
+                      <span className="urja-status-pill inactive" style={{ fontSize: '0.72rem', padding: '0.18rem 0.55rem' }}>
+                        <i className="bi bi-x-circle-fill me-1"></i>
+                        INACTIVE
+                      </span>
                     </div>
                   </div>
-                  <div className="alert alert-danger py-2 px-3 small mb-0" style={{ borderLeft: '4px solid #DC2626', backgroundColor: '#FEF2F2' }}>
-                    <i className="bi bi-exclamation-octagon-fill me-1" style={{ color: '#DC2626' }}></i>
-                    <strong>Warning:</strong> This action is permanent and cannot be undone. All credentials and login records will be purged from MySQL.
+
+                  {/* Prominent Red Warning */}
+                  <div className="alert alert-danger py-2 px-3 small mb-0 d-flex align-items-start gap-2" style={{ borderLeft: '4px solid #DC2626', backgroundColor: '#FEF2F2' }}>
+                    <i className="bi bi-exclamation-triangle-fill text-danger flex-shrink-0 mt-1" style={{ fontSize: '1rem' }}></i>
+                    <div style={{ color: '#991B1B', lineHeight: 1.45 }}>
+                      <strong>Warning:</strong> This will permanently remove the user account from the MySQL database. The user will no longer be able to log in.
+                    </div>
                   </div>
                 </div>
 
@@ -1450,7 +1464,17 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
                     onClick={confirmPermanentDelete}
                     disabled={isDeleting}
                   >
-                    {isDeleting ? 'Deleting Permanently...' : 'Permanently Delete'}
+                    {isDeleting ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Permanently Deleting...
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-trash-fill me-1"></i>
+                        Yes, Permanently Delete
+                      </>
+                    )}
                   </button>
                 </div>
               </>
