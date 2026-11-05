@@ -157,6 +157,16 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.ok(user, "User account updated successfully"));
     }
 
+    @PatchMapping("/users/{id}/deactivate")
+    @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
+    @Operation(summary = "Deactivate user account (Stage 1 of Two-Step Deletion)")
+    public ResponseEntity<ApiResponse<User>> deactivateUser(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserPrincipal currentUser) {
+        User user = userService.deactivateUser(id, currentUser);
+        return ResponseEntity.ok(ApiResponse.ok(user, "User deactivated successfully."));
+    }
+
     @PatchMapping("/users/{id}/status")
     @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
     @Operation(summary = "Activate or deactivate a user account")
@@ -164,18 +174,20 @@ public class AdminController {
             @PathVariable Long id,
             @RequestParam User.UserStatus status,
             @AuthenticationPrincipal UserPrincipal currentUser) {
-        User user = userService.updateUserStatus(id, status, currentUser);
+        User user = (status == User.UserStatus.INACTIVE) 
+                ? userService.deactivateUser(id, currentUser)
+                : userService.updateUserStatus(id, status, currentUser);
         return ResponseEntity.ok(ApiResponse.ok(user, "User status updated to " + status));
     }
 
     @DeleteMapping("/users/{id}")
     @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
-    @Operation(summary = "Delete or deactivate a user account")
+    @Operation(summary = "Permanently delete an already inactive user account from database (Stage 2 of Two-Step Deletion)")
     public ResponseEntity<ApiResponse<Void>> deleteUser(
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal currentUser) {
         userService.deleteUser(id, currentUser);
-        return ResponseEntity.ok(ApiResponse.ok(null, "User removed or deactivated successfully"));
+        return ResponseEntity.ok(ApiResponse.ok(null, "User permanently deleted successfully."));
     }
 
     @PostMapping("/users/bulk-delete")
@@ -186,7 +198,7 @@ public class AdminController {
             @AuthenticationPrincipal UserPrincipal currentUser) {
         List<Long> ids = request.getOrDefault("userIds", request.get("ids"));
         int affected = userService.bulkDeleteUsers(ids, currentUser);
-        return ResponseEntity.ok(ApiResponse.ok(Map.of("affectedCount", affected), affected + " user(s) removed or deactivated successfully"));
+        return ResponseEntity.ok(ApiResponse.ok(Map.of("affectedCount", affected), affected + " user(s) processed successfully"));
     }
 
     @GetMapping("/roles")

@@ -30,6 +30,7 @@ public class UserPrincipal implements UserDetails {
     private String profileImageUrl;
     private String title;
     private Collection<? extends GrantedAuthority> authorities;
+    private boolean enabled;
 
     public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
@@ -70,6 +71,7 @@ public class UserPrincipal implements UserDetails {
                 .profileImageUrl(avatar)
                 .title(resolvedTitle)
                 .authorities(authorities)
+                .enabled(user.getStatus() == User.UserStatus.ACTIVE)
                 .build();
     }
 
@@ -90,6 +92,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

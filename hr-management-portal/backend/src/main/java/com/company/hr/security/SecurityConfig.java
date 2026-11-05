@@ -65,7 +65,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers(
-                    "/api/v1/auth/**",
+                    "/api/v1/auth/login",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
@@ -74,7 +74,7 @@ public class SecurityConfig {
                 ).permitAll()
                 
                 // Admin specific endpoints
-                .requestMatchers("/api/v1/admin/**").hasAnyRole("IT_ADMIN", "HR_ADMIN")
+                .requestMatchers("/api/v1/admin/**", "/api/users/**").hasAnyRole("IT_ADMIN", "HR_ADMIN")
                 
                 // Department & Employee Master
                 .requestMatchers(HttpMethod.POST, "/api/v1/departments/**", "/api/v1/designations/**").hasAnyRole("IT_ADMIN", "HR_ADMIN")

@@ -202,7 +202,39 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
   // --------------------------------------------------------------------------
   // Handlers: Delete (Individual & Bulk)
   // --------------------------------------------------------------------------
-  const confirmIndividualDelete = () => {
+  // Stage 1 – Deactivate User
+  const confirmDeactivateUser = () => {
+    if (!deleteCandidateUser) return;
+    setIsDeleting(true);
+
+    fetch(`http://localhost:8080/api/v1/admin/users/${deleteCandidateUser.id}/deactivate`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+      .then(res => {
+        setIsDeleting(false);
+        setDeleteCandidateUser(null);
+        if (res.ok) {
+          showToast?.('User deactivated successfully.', 'success');
+          fetchUsers();
+          fetchStats();
+        } else {
+          res.json().then(e => {
+            showToast?.(e.message || 'Failed to deactivate user', 'error');
+          }).catch(() => {
+            showToast?.('Error deactivating user', 'error');
+          });
+        }
+      })
+      .catch(err => {
+        setIsDeleting(false);
+        setDeleteCandidateUser(null);
+        showToast?.(err.message || 'Network error deactivating user', 'error');
+      });
+  };
+
+  // Stage 2 – Permanently Delete User
+  const confirmPermanentDelete = () => {
     if (!deleteCandidateUser) return;
     setIsDeleting(true);
 
@@ -212,24 +244,25 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
     })
       .then(res => {
         setIsDeleting(false);
+        const deletedId = deleteCandidateUser.id;
         setDeleteCandidateUser(null);
         if (res.ok) {
-          showToast?.(`User ${deleteCandidateUser.name} deleted or deactivated successfully.`, 'success');
-          setSelectedUserIds(prev => prev.filter(id => id !== deleteCandidateUser.id));
+          showToast?.('User permanently deleted successfully.', 'success');
+          setSelectedUserIds(prev => prev.filter(id => id !== deletedId));
           fetchUsers();
           fetchStats();
         } else {
           res.json().then(e => {
-            showToast?.(e.message || 'Failed to delete user', 'error');
+            showToast?.(e.message || 'Failed to permanently delete user', 'error');
           }).catch(() => {
-            showToast?.('Error deleting user', 'error');
+            showToast?.('Error permanently deleting user', 'error');
           });
         }
       })
       .catch(err => {
         setIsDeleting(false);
         setDeleteCandidateUser(null);
-        showToast?.(err.message || 'Network error deleting user', 'error');
+        showToast?.(err.message || 'Network error permanently deleting user', 'error');
       });
   };
 
@@ -983,8 +1016,14 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
 
                           <button 
                             type="button" 
-                            className="urja-btn-row-icon delete"
-                            title={isProtected ? 'Protected system account cannot be deleted' : 'Delete User'}
+                            className={`urja-btn-row-icon delete ${isActive ? 'deactivate' : 'permanent'}`}
+                            title={
+                              isProtected 
+                                ? 'Protected system account cannot be modified' 
+                                : isActive 
+                                  ? 'Deactivate User' 
+                                  : 'Permanently Delete User'
+                            }
                             disabled={isProtected}
                             onClick={() => setDeleteCandidateUser(u)}
                             style={isProtected ? { opacity: 0.35, cursor: 'not-allowed' } : {}}
@@ -1298,53 +1337,124 @@ export default function UserManagementView({ currentUser, showToast, onNavigateT
       )}
 
       {/* ========================================================================
-          9. MODAL: DELETE USER CONFIRMATION (Individual)
+          9. MODAL: TWO-STAGE DELETE USER CONFIRMATION (Stage 1 Deactivate / Stage 2 Permanent)
           ======================================================================== */}
       {deleteCandidateUser && (
         <div className="urja-mgmt-modal-backdrop" onClick={() => setDeleteCandidateUser(null)}>
-          <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 480 }} onClick={e => e.stopPropagation()}>
-            <div className="urja-mgmt-modal-header bg-danger-subtle">
-              <h3 className="urja-mgmt-modal-title text-danger">
-                <i className="bi bi-trash-fill text-danger me-2"></i>
-                Delete User?
-              </h3>
-              <button type="button" className="btn-close" onClick={() => setDeleteCandidateUser(null)}></button>
-            </div>
-
-            <div className="urja-mgmt-modal-body">
-              <p className="text-dark mb-3" style={{ fontSize: '0.92rem' }}>
-                Are you sure you want to delete this user? This action may affect associated HRMS records.
-              </p>
-              <div className="p-3 bg-light rounded-3 border mb-3">
-                <div className="d-flex align-items-center gap-2 mb-1">
-                  <span className="text-muted small fw-bold">User Name:</span>
-                  <strong className="text-dark">{deleteCandidateUser.name}</strong>
+          <div className="urja-mgmt-modal-dialog" style={{ maxWidth: 490 }} onClick={e => e.stopPropagation()}>
+            {deleteCandidateUser.status === 'ACTIVE' ? (
+              /* -------------------------------------------------------------
+                 STAGE 1 – DEACTIVATE CONFIRMATION (Orange/Amber Warning Theme)
+                 ------------------------------------------------------------- */
+              <>
+                <div className="urja-mgmt-modal-header bg-warning-subtle">
+                  <h3 className="urja-mgmt-modal-title" style={{ color: '#B45309' }}>
+                    <i className="bi bi-person-slash me-2" style={{ color: '#D97706' }}></i>
+                    Deactivate User?
+                  </h3>
+                  <button type="button" className="btn-close" onClick={() => setDeleteCandidateUser(null)}></button>
                 </div>
-                <div className="d-flex align-items-center gap-2">
-                  <span className="text-muted small fw-bold">Work Email:</span>
-                  <span className="text-dark font-monospace small">{deleteCandidateUser.email}</span>
-                </div>
-              </div>
-            </div>
 
-            <div className="urja-mgmt-modal-footer">
-              <button 
-                type="button" 
-                className="urja-btn-secondary" 
-                onClick={() => setDeleteCandidateUser(null)}
-                disabled={isDeleting}
-              >
-                Cancel
-              </button>
-              <button 
-                type="button" 
-                className="urja-btn-danger-confirm" 
-                onClick={confirmIndividualDelete}
-                disabled={isDeleting}
-              >
-                {isDeleting ? 'Deleting...' : 'Confirm Delete'}
-              </button>
-            </div>
+                <div className="urja-mgmt-modal-body">
+                  <p className="text-dark mb-3" style={{ fontSize: '0.92rem' }}>
+                    Are you sure you want to deactivate this user?
+                  </p>
+                  <div className="p-3 bg-light rounded-3 border mb-3">
+                    <div className="d-flex align-items-center gap-2 mb-1">
+                      <span className="text-muted small fw-bold">User Name:</span>
+                      <strong className="text-dark">{deleteCandidateUser.name}</strong>
+                    </div>
+                    <div className="d-flex align-items-center gap-2 mb-1">
+                      <span className="text-muted small fw-bold">Work Email:</span>
+                      <span className="text-dark font-monospace small">{deleteCandidateUser.email}</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="text-muted small fw-bold">Account Status:</span>
+                      <span className="urja-status-pill active" style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem' }}>ACTIVE</span>
+                    </div>
+                  </div>
+                  <div className="alert alert-warning py-2 px-3 small mb-0" style={{ borderLeft: '4px solid #D97706', backgroundColor: '#FFFBEB' }}>
+                    <i className="bi bi-info-circle-fill me-1" style={{ color: '#D97706' }}></i>
+                    Login access will be disabled immediately. Historical HRMS records, tasks, and audit logs are safely preserved.
+                  </div>
+                </div>
+
+                <div className="urja-mgmt-modal-footer">
+                  <button 
+                    type="button" 
+                    className="urja-btn-secondary" 
+                    onClick={() => setDeleteCandidateUser(null)}
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="button" 
+                    className="urja-btn-warning-confirm" 
+                    onClick={confirmDeactivateUser}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? 'Deactivating...' : 'Deactivate'}
+                  </button>
+                </div>
+              </>
+            ) : (
+              /* -------------------------------------------------------------
+                 STAGE 2 – PERMANENT DATABASE DELETION (Red Danger Confirmation)
+                 ------------------------------------------------------------- */
+              <>
+                <div className="urja-mgmt-modal-header bg-danger-subtle">
+                  <h3 className="urja-mgmt-modal-title text-danger">
+                    <i className="bi bi-trash-fill text-danger me-2"></i>
+                    Permanently Delete User?
+                  </h3>
+                  <button type="button" className="btn-close" onClick={() => setDeleteCandidateUser(null)}></button>
+                </div>
+
+                <div className="urja-mgmt-modal-body">
+                  <p className="text-dark mb-3" style={{ fontSize: '0.92rem' }}>
+                    This user is already inactive. Do you want to permanently delete this account from the database?
+                  </p>
+                  <div className="p-3 bg-light rounded-3 border mb-3">
+                    <div className="d-flex align-items-center gap-2 mb-1">
+                      <span className="text-muted small fw-bold">User Name:</span>
+                      <strong className="text-dark">{deleteCandidateUser.name}</strong>
+                    </div>
+                    <div className="d-flex align-items-center gap-2 mb-1">
+                      <span className="text-muted small fw-bold">Work Email:</span>
+                      <span className="text-dark font-monospace small">{deleteCandidateUser.email}</span>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="text-muted small fw-bold">Account Status:</span>
+                      <span className="urja-status-pill inactive" style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem' }}>INACTIVE</span>
+                    </div>
+                  </div>
+                  <div className="alert alert-danger py-2 px-3 small mb-0" style={{ borderLeft: '4px solid #DC2626', backgroundColor: '#FEF2F2' }}>
+                    <i className="bi bi-exclamation-octagon-fill me-1" style={{ color: '#DC2626' }}></i>
+                    <strong>Warning:</strong> This action is permanent and cannot be undone. All credentials and login records will be purged from MySQL.
+                  </div>
+                </div>
+
+                <div className="urja-mgmt-modal-footer">
+                  <button 
+                    type="button" 
+                    className="urja-btn-secondary" 
+                    onClick={() => setDeleteCandidateUser(null)}
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="button" 
+                    className="urja-btn-danger-confirm" 
+                    onClick={confirmPermanentDelete}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? 'Deleting Permanently...' : 'Permanently Delete'}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

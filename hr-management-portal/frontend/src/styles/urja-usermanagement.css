@@ -838,6 +838,27 @@
   background-color: #FEE2E2;
   border-color: #F87171;
 }
+.urja-btn-row-icon.delete.deactivate {
+  border: 1px solid #FED7AA;
+  color: #D97706;
+}
+
+.urja-btn-row-icon.delete.deactivate:hover:not(:disabled) {
+  background-color: #FEF3C7;
+  border-color: #F59E0B;
+  color: #B45309;
+}
+
+.urja-btn-row-icon.delete.permanent {
+  border: 1px solid #FECACA;
+  color: #DC2626;
+}
+
+.urja-btn-row-icon.delete.permanent:hover:not(:disabled) {
+  background-color: #FEE2E2;
+  border-color: #EF4444;
+  color: #B91C1C;
+}
 
 /* ------------------------------------------------------------------------------
    6. PAGINATION CONTROLS
@@ -1048,4 +1069,28 @@
 
 .urja-btn-danger-confirm:hover {
   background-color: #B91C1C;
+}
+
+
+.urja-btn-warning-confirm {
+  background-color: #D97706;
+  border: 1px solid #D97706;
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(217, 119, 6, 0.25);
+}
+
+.urja-btn-warning-confirm:hover:not(:disabled) {
+  background-color: #B45309;
+  border-color: #B45309;
+}
+
+.urja-btn-warning-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
