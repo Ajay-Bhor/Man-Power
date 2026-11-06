@@ -397,6 +397,384 @@
   flex-direction: column;
 }
 
+/* ==========================================================================
+   4A. Monthly Hiring Performance - Specialized Enterprise Two-Part Layout
+   ========================================================================== */
+.urja-hiring-perf-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-hiring-perf-header {
+  background: linear-gradient(120deg, #087B55 0%, #009B63 100%);
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+}
+
+.urja-hiring-perf-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.urja-hiring-perf-header-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.urja-hiring-perf-header-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-hiring-perf-header-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+}
+
+.urja-hiring-perf-header-subtitle {
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.88);
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+.urja-hiring-perf-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.urja-hiring-perf-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.22rem 0.75rem;
+  letter-spacing: 0.2px;
+  backdrop-filter: blur(4px);
+}
+
+.urja-hiring-perf-icon-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  padding: 0;
+}
+
+.urja-hiring-perf-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
+}
+
+.urja-hiring-perf-body {
+  padding: 1.15rem 1.25rem 0.95rem 1.25rem;
+  display: grid;
+  grid-template-columns: 28% 72%;
+  gap: 1.25rem;
+  align-items: stretch;
+  flex-grow: 1;
+}
+
+@media (max-width: 900px) {
+  .urja-hiring-perf-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-hiring-perf-summary-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.urja-perf-summary-card {
+  background: #EAF7F0;
+  border: 1px solid rgba(8, 123, 85, 0.16);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.urja-perf-summary-card:hover {
+  transform: translateY(-2px);
+  background: #E2F5EA;
+  border-color: #16A36A;
+  box-shadow: 0 4px 12px rgba(8, 123, 85, 0.12);
+}
+
+.urja-perf-summary-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(8, 123, 85, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #087B55;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.urja-perf-summary-card:hover .urja-perf-summary-icon-box {
+  background: #087B55;
+  color: #FFFFFF;
+}
+
+.urja-perf-summary-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.urja-perf-summary-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #526477;
+  margin-bottom: 2px;
+}
+
+.urja-perf-summary-stat-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.urja-perf-summary-val {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1E293B;
+  line-height: 1.1;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.urja-perf-summary-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  background: #D1F4E0;
+  color: #087B55;
+  white-space: nowrap;
+}
+
+.urja-perf-chart-wrap {
+  width: 100%;
+  height: 280px;
+  position: relative;
+}
+
+/* Legend items */
+.urja-perf-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.8rem;
+  padding-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+.urja-perf-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: default;
+}
+
+.urja-perf-legend-square {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.urja-perf-legend-line-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 22px;
+  height: 12px;
+}
+
+.urja-perf-legend-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #FF6B35;
+  transform: translateY(-50%);
+}
+
+.urja-perf-legend-dot {
+  position: relative;
+  z-index: 1;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: 2px solid #FF6B35;
+}
+
+/* Custom Tooltip */
+.urja-chart-custom-tooltip {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  font-size: 0.8rem;
+}
+
+.urja-tooltip-header {
+  font-weight: 700;
+  color: #1E293B;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.urja-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.urja-tooltip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.urja-tooltip-name {
+  color: #64748B;
+  font-size: 0.78rem;
+}
+
+.urja-tooltip-val {
+  font-weight: 700;
+  color: #1E293B;
+  margin-left: auto;
+}
+
+/* Modal styles for Info and Fullscreen expand */
+.urja-perf-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 1080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.urja-perf-modal-dialog {
+  background: #FFFFFF;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: urjaModalSlideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.urja-info-modal-dialog {
+  background: #FFFFFF;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: urjaModalSlideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.urja-perf-modal-header,
+.urja-info-modal-header {
+  padding: 1rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #E2E8F0;
+  background: #F8FAFC;
+}
+
+.urja-perf-modal-body,
+.urja-info-modal-body {
+  padding: 1.35rem;
+}
+
+.urja-info-modal-footer {
+  padding: 0.85rem 1.35rem;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@keyframes urjaModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .urja-chart-header {
   display: flex;
   align-items: center;

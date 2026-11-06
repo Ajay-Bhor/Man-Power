@@ -40,15 +40,193 @@ export default function ReportsAnalyticsView({ currentUser, onToast }) {
   // Active Drill-down Drawer State
   const [activeDrilldown, setActiveDrilldown] = useState(null);
 
-  // Initial Monthly Performance Data (Recharts)
+  // Performance Guide & Fullscreen Modal States
+  const [showPerfInfo, setShowPerfInfo] = useState(false);
+  const [isPerfExpanded, setIsPerfExpanded] = useState(false);
+
+  // Initial Monthly Performance Data (Recharts) - Matching Enterprise Design Reference
   const monthlyHiringData = [
-    { month: 'May 2026', applications: 210, interviews: 58, joined: 12 },
+    { month: 'May 2026', applications: 210, interviews: 62, joined: 12 },
     { month: 'Jun 2026', applications: 245, interviews: 64, joined: 14 },
-    { month: 'Jul 2026', applications: 290, interviews: 76, joined: 18 },
-    { month: 'Aug 2026', applications: 310, interviews: 82, joined: 20 },
-    { month: 'Sep 2026', applications: 280, interviews: 71, joined: 16 },
-    { month: 'Oct 2026', applications: 340, interviews: 94, joined: 22 }
+    { month: 'Jul 2026', applications: 295, interviews: 78, joined: 18 },
+    { month: 'Aug 2026', applications: 310, interviews: 85, joined: 16 },
+    { month: 'Sep 2026', applications: 290, interviews: 76, joined: 15 },
+    { month: 'Oct 2026', applications: 340, interviews: 92, joined: 20 }
   ];
+
+  // Custom renderers for Monthly Hiring Performance chart
+  const renderCustomBarLabel = (props) => {
+    const { x, y, width, height, value } = props;
+    if (!value || height < 14) return null;
+    return (
+      <text
+        x={x + width / 2}
+        y={y + 13}
+        fill="#FFFFFF"
+        textAnchor="middle"
+        fontSize={10}
+        fontWeight="700"
+        fontFamily="'DM Sans', 'Manrope', sans-serif"
+        pointerEvents="none"
+      >
+        {value}
+      </text>
+    );
+  };
+
+  const renderCustomLineDot = (props) => {
+    const { cx, cy, value } = props;
+    if (cx == null || cy == null) return null;
+    return (
+      <g key={`dot-${cx}-${cy}`}>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={9.5}
+          fill="#FFFFFF"
+          stroke="#FF6B35"
+          strokeWidth={2}
+        />
+        <text
+          x={cx}
+          y={cy}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill="#D9480F"
+          fontSize={9}
+          fontWeight="800"
+          fontFamily="'DM Sans', 'Manrope', sans-serif"
+          pointerEvents="none"
+        >
+          {value}
+        </text>
+      </g>
+    );
+  };
+
+  const renderActiveLineDot = (props) => {
+    const { cx, cy, value } = props;
+    if (cx == null || cy == null) return null;
+    return (
+      <g key={`active-dot-${cx}-${cy}`}>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={12}
+          fill="#FFFFFF"
+          stroke="#FF6B35"
+          strokeWidth={2.5}
+        />
+        <text
+          x={cx}
+          y={cy}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill="#D9480F"
+          fontSize={10}
+          fontWeight="800"
+          fontFamily="'DM Sans', 'Manrope', sans-serif"
+          pointerEvents="none"
+        >
+          {value}
+        </text>
+      </g>
+    );
+  };
+
+  const renderCustomLegend = () => {
+    return (
+      <div className="urja-perf-legend">
+        <div className="urja-perf-legend-item">
+          <span className="urja-perf-legend-square" style={{ backgroundColor: '#087B55' }}></span>
+          <span>Applications</span>
+        </div>
+        <div className="urja-perf-legend-item">
+          <span className="urja-perf-legend-line-dot">
+            <span className="urja-perf-legend-line"></span>
+            <span className="urja-perf-legend-dot"></span>
+          </span>
+          <span>Candidates Joined</span>
+        </div>
+        <div className="urja-perf-legend-item">
+          <span className="urja-perf-legend-square" style={{ backgroundColor: '#16A36A' }}></span>
+          <span>Interviews</span>
+        </div>
+      </div>
+    );
+  };
+
+  const CustomPerfTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="urja-chart-custom-tooltip">
+          <div className="urja-tooltip-header">{label}</div>
+          <div className="urja-tooltip-items">
+            {payload.map((entry, index) => (
+              <div key={`tip-${index}`} className="urja-tooltip-row">
+                <span
+                  className="urja-tooltip-dot"
+                  style={{ backgroundColor: entry.color || entry.stroke || entry.fill }}
+                />
+                <span className="urja-tooltip-name">{entry.name}:</span>
+                <span className="urja-tooltip-val">{entry.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const handleSummaryCardClick = (type) => {
+    if (type === 'APPLICATIONS') {
+      setActiveDrilldown({
+        type: 'APPLICATIONS',
+        title: 'Total Applications Pipeline (1,759)',
+        subtitle: 'Candidate sourcing breakdown across active requisition channels.',
+        value: '1,759 Total Sourced',
+        label: '+14.2% Growth vs Last Period',
+        items: [
+          { title: 'Job Portals (Naukri, LinkedIn, Indeed)', meta: '703 applications (40.0%)' },
+          { title: 'Employee Referrals & Internal Network', meta: '352 applications (20.0%)' },
+          { title: 'Campus Recruitment Drives', meta: '264 applications (15.0%)' },
+          { title: 'Direct Walk-in Applications', meta: '176 applications (10.0%)' },
+          { title: 'Recruitment Agency Partners', meta: '139 applications (7.9%)' },
+          { title: 'Careers Portal Direct Inquiries', meta: '125 applications (7.1%)' }
+        ]
+      });
+    } else if (type === 'INTERVIEWS') {
+      setActiveDrilldown({
+        type: 'INTERVIEWS',
+        title: 'Conducted Interviews (467)',
+        subtitle: 'Technical evaluations, managerial reviews, and HR screenings.',
+        value: '467 Interviews',
+        label: '+8.9% Activity vs Target',
+        items: [
+          { title: 'Initial Screening & HR Fitment', meta: '185 candidates screened' },
+          { title: 'Technical & Domain Assessment', meta: '162 panel sessions conducted' },
+          { title: 'HOD & Leadership Round', meta: '86 final evaluations held' },
+          { title: 'Management Final Review', meta: '34 compensation & offer discussions' }
+        ]
+      });
+    } else if (type === 'JOINED') {
+      setActiveDrilldown({
+        type: 'JOINED',
+        title: 'Candidates Successfully Joined (100)',
+        subtitle: 'New team members onboarded across plants and corporate offices.',
+        value: '100 Joiners',
+        label: '+11.1% Achievement vs Target',
+        items: [
+          { title: 'Plant Operations & Manufacturing', meta: '38 joiners inducted' },
+          { title: 'Engineering & Technology', meta: '24 software & automation engineers' },
+          { title: 'Quality Assurance & Compliance', meta: '15 specialists deployed' },
+          { title: 'Maintenance & Facility Support', meta: '12 technicians active' },
+          { title: 'Accounts & Human Resources', meta: '11 corporate team members' }
+        ]
+      });
+    }
+  };
 
   // Recruitment Funnel Stages Data
   const funnelStages = [
@@ -601,92 +779,177 @@ export default function ReportsAnalyticsView({ currentUser, onToast }) {
 
       {/* 4. Interactive Graphs Row 1: Monthly Trend & Recruitment Funnel */}
       <section className="urja-charts-grid-row">
-        {/* Graph A: Monthly Hiring Performance (Bar & Line Recharts) */}
-        <div className="urja-chart-card">
-          <div className="urja-chart-header">
-            <div className="urja-chart-title-box">
-              <i className="bi bi-bar-chart-fill text-success fs-5"></i>
-              <h2 className="urja-chart-title">Monthly Hiring Performance</h2>
-              <span className="urja-chart-badge">Line & Bar</span>
+        {/* Graph A: Monthly Hiring Performance (Enterprise Two-Part Layout) */}
+        <div className="urja-hiring-perf-card">
+          {/* Dark Green Gradient Header */}
+          <div className="urja-hiring-perf-header">
+            <div className="urja-hiring-perf-header-left">
+              <div className="urja-hiring-perf-header-icon">
+                <i className="bi bi-bar-chart-line-fill"></i>
+              </div>
+              <div className="urja-hiring-perf-header-titles">
+                <h3 className="urja-hiring-perf-header-title">Monthly Hiring Performance</h3>
+                <span className="urja-hiring-perf-header-subtitle">
+                  Applications, Interviews and Joined candidates trend
+                </span>
+              </div>
             </div>
-            <span className="urja-chart-hint">Click any bar to drill-down</span>
+            <div className="urja-hiring-perf-header-right">
+              <span className="urja-hiring-perf-badge">Line &amp; Bar</span>
+              <button
+                type="button"
+                className="urja-hiring-perf-icon-btn"
+                title="Performance Metrics Guide"
+                onClick={() => setShowPerfInfo(true)}
+              >
+                <i className="bi bi-info-circle"></i>
+              </button>
+              <button
+                type="button"
+                className="urja-hiring-perf-icon-btn"
+                title="Expand to Full View"
+                onClick={() => setIsPerfExpanded(true)}
+              >
+                <i className="bi bi-arrows-angle-expand"></i>
+              </button>
+            </div>
           </div>
 
-          <div style={{ width: '100%', height: 320 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart
-                data={monthlyHiringData}
-                margin={{ top: 15, right: 20, bottom: 5, left: -10 }}
-                onClick={(e) => {
-                  if (e && e.activePayload && e.activePayload.length > 0) {
-                    const row = e.activePayload[0].payload;
-                    setActiveDrilldown({
-                      type: 'MONTHLY',
-                      title: `${row.month} Hiring Breakdown`,
-                      subtitle: `Full pipeline metrics recorded during ${row.month}.`,
-                      value: `${row.joined} Joined`,
-                      label: `${row.applications} Applications • ${row.interviews} Interviews`,
-                      items: [
-                        { title: 'Total Sourced Applicants', meta: `${row.applications} candidate applications received` },
-                        { title: 'Interviews Administered', meta: `${row.interviews} panels conducted across technical and managerial stages` },
-                        { title: 'Final Candidates Onboarded', meta: `${row.joined} new joiners successfully integrated` }
-                      ]
-                    });
-                  }
-                }}
+          {/* Two-Column Card Body: 3 Summary Cards + Combination Chart */}
+          <div className="urja-hiring-perf-body">
+            {/* Left Column: 3 Vertical Summary Cards */}
+            <div className="urja-hiring-perf-summary-list">
+              {/* Metric 1: Applications */}
+              <div
+                className="urja-perf-summary-card"
+                onClick={() => handleSummaryCardClick('APPLICATIONS')}
+                title="Click to view full Applications breakdown"
               >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                <XAxis
-                  dataKey="month"
-                  stroke="#718096"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={{ stroke: '#E2E8F0' }}
-                />
-                <YAxis
-                  stroke="#718096"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '10px',
-                    border: '1px solid #E2E8F0',
-                    boxShadow: '0 6px 18px rgba(15, 23, 42, 0.08)',
-                    fontSize: '0.82rem',
-                    color: '#26364A'
+                <div className="urja-perf-summary-icon-box">
+                  <i className="bi bi-briefcase-fill"></i>
+                </div>
+                <div className="urja-perf-summary-info">
+                  <span className="urja-perf-summary-label">Applications</span>
+                  <div className="urja-perf-summary-stat-row">
+                    <span className="urja-perf-summary-val">1,759</span>
+                    <span className="urja-perf-summary-trend">
+                      <i className="bi bi-arrow-up-right"></i> +14.2%
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Metric 2: Interviews */}
+              <div
+                className="urja-perf-summary-card"
+                onClick={() => handleSummaryCardClick('INTERVIEWS')}
+                title="Click to view full Interviews breakdown"
+              >
+                <div className="urja-perf-summary-icon-box">
+                  <i className="bi bi-people-fill"></i>
+                </div>
+                <div className="urja-perf-summary-info">
+                  <span className="urja-perf-summary-label">Interviews</span>
+                  <div className="urja-perf-summary-stat-row">
+                    <span className="urja-perf-summary-val">467</span>
+                    <span className="urja-perf-summary-trend">
+                      <i className="bi bi-arrow-up-right"></i> +8.9%
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Metric 3: Candidates Joined */}
+              <div
+                className="urja-perf-summary-card"
+                onClick={() => handleSummaryCardClick('JOINED')}
+                title="Click to view full Onboarding breakdown"
+              >
+                <div className="urja-perf-summary-icon-box">
+                  <i className="bi bi-person-check-fill"></i>
+                </div>
+                <div className="urja-perf-summary-info">
+                  <span className="urja-perf-summary-label">Candidates Joined</span>
+                  <div className="urja-perf-summary-stat-row">
+                    <span className="urja-perf-summary-val">100</span>
+                    <span className="urja-perf-summary-trend">
+                      <i className="bi bi-arrow-up-right"></i> +11.1%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Recharts Combination Chart */}
+            <div className="urja-perf-chart-wrap">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart
+                  data={monthlyHiringData}
+                  margin={{ top: 16, right: 14, bottom: 0, left: -16 }}
+                  onClick={(e) => {
+                    if (e && e.activePayload && e.activePayload.length > 0) {
+                      const row = e.activePayload[0].payload;
+                      setActiveDrilldown({
+                        type: 'MONTHLY',
+                        title: `${row.month} Hiring Breakdown`,
+                        subtitle: `Full pipeline metrics recorded during ${row.month}.`,
+                        value: `${row.joined} Joined`,
+                        label: `${row.applications} Applications • ${row.interviews} Interviews`,
+                        items: [
+                          { title: 'Total Sourced Applicants', meta: `${row.applications} candidate applications received` },
+                          { title: 'Interviews Administered', meta: `${row.interviews} panels conducted across technical and managerial stages` },
+                          { title: 'Final Candidates Onboarded', meta: `${row.joined} new joiners successfully integrated` }
+                        ]
+                      });
+                    }
                   }}
-                />
-                <Legend
-                  wrapperStyle={{ paddingTop: 10, fontSize: '0.84rem' }}
-                />
-                <Bar
-                  dataKey="applications"
-                  name="Applications"
-                  fill="#087B55"
-                  radius={[4, 4, 0, 0]}
-                  maxBarSize={36}
-                />
-                <Bar
-                  dataKey="interviews"
-                  name="Interviews"
-                  fill="#16A36A"
-                  radius={[4, 4, 0, 0]}
-                  maxBarSize={36}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="joined"
-                  name="Candidates Joined"
-                  stroke="#EA580C"
-                  strokeWidth={3}
-                  dot={{ r: 5, fill: '#EA580C', stroke: '#FFFFFF', strokeWidth: 2 }}
-                  activeDot={{ r: 7 }}
-                />
-              </ComposedChart>
-            </ResponsiveContainer>
+                >
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#EDF2F7" />
+                  <XAxis
+                    dataKey="month"
+                    stroke="#718096"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={{ stroke: '#E2E8F0' }}
+                  />
+                  <YAxis
+                    domain={[0, 340]}
+                    ticks={[0, 85, 170, 255, 340]}
+                    stroke="#718096"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip content={<CustomPerfTooltip />} />
+                  <Legend content={renderCustomLegend} />
+                  <Bar
+                    dataKey="applications"
+                    name="Applications"
+                    fill="#087B55"
+                    radius={[6, 6, 0, 0]}
+                    barSize={24}
+                    label={renderCustomBarLabel}
+                  />
+                  <Bar
+                    dataKey="interviews"
+                    name="Interviews"
+                    fill="#16A36A"
+                    radius={[6, 6, 0, 0]}
+                    barSize={22}
+                    label={renderCustomBarLabel}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="joined"
+                    name="Candidates Joined"
+                    stroke="#FF6B35"
+                    strokeWidth={2.5}
+                    dot={renderCustomLineDot}
+                    activeDot={renderActiveLineDot}
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
@@ -698,7 +961,17 @@ export default function ReportsAnalyticsView({ currentUser, onToast }) {
               <h2 className="urja-chart-title">Recruitment Funnel</h2>
               <span className="urja-chart-badge">6 Stages</span>
             </div>
-            <span className="urja-chart-hint">Click stage for candidates</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <span className="urja-chart-hint">Click stage for candidates</span>
+              <button
+                type="button"
+                className="btn btn-sm btn-link p-0 text-muted"
+                style={{ fontSize: '0.85rem', color: '#718096' }}
+                title="Expand Funnel"
+              >
+                <i className="bi bi-arrows-angle-expand"></i>
+              </button>
+            </div>
           </div>
 
           <div className="urja-funnel-container">
@@ -1144,6 +1417,167 @@ export default function ReportsAnalyticsView({ currentUser, onToast }) {
             </div>
           </aside>
         </>,
+        document.body
+      )}
+
+      {/* Information Guide Modal for Monthly Hiring Performance */}
+      {showPerfInfo && createPortal(
+        <div className="urja-perf-modal-backdrop" onClick={() => setShowPerfInfo(false)}>
+          <div className="urja-info-modal-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="urja-info-modal-header">
+              <div className="d-flex align-items-center gap-2">
+                <i className="bi bi-info-circle-fill text-success fs-5"></i>
+                <h5 className="m-0 fw-bold text-dark">About Monthly Hiring Performance</h5>
+              </div>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowPerfInfo(false)}
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="urja-info-modal-body">
+              <p className="text-secondary small mb-3">
+                This analytics module tracks conversion velocity through all three key stages of talent acquisition over the past 6 months:
+              </p>
+              <div className="d-flex flex-column gap-2 mb-3">
+                <div className="p-2 rounded bg-light border">
+                  <div className="fw-bold text-success mb-1">
+                    <i className="bi bi-inbox-fill me-1"></i> Applications (1,759 Total)
+                  </div>
+                  <div className="text-muted small">
+                    All candidate profiles sourced through direct portals, campus drives, referrals, and recruitment agencies.
+                  </div>
+                </div>
+                <div className="p-2 rounded bg-light border">
+                  <div className="fw-bold text-success mb-1">
+                    <i className="bi bi-people-fill me-1"></i> Interviews (467 Total)
+                  </div>
+                  <div className="text-muted small">
+                    Evaluation panels conducted including technical rounds, managerial interviews, and HR fitment assessments.
+                  </div>
+                </div>
+                <div className="p-2 rounded bg-light border">
+                  <div className="fw-bold text-warning-emphasis mb-1" style={{ color: '#D9480F' }}>
+                    <i className="bi bi-person-check-fill me-1"></i> Candidates Joined (100 Total)
+                  </div>
+                  <div className="text-muted small">
+                    New employees who accepted offers and successfully completed Day 1 onboarding and plant deployment.
+                  </div>
+                </div>
+              </div>
+              <div className="text-muted" style={{ fontSize: '0.78rem' }}>
+                <i className="bi bi-lightbulb text-warning me-1"></i>
+                Tip: Click any bar, line point, or left summary card to open the drill-down drawer with candidate breakdowns.
+              </div>
+            </div>
+            <div className="urja-info-modal-footer">
+              <button
+                type="button"
+                className="btn btn-sm btn-success px-4 fw-bold"
+                onClick={() => setShowPerfInfo(false)}
+              >
+                Close Guide
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Expanded / Fullscreen View Modal for Monthly Hiring Performance */}
+      {isPerfExpanded && createPortal(
+        <div className="urja-perf-modal-backdrop" onClick={() => setIsPerfExpanded(false)}>
+          <div className="urja-perf-modal-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="urja-perf-modal-header">
+              <div className="d-flex align-items-center gap-2">
+                <div className="urja-hiring-perf-header-icon" style={{ background: '#087B55', width: 28, height: 28, fontSize: '0.9rem' }}>
+                  <i className="bi bi-bar-chart-line-fill"></i>
+                </div>
+                <div>
+                  <h5 className="m-0 fw-bold text-dark">Monthly Hiring Performance – Full Analytics</h5>
+                  <span className="text-muted small">May 2026 – Oct 2026 detailed pipeline throughput</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setIsPerfExpanded(false)}
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="urja-perf-modal-body">
+              <div style={{ width: '100%', height: 360 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart
+                    data={monthlyHiringData}
+                    margin={{ top: 20, right: 25, bottom: 5, left: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                    <XAxis dataKey="month" stroke="#718096" fontSize={12} />
+                    <YAxis domain={[0, 340]} ticks={[0, 85, 170, 255, 340]} stroke="#718096" fontSize={12} />
+                    <Tooltip content={<CustomPerfTooltip />} />
+                    <Legend content={renderCustomLegend} />
+                    <Bar dataKey="applications" name="Applications" fill="#087B55" radius={[4, 4, 0, 0]} barSize={28} label={renderCustomBarLabel} />
+                    <Bar dataKey="interviews" name="Interviews" fill="#16A36A" radius={[4, 4, 0, 0]} barSize={28} label={renderCustomBarLabel} />
+                    <Line type="monotone" dataKey="joined" name="Candidates Joined" stroke="#FF6B35" strokeWidth={3} dot={renderCustomLineDot} activeDot={renderActiveLineDot} />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Monthly breakdown table */}
+              <div className="table-responsive mt-3">
+                <table className="table table-sm table-bordered align-middle text-center small mb-0">
+                  <thead className="table-light">
+                    <tr>
+                      <th className="text-start">Metric / Period</th>
+                      {monthlyHiringData.map((d, i) => <th key={i}>{d.month}</th>)}
+                      <th className="table-success">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="text-start fw-bold text-success">Applications</td>
+                      {monthlyHiringData.map((d, i) => <td key={i}>{d.applications}</td>)}
+                      <td className="fw-bold table-success">1,759</td>
+                    </tr>
+                    <tr>
+                      <td className="text-start fw-bold text-primary">Interviews</td>
+                      {monthlyHiringData.map((d, i) => <td key={i}>{d.interviews}</td>)}
+                      <td className="fw-bold table-success">467</td>
+                    </tr>
+                    <tr>
+                      <td className="text-start fw-bold text-danger">Candidates Joined</td>
+                      {monthlyHiringData.map((d, i) => <td key={i}>{d.joined}</td>)}
+                      <td className="fw-bold table-success">100</td>
+                    </tr>
+                    <tr>
+                      <td className="text-start text-muted">Interview Conversion</td>
+                      {monthlyHiringData.map((d, i) => <td key={i}>{((d.interviews / d.applications) * 100).toFixed(1)}%</td>)}
+                      <td className="fw-bold table-success">26.5%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="urja-info-modal-footer">
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary px-3 me-2"
+                onClick={() => setIsPerfExpanded(false)}
+              >
+                Close View
+              </button>
+              <button
+                type="button"
+                className="btn btn-sm btn-success px-3 fw-bold"
+                onClick={handleExportCSV}
+              >
+                <i className="bi bi-file-earmark-spreadsheet me-1"></i> Export Metrics CSV
+              </button>
+            </div>
+          </div>
+        </div>,
         document.body
       )}
     </div>
