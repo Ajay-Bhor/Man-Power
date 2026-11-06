@@ -1,4 +1,4 @@
-import api, { authService, getStoredToken, getStoredUser, setAuthSession, clearAuthSession, isJwtTokenValid, registerAuthFailureHandler } from './services/api';
+import api, { authService, userService, getStoredToken, getStoredUser, setAuthSession, clearAuthSession, isJwtTokenValid, registerAuthFailureHandler } from './services/api';
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import './styles/portal.css';
 import './styles/urja-dashboard.css';
@@ -146,9 +146,12 @@ export default function App() {
 
   const [intendedRedirect, setIntendedRedirect] = useState(initialRoute.tab);
 
-  // Active User & Persona State
-  const [currentUser, setCurrentUser] = useState(INITIAL_USERS[0]);
-  const [currentRoleId, setCurrentRoleId] = useState(INITIAL_USERS[0].role);
+  // Active Authenticated User & Role State
+  const [currentUser, setCurrentUser] = useState(() => getStoredUser() || null);
+  const [currentRoleId, setCurrentRoleId] = useState(() => {
+    const u = getStoredUser();
+    return u?.role || (u?.roles && u.roles[0]) || 'ROLE_HR_ADMIN';
+  });
 
   // Navigation State
   const [activeTab, setActiveTab] = useState(initialRoute.tab);
@@ -269,31 +272,39 @@ export default function App() {
         }
       }
 
-      // Backend session validation with Spring Boot: GET /api/v1/auth/me
+      // Backend session validation with Spring Boot: GET /api/users/me
       try {
-        const res = await api.get('/api/v1/auth/me');
+        const res = await api.get('/api/users/me');
         const verifiedUser = res.data?.data || res.data;
 
         const userObj = storedUser || {};
-        const primaryRole = (verifiedUser.authorities && verifiedUser.authorities[0]?.authority) || userObj.role || 'ROLE_HR_ADMIN';
+        const primaryRole = (verifiedUser.roles && verifiedUser.roles[0]) || (verifiedUser.authorities && verifiedUser.authorities[0]?.authority) || userObj.role || 'ROLE_HR_ADMIN';
+        const dept = verifiedUser.department || verifiedUser.departmentName || userObj.dept || userObj.department || 'Human Resources';
+        const designation = verifiedUser.designation || verifiedUser.title || userObj.designation || userObj.title || 'HR Administrator';
+        const avatar = verifiedUser.profileImageUrl || verifiedUser.avatar || userObj.avatar || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg');
+
         const fullUser = {
           ...userObj,
           id: verifiedUser.id || userObj.id,
           name: verifiedUser.name || userObj.name,
           email: verifiedUser.email || userObj.email,
           username: verifiedUser.username || userObj.username,
-          roles: verifiedUser.authorities ? verifiedUser.authorities.map(a => a.authority) : (userObj.roles || [primaryRole]),
+          roles: verifiedUser.roles || (userObj.roles || [primaryRole]),
           role: primaryRole,
           token: storedToken,
-          avatar: verifiedUser.profileImageUrl || userObj.avatar || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg'),
-          title: verifiedUser.title || userObj.title || 'HR Administrator',
-          dept: userObj.dept || 'Human Resources',
-          status: 'ACTIVE'
+          avatar: avatar,
+          profileImageUrl: avatar,
+          title: designation,
+          designation: designation,
+          dept: dept,
+          department: dept,
+          status: verifiedUser.status || 'ACTIVE'
         };
 
         if (!isCancelled) {
           setCurrentUser(fullUser);
           setCurrentRoleId(primaryRole);
+          setAuthSession(storedToken, fullUser);
           setIsAuthenticated(true);
                 try {
             localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
@@ -696,81 +707,7 @@ export default function App() {
     }
   };
 
-  // Switch User Profile / Role
-  const handleRoleChange = (roleId) => {
-    setCurrentRoleId(roleId);
-    const foundUser = users.find(u => u.role === roleId) || users[0];
-    setCurrentUser(foundUser);
-    const targetTab = getRoleDefaultTab(roleId);
-    setActiveTab(targetTab);
-    setShowProfileMenu(false);
-    try {
-      sessionStorage.setItem('ats_urja_user', JSON.stringify(foundUser));
-    } catch (e) {}
-    if (typeof window !== 'undefined') {
-      window.history.replaceState({}, '', `/?tab=${targetTab}`);
-    }
-    showToast(`Active view switched to: ${foundUser.name} (${foundUser.title})`);
-  };
 
-  // Switch Test Persona with Genuine Backend Token Generation & Cache Invalidation
-  const handleSwitchAccount = async (targetUser) => {
-    setShowProfileMenu(false);
-    showToast(`Signing in as ${targetUser.name}...`);
-
-    // Invalidate user-specific state & cache
-    setPersonalizedData(null);
-    setSelectedCandidate(null);
-    setViewingReq(null);
-
-    try {
-      const res = await fetch('http://localhost:8080/api/v1/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usernameOrEmail: targetUser.email, password: 'password' })
-      });
-
-      if (res.ok) {
-        const body = await res.json();
-        const authData = body.data;
-        const primaryRole = (authData.roles && authData.roles[0]) || authData.role || targetUser.role;
-        const jwtToken = authData.accessToken || authData.token;
-        const updatedUser = {
-          ...targetUser,
-          ...authData,
-          role: primaryRole,
-          roles: authData.roles || [primaryRole],
-          token: jwtToken
-        };
-
-        sessionStorage.setItem('ats_urja_token', jwtToken);
-        sessionStorage.setItem('ats_urja_user', JSON.stringify(updatedUser));
-        setCurrentUser(updatedUser);
-        setCurrentRoleId(primaryRole);
-        const defaultTab = getRoleDefaultTab(primaryRole);
-        setActiveTab(defaultTab);
-        if (typeof window !== 'undefined') {
-          window.history.replaceState({}, '', `/?tab=${defaultTab}`);
-        }
-        showToast(`Signed in as: ${updatedUser.name} (${updatedUser.title || primaryRole})`);
-        return;
-      }
-    } catch (err) {
-      console.warn('Backend authentication switch issue:', err);
-    }
-
-    // Fallback if backend is momentarily unreachable
-    const updatedUser = {
-      ...targetUser,
-      roles: [targetUser.role]
-    };
-    sessionStorage.setItem('ats_urja_user', JSON.stringify(updatedUser));
-    setCurrentUser(updatedUser);
-    setCurrentRoleId(targetUser.role);
-    const defaultTab = getRoleDefaultTab(targetUser.role);
-    setActiveTab(defaultTab);
-    showToast(`Active persona switched: ${updatedUser.name}`);
-  };
 
   // Screen 3: Requisitions Filtered List
   const filteredRequisitions = useMemo(() => {
@@ -950,39 +887,61 @@ export default function App() {
   };
 
   // Login Success Handler with Role-Based Dashboard Redirection (Requirement 4 & 5)
-  const handleLoginSuccess = (authData) => {
-    const primaryRole = authData.roles ? authData.roles[0] : (authData.role || 'ROLE_HR_ADMIN');
-    const match = INITIAL_USERS.find(u => 
-      (authData.email && u.email.toLowerCase() === authData.email.toLowerCase()) || 
-      u.role === primaryRole
-    );
+  const handleLoginSuccess = async (authData) => {
+    const primaryRole = (authData.roles && authData.roles[0]) || authData.role || 'ROLE_HR_ADMIN';
+    const token = authData.token || authData.accessToken;
 
-    const fullUser = {
-      ...INITIAL_USERS[0],
-      ...match,
-      ...authData,
-      id: authData.id || match?.id || 1,
-      name: authData.name || match?.name || 'Administrator',
-      username: authData.username || match?.username || 'admin',
+    let fullUser = {
+      id: authData.id,
+      name: authData.name || 'User',
+      username: authData.username || '',
+      email: authData.email || '',
       role: primaryRole,
       roles: authData.roles || [primaryRole],
-      email: authData.email || match?.email || '',
-      avatar: authData.profileImageUrl || match?.avatar || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg'),
-      profileImageUrl: authData.profileImageUrl || match?.avatar || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg'),
-      title: authData.title || match?.title || (primaryRole === 'ROLE_DEPT_HEAD' ? 'Department Head' : 'HR Executive'),
-      dept: authData.dept || match?.dept || (primaryRole === 'ROLE_DEPT_HEAD' ? 'Operations & Supply Chain' : 'Human Resources'),
-      token: authData.token,
+      avatar: authData.profileImageUrl || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg'),
+      profileImageUrl: authData.profileImageUrl || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg'),
+      title: authData.title || 'Staff',
+      designation: authData.title || 'Staff',
+      dept: 'Human Resources',
+      department: 'Human Resources',
+      token: token,
       status: 'ACTIVE'
     };
 
-    setCurrentUser(fullUser);
-    setCurrentRoleId(primaryRole);
+    try {
+      const meRes = await api.get('/api/users/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const meData = meRes.data?.data || meRes.data;
+      if (meData) {
+        fullUser = {
+          ...fullUser,
+          id: meData.id || fullUser.id,
+          name: meData.name || fullUser.name,
+          username: meData.username || fullUser.username,
+          email: meData.email || fullUser.email,
+          role: (meData.roles && meData.roles[0]) || fullUser.role,
+          roles: meData.roles || fullUser.roles,
+          dept: meData.department || meData.departmentName || fullUser.dept,
+          department: meData.department || meData.departmentName || fullUser.department,
+          title: meData.designation || meData.title || fullUser.title,
+          designation: meData.designation || meData.title || fullUser.designation,
+          avatar: meData.profileImageUrl || meData.avatar || fullUser.avatar,
+          profileImageUrl: meData.profileImageUrl || meData.avatar || fullUser.profileImageUrl,
+          status: meData.status || fullUser.status
+        };
+      }
+    } catch (e) {
+      console.warn('Profile fetch after login encountered error:', e);
+    }
 
-    setAuthSession(authData.token, fullUser);
+    setCurrentUser(fullUser);
+    setCurrentRoleId(fullUser.role);
+    setAuthSession(token, fullUser);
 
     // Same page persistence: target route from current URL, intended redirect, or role default
     const route = parseCurrentRoute();
-    const targetTab = intendedRedirect || (route.tab !== 'dashboard' ? route.tab : getRoleDefaultTab(primaryRole));
+    const targetTab = intendedRedirect || (route.tab !== 'dashboard' ? route.tab : getRoleDefaultTab(fullUser.role));
     setActiveTab(targetTab);
     setIntendedRedirect(null);
     syncUrlWithRoute(targetTab);
@@ -1348,28 +1307,46 @@ export default function App() {
               <i className="bi bi-chevron-down urja-header-chevron-v2"></i>
             </div>
 
-            {/* Profile Dropdown Menu with Logout (Requirement 2 & 5) */}
+            {/* Profile Dropdown Menu - Individual Authenticated User (Zero Test Accounts) */}
             {showProfileMenu && (
-              <div className="urja-profile-dropdown-v2">
+              <div className="urja-profile-dropdown-v2" id="urja-user-profile-menu">
                 <div className="urja-dropdown-header-v2">
-                  <div className="urja-dropdown-header-name">{currentUser?.name}</div>
-                  <div className="urja-dropdown-header-email">{currentUser?.email}</div>
-                  <div className="urja-dropdown-header-dept">{currentUser?.dept} • {currentUser?.title}</div>
+                  <div className="urja-dropdown-header-name">{currentUser?.name || 'Urja User'}</div>
+                  <div className="urja-dropdown-header-email">{currentUser?.email || ''}</div>
+                  <div className="urja-dropdown-header-dept">
+                    {(currentUser?.department || currentUser?.dept || 'Human Resources')} • {(currentUser?.designation || currentUser?.title || 'Team Member')}
+                  </div>
                 </div>
 
-                <div style={{ padding: '0.45rem 1.2rem 0.2rem', color: '#64748B', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase' }}>
-                  Switch Test Account:
-                </div>
-                {INITIAL_USERS.slice(0, 4).map(u => (
+                <div className="py-1">
                   <button 
-                    key={u.id}
-                    className={`urja-dropdown-item-v2 ${currentUser?.email === u.email ? 'active-persona' : ''}`}
-                    onClick={() => handleSwitchAccount(u)}
+                    className="urja-dropdown-item-v2"
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      showToast(`Viewing profile of ${currentUser?.name}`);
+                    }}
                   >
-                    <i className="bi bi-person-circle"></i>
-                    <span>{u.name} ({u.title})</span>
+                    <i className="bi bi-person text-secondary"></i>
+                    <span>My Profile</span>
                   </button>
-                ))}
+
+                  <button 
+                    className="urja-dropdown-item-v2"
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      if (permittedTabs.includes('settings')) {
+                        handleNavTab('settings');
+                      } else {
+                        showToast('Account settings are managed by your System Administrator.');
+                      }
+                    }}
+                  >
+                    <i className="bi bi-gear text-secondary"></i>
+                    <span>Account Settings</span>
+                  </button>
+                </div>
+
+                <div className="urja-dropdown-divider" style={{ borderTop: '1px solid #F1F5F9', margin: '0.25rem 0' }}></div>
 
                 <button 
                   className="urja-dropdown-item-v2 logout"

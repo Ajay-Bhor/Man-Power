@@ -275,8 +275,16 @@ export function installFetchInterceptor() {
 }
 
 // -------------------------------------------------------------
-// High-Level Authentication API Services
+// High-Level Authentication & User API Services
 // -------------------------------------------------------------
+export const userService = {
+  async getCurrentUserProfile() {
+    const response = await api.get('/api/users/me');
+    const body = response.data;
+    return body.data || body;
+  }
+};
+
 export const authService = {
   async login(usernameOrEmail, password, rememberMe = false) {
     const response = await api.post('/api/v1/auth/login', {

@@ -34,16 +34,6 @@ export default function LoginPage({ onLoginSuccess }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Demo accounts for rapid one-click role switching during testing
-  const demoAccounts = [
-    { label: 'IT Admin', email: 'admin@company.com', role: 'ROLE_IT_ADMIN', name: 'Vikramaditya Sharma', title: 'IT Administrator', avatar: 'VS' },
-    { label: 'HR Admin', email: 'hradmin@company.com', role: 'ROLE_HR_ADMIN', name: 'Priyanka Deshmukh', title: 'HR Administrator', avatar: '/assets/images/woman.jpg' },
-    { label: 'Recruiter', email: 'anita.recruiter@company.com', role: 'ROLE_HR_RECRUITER', name: 'Anita Deshmukh', title: 'Senior Technical Recruiter', avatar: 'AD' },
-    { label: 'Interviewer', email: 'arjun.tech@company.com', role: 'ROLE_INTERVIEWER', name: 'Arjun Varma', title: 'Technical Lead / Interviewer', avatar: '/assets/images/man.jpg' },
-    { label: 'Dept Head', email: 'sanjay.ops@company.com', role: 'ROLE_DEPT_HEAD', name: 'Sanjay Patil', title: 'Department Head', avatar: '/assets/images/man.jpg' },
-    { label: 'Approver', email: 'amitav.mgr@company.com', role: 'ROLE_APPROVING_MANAGER', name: 'Amitav Mukherjee', title: 'Approving Manager', avatar: 'AM' }
-  ];
-
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!email || !password) {

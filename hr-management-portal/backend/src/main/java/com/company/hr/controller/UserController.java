@@ -1,6 +1,7 @@
 package com.company.hr.controller;
 
 import com.company.hr.dto.ApiResponse;
+import com.company.hr.dto.UserResponseDto;
 import com.company.hr.entity.User;
 import com.company.hr.security.UserPrincipal;
 import com.company.hr.service.UserService;
@@ -15,10 +16,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@Tag(name = "User Management", description = "Two-step user deactivation and permanent deletion endpoints")
+@Tag(name = "User Management", description = "User profile and lifecycle endpoints")
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Get authenticated user profile strictly from JWT security principal")
+    public ResponseEntity<ApiResponse<UserResponseDto>> getCurrentUserProfile(
+            @AuthenticationPrincipal UserPrincipal currentUser) {
+        UserResponseDto profile = userService.getCurrentUserProfile(currentUser);
+        return ResponseEntity.ok(ApiResponse.ok(profile));
+    }
 
     @PatchMapping("/{id}/deactivate")
     @PreAuthorize("hasAnyRole('IT_ADMIN', 'HR_ADMIN')")
@@ -40,4 +50,3 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.ok(null, "User permanently deleted successfully."));
     }
 }
-

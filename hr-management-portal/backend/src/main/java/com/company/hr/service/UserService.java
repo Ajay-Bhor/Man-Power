@@ -475,4 +475,57 @@ public class UserService {
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public UserResponseDto getCurrentUserProfile(UserPrincipal currentUser) {
+        if (currentUser == null || currentUser.getId() == null) {
+            throw new BadRequestException("Unauthenticated user session.");
+        }
+
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + currentUser.getId()));
+
+        List<String> roleNames = user.getRoles().stream()
+                .map(Role::getRoleName)
+                .collect(Collectors.toList());
+        String primaryRole = roleNames.isEmpty() ? "ROLE_EMPLOYEE" : roleNames.get(0);
+
+        String deptName = "Human Resources";
+        if (user.getDepartmentRestrictionId() != null) {
+            deptName = departmentRepository.findById(user.getDepartmentRestrictionId())
+                    .map(Department::getDepartmentName)
+                    .orElse("Department #" + user.getDepartmentRestrictionId());
+        } else if ("ROLE_IT_ADMIN".equals(primaryRole)) {
+            deptName = "Information Technology";
+        } else if ("ROLE_INTERVIEWER".equals(primaryRole) || user.getUsername().contains("eng")) {
+            deptName = "Engineering & Technology";
+        }
+
+        long activeTasks = 0L;
+        try {
+            activeTasks = taskRepository.countActiveTasksByUser().stream()
+                    .filter(row -> row[0].equals(user.getId()))
+                    .map(row -> (Long) row[1])
+                    .findFirst()
+                    .orElse(0L);
+        } catch (Exception ignored) {}
+
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(primaryRole)
+                .roles(roleNames)
+                .departmentId(user.getDepartmentRestrictionId())
+                .department(deptName)
+                .designation(user.getDesignation())
+                .phoneNumber(user.getPhoneNumber())
+                .profileImageUrl(user.getProfileImageUrl())
+                .status(user.getStatus().name())
+                .assignedTasksCount(activeTasks)
+                .lastLoginAt(user.getLastLoginAt())
+                .createdAt(user.getCreatedAt())
+                .build();
+    }
 }

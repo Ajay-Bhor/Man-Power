@@ -79,6 +79,9 @@ public class SecurityConfig {
                     "/error"
                 ).permitAll()
                 
+                // Current authenticated user's own profile endpoint
+                .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
+
                 // Admin specific endpoints
                 .requestMatchers("/api/v1/admin/**", "/api/users/**").hasAnyRole("IT_ADMIN", "HR_ADMIN")
                 

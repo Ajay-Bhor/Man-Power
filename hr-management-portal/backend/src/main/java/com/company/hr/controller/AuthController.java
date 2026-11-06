@@ -3,8 +3,10 @@ package com.company.hr.controller;
 import com.company.hr.dto.ApiResponse;
 import com.company.hr.dto.AuthRequest;
 import com.company.hr.dto.AuthResponse;
+import com.company.hr.dto.UserResponseDto;
 import com.company.hr.security.JwtTokenProvider;
 import com.company.hr.security.UserPrincipal;
+import com.company.hr.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,6 +31,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final UserService userService;
 
     @PostMapping("/login")
     @Operation(summary = "Authenticate user and issue JWT bearer token")
@@ -61,9 +64,10 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    @Operation(summary = "Get current authenticated user identity and roles")
-    public ResponseEntity<ApiResponse<UserPrincipal>> getCurrentUser(@AuthenticationPrincipal UserPrincipal currentUser) {
-        return ResponseEntity.ok(ApiResponse.ok(currentUser));
+    @Operation(summary = "Get current authenticated user identity and database profile")
+    public ResponseEntity<ApiResponse<UserResponseDto>> getCurrentUser(@AuthenticationPrincipal UserPrincipal currentUser) {
+        UserResponseDto profile = userService.getCurrentUserProfile(currentUser);
+        return ResponseEntity.ok(ApiResponse.ok(profile));
     }
 
     @PostMapping("/logout")
