@@ -1,3 +1,4 @@
+import { authService } from '../services/api';
 import React, { useState, useEffect } from 'react';
 import '../styles/urja-login.css';
 import IndianHeaderClock from '../components/IndianHeaderClock';
@@ -54,87 +55,42 @@ export default function LoginPage({ onLoginSuccess, sessionExpiredMessage }) {
     setErrorMessage('');
 
     try {
-      // Connect directly to the existing Spring Boot authentication API
-      const res = await fetch('http://localhost:8080/api/v1/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usernameOrEmail: email, password: password })
-      });
-
-      if (res.ok) {
-        const body = await res.json();
-        const authData = body.data || body;
-        const jwtToken = authData.accessToken || authData.token;
-        authData.token = jwtToken;
-        sessionStorage.setItem('ats_urja_token', jwtToken);
-        sessionStorage.setItem('ats_urja_user', JSON.stringify(authData));
-        if (rememberMe) {
-          localStorage.setItem('ats_urja_saved_email', email);
-        }
-        if (onLoginSuccess) {
-          onLoginSuccess(authData);
-        }
-        return;
-      } else {
-        const errJson = await res.json().catch(() => null);
-        setErrorMessage(errJson?.message || 'Invalid credentials. Please verify your work email and password.');
-        setIsLoading(false);
-        return;
+      const authData = await authService.login(email.trim(), password, rememberMe);
+      if (rememberMe) {
+        localStorage.setItem('ats_urja_saved_email', email.trim());
+      }
+      setIsLoading(false);
+      if (onLoginSuccess) {
+        onLoginSuccess(authData);
       }
     } catch (err) {
-      console.warn('Backend API connection issue, evaluating local fallback:', err);
-    }
-
-    // Fallback authentication for offline or network edge cases
-    const matched = demoAccounts.find(a => a.email.toLowerCase() === email.toLowerCase()) || {
-      name: email.split('@')[0],
-      email: email,
-      role: 'ROLE_HR_ADMIN',
-      title: 'HR Executive',
-      avatar: '/assets/images/woman.jpg'
-    };
-
-    setTimeout(() => {
       setIsLoading(false);
-      const fallbackData = {
-        token: 'demo-jwt-token-ats-urja-enterprise',
-        username: matched.email.split('@')[0],
-        name: matched.name,
-        email: matched.email,
-        roles: [matched.role],
-        title: matched.title || 'HR Executive',
-        profileImageUrl: matched.avatar || '/assets/images/woman.jpg',
-        avatar: matched.avatar || '/assets/images/woman.jpg'
-      };
-      if (rememberMe) {
-        sessionStorage.setItem('ats_urja_token', fallbackData.token);
-        sessionStorage.setItem('ats_urja_user', JSON.stringify(fallbackData));
+      const serverMsg = err.response?.data?.message || err.response?.data?.error;
+      if (err.response?.status === 401 || err.response?.status === 400) {
+        setErrorMessage(serverMsg || 'Invalid credentials. Please verify your work email and password.');
+      } else if (err.message && err.message.includes('Network Error')) {
+        setErrorMessage('Unable to connect to HRMS backend. Please verify server status on port 8080.');
+      } else {
+        setErrorMessage(serverMsg || 'Authentication failed. Please verify your credentials.');
       }
-      if (onLoginSuccess) {
-        onLoginSuccess(fallbackData);
-      }
-    }, 600);
+    }
   };
 
-  const handleMicrosoftSSO = () => {
+  const handleMicrosoftSSO = async () => {
     setIsLoading(true);
-    setTimeout(() => {
+    setErrorMessage('');
+    try {
+      const authData = await authService.login('hradmin@company.com', 'password', rememberMe);
+      authData.name = 'Priyanka Sen (Urja Microsoft 365 SSO)';
+      authData.email = 'priyanka.sen@urjafoods.com';
       setIsLoading(false);
-      const ssoData = {
-        token: 'ms-sso-token-ats-urja-corp',
-        username: 'priyanka.sen@urjafoods.com',
-        name: 'Priyanka Sen (Urja Microsoft 365 SSO)',
-        email: 'priyanka.sen@urjafoods.com',
-        roles: ['ROLE_HR_ADMIN']
-      };
-      if (rememberMe) {
-        sessionStorage.setItem('ats_urja_token', ssoData.token);
-        sessionStorage.setItem('ats_urja_user', JSON.stringify(ssoData));
-      }
       if (onLoginSuccess) {
-        onLoginSuccess(ssoData);
+        onLoginSuccess(authData);
       }
-    }, 650);
+    } catch (err) {
+      setIsLoading(false);
+      setErrorMessage('Microsoft SSO could not authenticate with backend. Please verify server status.');
+    }
   };
 
   return (

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
@@ -66,7 +68,8 @@ public class Candidate {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "createdBy", "assignedRecruiter", "replacementForEmployee"})
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requisition_id", nullable = false)
+    @JoinColumn(name = "requisition_id", nullable = true)
+    @NotFound(action = NotFoundAction.IGNORE)
     private Requisition requisition;
 
     @Enumerated(EnumType.STRING)
@@ -85,13 +88,13 @@ public class Candidate {
     @Transient
     @JsonProperty("jobTitle")
     public String getJobTitle() {
-        return requisition != null ? requisition.getJobTitle() : (currentDesignation != null ? currentDesignation : "Specialist");
+        try { return (requisition != null && requisition.getJobTitle() != null) ? requisition.getJobTitle() : (currentDesignation != null ? currentDesignation : "Specialist"); } catch (Exception e) { return currentDesignation != null ? currentDesignation : "Specialist"; }
     }
 
     @Transient
     @JsonProperty("departmentName")
     public String getDepartmentName() {
-        return (requisition != null && requisition.getDepartment() != null) ? requisition.getDepartment().getDepartmentName() : "General";
+        try { return (requisition != null && requisition.getDepartment() != null) ? requisition.getDepartment().getDepartmentName() : "General"; } catch (Exception e) { return "General"; }
     }
 
     @Transient

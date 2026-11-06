@@ -4,6 +4,10 @@ import App from './App.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles/portal.css';
+import { installFetchInterceptor } from './services/api';
+
+// Initialize transparent fetch interceptor to guarantee valid JWT headers on all API requests
+installFetchInterceptor();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

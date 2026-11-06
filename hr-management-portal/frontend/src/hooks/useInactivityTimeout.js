@@ -111,3 +111,4 @@ export default function useInactivityTimeout(isAuthenticated, onTimeout, onRemot
     };
   }, [isAuthenticated, recordActivity]);
 }
+

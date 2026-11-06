@@ -67,12 +67,29 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String authToken) {
+        if (authToken == null || authToken.isBlank() || "undefined".equalsIgnoreCase(authToken) || "null".equalsIgnoreCase(authToken)) {
+            return false;
+        }
         try {
             Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(authToken);
             return true;
+        } catch (ExpiredJwtException ex) {
+            log.warn("Expired JWT token encountered: {}", ex.getMessage());
         } catch (JwtException | IllegalArgumentException ex) {
-            log.error("Invalid JWT token: {}", ex.getMessage());
+            log.warn("Invalid JWT token encountered: {}", ex.getMessage());
         }
         return false;
+    }
+
+    public boolean isTokenExpired(String authToken) {
+        if (authToken == null || authToken.isBlank()) return true;
+        try {
+            Claims claims = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(authToken).getPayload();
+            return claims.getExpiration().before(new Date());
+        } catch (ExpiredJwtException ex) {
+            return true;
+        } catch (Exception ex) {
+            return true;
+        }
     }
 }

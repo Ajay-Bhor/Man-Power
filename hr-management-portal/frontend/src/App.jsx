@@ -1,3 +1,4 @@
+import api, { authService, getStoredToken, getStoredUser, setAuthSession, clearAuthSession, isJwtTokenValid, registerAuthFailureHandler, SESSION_EXPIRED_KEY } from './services/api';
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import './styles/portal.css';
 import './styles/urja-dashboard.css';
@@ -164,20 +165,9 @@ export default function App() {
 
   // Inactivity Logout Handler (Exactly 5 Minutes = 300,000 ms)
   const handleInactivityLogout = useCallback((isRemote = false) => {
-    const token = sessionStorage.getItem('ats_urja_token');
-    if (token) {
-      fetch('http://localhost:8080/api/v1/auth/logout', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      }).catch(() => {});
-    }
-
+    authService.logout().catch(() => {});
+    clearAuthSession();
     try {
-      sessionStorage.removeItem('ats_urja_token');
-      sessionStorage.removeItem('ats_urja_user');
-      sessionStorage.removeItem('ats_session_expired_msg');
-      localStorage.removeItem('ats_urja_token');
-      localStorage.removeItem('ats_urja_user');
       localStorage.removeItem(LAST_ACTIVITY_KEY);
     } catch (e) {}
 
@@ -198,24 +188,15 @@ export default function App() {
     setCurrentUser(null);
     setPersonalizedData(null);
     const expiredMsg = 'Your session has expired due to 5 minutes of inactivity. Please log in again.';
-    try { sessionStorage.setItem('ats_session_expired_msg', expiredMsg); } catch (e) {}
+    try { sessionStorage.setItem(SESSION_EXPIRED_KEY, expiredMsg); } catch (e) {}
     setSessionExpiredMessage(expiredMsg);
   }, []);
 
   // Manual Sign Out Handler
   const handleSignOut = useCallback((broadcast = true) => {
-    const token = sessionStorage.getItem('ats_urja_token');
-    if (token) {
-      fetch('http://localhost:8080/api/v1/auth/logout', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      }).catch(() => {});
-    }
+    authService.logout().catch(() => {});
+    clearAuthSession();
     try {
-      sessionStorage.removeItem('ats_urja_user');
-      sessionStorage.removeItem('ats_urja_token');
-      localStorage.removeItem('ats_urja_user');
-      localStorage.removeItem('ats_urja_token');
       localStorage.removeItem(LAST_ACTIVITY_KEY);
       if (broadcast) {
         localStorage.setItem(SESSION_EVENT_KEY, JSON.stringify({
@@ -247,19 +228,19 @@ export default function App() {
   useEffect(() => {
     let isCancelled = false;
 
+    registerAuthFailureHandler(() => {
+      handleInactivityLogout(false);
+    });
+
     const validateSession = async () => {
-      const storedToken = sessionStorage.getItem('ats_urja_token');
-      const storedUserStr = sessionStorage.getItem('ats_urja_user');
+      const storedToken = getStoredToken();
+      const storedUser = getStoredUser();
       const lastActivityStr = localStorage.getItem(LAST_ACTIVITY_KEY);
 
       // Check if explicit logout parameter ?auth=false was provided
       const params = new URLSearchParams(window.location.search);
       if (params.get('auth') === 'false') {
-        try {
-          sessionStorage.removeItem('ats_urja_user');
-          sessionStorage.removeItem('ats_urja_token');
-          localStorage.removeItem(LAST_ACTIVITY_KEY);
-        } catch (e) {}
+        clearAuthSession();
         if (!isCancelled) {
           setIsAuthenticated(false);
           setIsVerifyingSession(false);
@@ -267,13 +248,14 @@ export default function App() {
         return;
       }
 
-      const storedExpiredMsg = sessionStorage.getItem('ats_session_expired_msg');
+      const storedExpiredMsg = sessionStorage.getItem(SESSION_EXPIRED_KEY);
       if (storedExpiredMsg && !isCancelled) {
         setSessionExpiredMessage(storedExpiredMsg);
       }
 
-      // If no token exists, user is unauthenticated
-      if (!storedToken) {
+      // If no valid JWT token, user is unauthenticated
+      if (!storedToken || !isJwtTokenValid(storedToken)) {
+        clearAuthSession();
         if (!isCancelled) {
           setIsAuthenticated(false);
           setIsVerifyingSession(false);
@@ -286,7 +268,7 @@ export default function App() {
         const elapsed = Date.now() - Number(lastActivityStr);
         if (elapsed >= INACTIVITY_TIMEOUT_MS) {
           const expiredMsg = 'Your session has expired due to 5 minutes of inactivity. Please log in again.';
-          try { sessionStorage.setItem('ats_session_expired_msg', expiredMsg); } catch (e) {}
+          try { sessionStorage.setItem(SESSION_EXPIRED_KEY, expiredMsg); } catch (e) {}
           handleInactivityLogout(false);
           if (!isCancelled) {
             setSessionExpiredMessage(expiredMsg);
@@ -298,85 +280,48 @@ export default function App() {
 
       // Backend session validation with Spring Boot: GET /api/v1/auth/me
       try {
-        const res = await fetch('http://localhost:8080/api/v1/auth/me', {
-          headers: { 'Authorization': `Bearer ${storedToken}` }
-        });
+        const res = await api.get('/api/v1/auth/me');
+        const verifiedUser = res.data?.data || res.data;
 
-        if (res.ok) {
-          const body = await res.json();
-          const verifiedUser = body.data || body;
+        const userObj = storedUser || {};
+        const primaryRole = (verifiedUser.authorities && verifiedUser.authorities[0]?.authority) || userObj.role || 'ROLE_HR_ADMIN';
+        const fullUser = {
+          ...userObj,
+          id: verifiedUser.id || userObj.id,
+          name: verifiedUser.name || userObj.name,
+          email: verifiedUser.email || userObj.email,
+          username: verifiedUser.username || userObj.username,
+          roles: verifiedUser.authorities ? verifiedUser.authorities.map(a => a.authority) : (userObj.roles || [primaryRole]),
+          role: primaryRole,
+          token: storedToken,
+          avatar: verifiedUser.profileImageUrl || userObj.avatar || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg'),
+          title: verifiedUser.title || userObj.title || 'HR Administrator',
+          dept: userObj.dept || 'Human Resources',
+          status: 'ACTIVE'
+        };
 
-          let userObj = {};
-          if (storedUserStr) {
-            try { userObj = JSON.parse(storedUserStr); } catch (e) {}
-          }
-
-          const primaryRole = (verifiedUser.authorities && verifiedUser.authorities[0]?.authority) || userObj.role || 'ROLE_HR_ADMIN';
-          const fullUser = {
-            ...userObj,
-            id: verifiedUser.id || userObj.id,
-            name: verifiedUser.name || userObj.name,
-            email: verifiedUser.email || userObj.email,
-            username: verifiedUser.username || userObj.username,
-            roles: verifiedUser.authorities ? verifiedUser.authorities.map(a => a.authority) : (userObj.roles || [primaryRole]),
-            role: primaryRole,
-            token: storedToken,
-            avatar: verifiedUser.profileImageUrl || userObj.avatar || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg'),
-            title: verifiedUser.title || userObj.title || 'HR Administrator',
-            dept: userObj.dept || 'Human Resources',
-            status: 'ACTIVE'
-          };
-
-          if (!isCancelled) {
-            setCurrentUser(fullUser);
-            setCurrentRoleId(primaryRole);
-            setIsAuthenticated(true);
-            setSessionExpiredMessage(null);
-            try {
-              localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
-            } catch (e) {}
-
-            // Same Page Persistence: Restore exact route and query params
-            const route = parseCurrentRoute();
-            setActiveTab(route.tab);
-            setIsVerifyingSession(false);
-          }
-          return;
-        } else if (res.status === 401 || res.status === 403) {
-          // Token is rejected or expired
+        if (!isCancelled) {
+          setCurrentUser(fullUser);
+          setCurrentRoleId(primaryRole);
+          setIsAuthenticated(true);
+          setSessionExpiredMessage(null);
           try {
-            sessionStorage.removeItem('ats_urja_token');
-            sessionStorage.removeItem('ats_urja_user');
-            localStorage.removeItem(LAST_ACTIVITY_KEY);
+            localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
           } catch (e) {}
-          if (!isCancelled) {
-            setIsAuthenticated(false);
-            setSessionExpiredMessage('Your session has expired due to 5 minutes of inactivity. Please log in again.');
-            setIsVerifyingSession(false);
-          }
-          return;
+
+          // Same Page Persistence: Restore exact route and query params
+          const route = parseCurrentRoute();
+          setActiveTab(route.tab);
+          setIsVerifyingSession(false);
         }
       } catch (err) {
-        console.warn('Backend verification call unavailable, using local session state:', err);
-        if (storedUserStr) {
-          try {
-            const parsed = JSON.parse(storedUserStr);
-            if (!isCancelled) {
-              setCurrentUser(parsed);
-              setCurrentRoleId(parsed.role || 'ROLE_HR_ADMIN');
-              setIsAuthenticated(true);
-              const route = parseCurrentRoute();
-              setActiveTab(route.tab);
-              setIsVerifyingSession(false);
-            }
-            return;
-          } catch (e) {}
+        console.warn('Backend validation failed, clearing session:', err);
+        clearAuthSession();
+        if (!isCancelled) {
+          setIsAuthenticated(false);
+          setSessionExpiredMessage('Your session has expired due to 5 minutes of inactivity. Please log in again.');
+          setIsVerifyingSession(false);
         }
-      }
-
-      if (!isCancelled) {
-        setIsAuthenticated(false);
-        setIsVerifyingSession(false);
       }
     };
 
@@ -1044,11 +989,7 @@ export default function App() {
     setCurrentUser(fullUser);
     setCurrentRoleId(primaryRole);
 
-    try {
-      sessionStorage.setItem('ats_urja_token', authData.token || '');
-      sessionStorage.setItem('ats_urja_user', JSON.stringify(fullUser));
-      localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
-    } catch (e) {}
+    setAuthSession(authData.token, fullUser);
 
     // Same page persistence: target route from current URL, intended redirect, or role default
     const route = parseCurrentRoute();

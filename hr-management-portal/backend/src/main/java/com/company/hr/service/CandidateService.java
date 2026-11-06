@@ -153,10 +153,10 @@ public class CandidateService {
         }
 
         if (recruiterId != null || interviewerId != null) {
-            return candidateRepository.filterCandidatesWithRoleScope(searchKeyword, reqId, deptName, status, source, deptRestrictionId, recruiterId, interviewerId, pageable);
+            String statusStrParam = status != null ? status.name() : null; String sourceStrParam = source != null ? source.name() : null; return candidateRepository.filterCandidatesWithRoleScope(searchKeyword, reqId, deptName, statusStrParam, sourceStrParam, deptRestrictionId, recruiterId, interviewerId, pageable);
         }
 
-        return candidateRepository.filterCandidates(searchKeyword, reqId, deptName, status, source, deptRestrictionId, pageable);
+        String statusStrParam = status != null ? status.name() : null; String sourceStrParam = source != null ? source.name() : null; return candidateRepository.filterCandidates(searchKeyword, reqId, deptName, statusStrParam, sourceStrParam, deptRestrictionId, pageable);
     }
 
     @Transactional(readOnly = true)
