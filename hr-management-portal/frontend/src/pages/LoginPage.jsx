@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/urja-login.css';
 import IndianHeaderClock from '../components/IndianHeaderClock';
 
-export default function LoginPage({ onLoginSuccess }) {
+export default function LoginPage({ onLoginSuccess, sessionExpiredMessage }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -17,8 +17,7 @@ export default function LoginPage({ onLoginSuccess }) {
   useEffect(() => {
     try {
       localStorage.removeItem('ats_urja_saved_email');
-      sessionStorage.removeItem('ats_urja_user');
-      sessionStorage.removeItem('ats_urja_token');
+      
     } catch (e) {}
     setEmail('');
     setPassword('');
@@ -318,6 +317,34 @@ export default function LoginPage({ onLoginSuccess }) {
                 Sign in to access your recruitment workspace.
               </p>
             </div>
+
+            {sessionExpiredMessage && (
+              <div
+                className="urja-session-expired-alert"
+                role="alert"
+                style={{
+                  backgroundColor: '#FEF3C7',
+                  border: '1px solid #F59E0B',
+                  borderRadius: '10px',
+                  padding: '0.85rem 1rem',
+                  color: '#92400E',
+                  fontSize: '0.86rem',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.65rem',
+                  marginBottom: '1rem',
+                  lineHeight: '1.4'
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>{sessionExpiredMessage}</span>
+              </div>
+            )}
 
             {errorMessage && (
               <div className="urja-card-error">

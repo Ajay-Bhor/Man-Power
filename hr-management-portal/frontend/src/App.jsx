@@ -19,6 +19,7 @@ import ApprovalsInboxView from './components/ApprovalsInboxView';
 import EmployeesManagementView from './components/EmployeesManagementView';
 import TaskAssignmentView from './components/TaskAssignmentView';
 import ReportsAnalyticsView from './components/ReportsAnalyticsView';
+import useInactivityTimeout, { INACTIVITY_TIMEOUT_MS, LAST_ACTIVITY_KEY, SESSION_EVENT_KEY } from './hooks/useInactivityTimeout';
 import './styles/urja-reports.css';
 import './styles/urja-offers.css';
 import './styles/urja-approvals.css';
@@ -74,84 +75,82 @@ const getRoleDefaultTab = (roleId) => {
   }
 };
 
-export default function App() {
-  // 1. Initial Authentication & Session Inspection
-  // Every time the website is opened locally at root URL http://localhost:<port>/,
-  // the first page displayed is ALWAYS the Login Page (Screen 1), then Dashboard after sign in.
-  const getInitialAuthSession = () => {
-    if (typeof window === 'undefined') return { user: null, isAuthenticated: false };
 
-    // Clear legacy permanent localStorage login tokens so opening the website never bypasses Login
-    try {
-      localStorage.removeItem('ats_urja_user');
-      localStorage.removeItem('ats_urja_token');
-    } catch (e) {}
+// Parse current route from window.location pathname and search query
+const parseCurrentRoute = () => {
+  if (typeof window === 'undefined') return { tab: 'dashboard', pathname: '/', search: '' };
 
-    const params = new URLSearchParams(window.location.search);
-    const requestedTab = params.get('tab');
+  const pathname = window.location.pathname; // e.g. "/dashboard/reports" or "/reports" or "/"
+  const search = window.location.search;     // e.g. "?tab=reports"
+  const urlParams = new URLSearchParams(search);
 
-    // Explicit logout or login screen request via ?auth=false
-    if (params.get('auth') === 'false') {
-      try {
-        sessionStorage.removeItem('ats_urja_user');
-      } catch (e) {}
-      return { user: null, isAuthenticated: false };
+  let tabFromQuery = urlParams.get('tab');
+  let tabFromPath = null;
+
+  const pathParts = pathname.split('/').filter(Boolean);
+  if (pathParts.length > 0) {
+    if (pathParts[0] === 'dashboard' && pathParts[1]) {
+      tabFromPath = pathParts[1];
+    } else if (pathParts[0] !== 'dashboard' && pathParts[0] !== 'index.html') {
+      tabFromPath = pathParts[0];
     }
+  }
 
-    // Every time the website is opened at root URL (no tab query), ALWAYS display the Login Page first!
-    if (!requestedTab) {
-      try {
-        sessionStorage.removeItem('ats_urja_user');
-      } catch (e) {}
-      return { user: null, isAuthenticated: false };
-    }
+  let resolvedTab = tabFromQuery || tabFromPath || 'dashboard';
 
-    // Only if a specific tab was requested (e.g. page refresh during active session on ?tab=dashboard)
-    try {
-      const stored = sessionStorage.getItem('ats_urja_user');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed && (parsed.role || parsed.email)) {
-          return { user: parsed, isAuthenticated: true };
-        }
-      }
-    } catch (e) {}
+  // Support common aliases
+  if (resolvedTab === 'applications') resolvedTab = 'candidates';
+  if (resolvedTab === 'jobs') resolvedTab = 'requisitions';
 
-    // Direct access to protected tabs by unauthenticated users -> display Login Page
-    return { user: null, isAuthenticated: false };
+  return {
+    tab: resolvedTab,
+    pathname,
+    search,
+    urlParams
   };
+};
 
-  const initialSession = getInitialAuthSession();
-  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
-  const initialRequestedTab = searchParams ? searchParams.get('tab') : null;
+// Synchronize URL with active tab and route
+const syncUrlWithRoute = (tab, extraParams = null) => {
+  if (typeof window === 'undefined') return;
 
-  // Authentication & Session State (Screen 1) - Defaults to FALSE for root URL landing
-  const [isAuthenticated, setIsAuthenticated] = useState(initialSession.isAuthenticated);
-  const [intendedRedirect, setIntendedRedirect] = useState(initialRequestedTab);
+  const pathname = window.location.pathname;
+  let newUrl;
+  if (pathname.startsWith('/dashboard')) {
+    newUrl = `/dashboard/${tab}`;
+  } else {
+    const params = new URLSearchParams(window.location.search);
+    params.set('tab', tab);
+    if (extraParams) {
+      Object.entries(extraParams).forEach(([k, v]) => {
+        if (v === null || v === undefined) params.delete(k);
+        else params.set(k, v);
+      });
+    }
+    newUrl = `/?${params.toString()}`;
+  }
+
+  const currentFull = window.location.pathname + window.location.search;
+  if (currentFull !== newUrl) {
+    window.history.pushState({ tab }, '', newUrl);
+  }
+};
+
+export default function App() {
+  const initialRoute = parseCurrentRoute();
+
+  // Authentication & Session State
+  const [isVerifyingSession, setIsVerifyingSession] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [sessionExpiredMessage, setSessionExpiredMessage] = useState(null);
+  const [intendedRedirect, setIntendedRedirect] = useState(initialRoute.tab);
 
   // Active User & Persona State
-  const [currentUser, setCurrentUser] = useState(() => {
-    if (initialSession.user) {
-      const match = INITIAL_USERS.find(u => 
-        (initialSession.user.email && u.email.toLowerCase() === initialSession.user.email.toLowerCase()) || 
-        u.role === initialSession.user.role
-      );
-      return match || { ...INITIAL_USERS[0], ...initialSession.user };
-    }
-    return INITIAL_USERS[0];
-  });
+  const [currentUser, setCurrentUser] = useState(INITIAL_USERS[0]);
+  const [currentRoleId, setCurrentRoleId] = useState(INITIAL_USERS[0].role);
 
-  const [currentRoleId, setCurrentRoleId] = useState(() => {
-    return initialSession.user?.role || INITIAL_USERS[0].role;
-  });
-
-  // Navigation State: if authenticated, use requested tab or role default tab; otherwise 'dashboard'
-  const [activeTab, setActiveTab] = useState(() => {
-    if (initialSession.isAuthenticated) {
-      return initialRequestedTab || getRoleDefaultTab(initialSession.user?.role || INITIAL_USERS[0].role);
-    }
-    return 'dashboard';
-  });
+  // Navigation State
+  const [activeTab, setActiveTab] = useState(initialRoute.tab);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     if (typeof window !== 'undefined') {
       return window.innerWidth <= 992;
@@ -163,7 +162,239 @@ export default function App() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchContainerRef = useRef(null);
 
-  // Data Collections State
+  // Inactivity Logout Handler (Exactly 5 Minutes = 300,000 ms)
+  const handleInactivityLogout = useCallback((isRemote = false) => {
+    const token = sessionStorage.getItem('ats_urja_token');
+    if (token) {
+      fetch('http://localhost:8080/api/v1/auth/logout', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).catch(() => {});
+    }
+
+    try {
+      sessionStorage.removeItem('ats_urja_token');
+      sessionStorage.removeItem('ats_urja_user');
+      sessionStorage.removeItem('ats_session_expired_msg');
+      localStorage.removeItem('ats_urja_token');
+      localStorage.removeItem('ats_urja_user');
+      localStorage.removeItem(LAST_ACTIVITY_KEY);
+    } catch (e) {}
+
+    if (!isRemote) {
+      try {
+        localStorage.setItem(SESSION_EVENT_KEY, JSON.stringify({
+          type: 'INACTIVITY_LOGOUT',
+          timestamp: Date.now()
+        }));
+      } catch (e) {}
+    }
+
+    if (typeof window !== 'undefined') {
+      window.history.replaceState({}, '', '/');
+    }
+
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    setPersonalizedData(null);
+    const expiredMsg = 'Your session has expired due to 5 minutes of inactivity. Please log in again.';
+    try { sessionStorage.setItem('ats_session_expired_msg', expiredMsg); } catch (e) {}
+    setSessionExpiredMessage(expiredMsg);
+  }, []);
+
+  // Manual Sign Out Handler
+  const handleSignOut = useCallback((broadcast = true) => {
+    const token = sessionStorage.getItem('ats_urja_token');
+    if (token) {
+      fetch('http://localhost:8080/api/v1/auth/logout', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).catch(() => {});
+    }
+    try {
+      sessionStorage.removeItem('ats_urja_user');
+      sessionStorage.removeItem('ats_urja_token');
+      localStorage.removeItem('ats_urja_user');
+      localStorage.removeItem('ats_urja_token');
+      localStorage.removeItem(LAST_ACTIVITY_KEY);
+      if (broadcast) {
+        localStorage.setItem(SESSION_EVENT_KEY, JSON.stringify({
+          type: 'MANUAL_LOGOUT',
+          timestamp: Date.now()
+        }));
+      }
+    } catch (e) {}
+
+    if (typeof window !== 'undefined') {
+      window.history.replaceState({}, '', '/');
+    }
+    setIntendedRedirect(null);
+    setCurrentUser(null);
+    setPersonalizedData(null);
+    setIsAuthenticated(false);
+    setShowProfileMenu(false);
+    setSessionExpiredMessage(null);
+  }, []);
+
+  // Automatic Inactivity Timeout Hook (5 Minutes) & Multi-Tab Synchronization
+  useInactivityTimeout(
+    isAuthenticated,
+    () => handleInactivityLogout(false),
+    () => handleSignOut(false)
+  );
+
+  // Same Page Persistence & Session Validation with Spring Boot Backend on Mount
+  useEffect(() => {
+    let isCancelled = false;
+
+    const validateSession = async () => {
+      const storedToken = sessionStorage.getItem('ats_urja_token');
+      const storedUserStr = sessionStorage.getItem('ats_urja_user');
+      const lastActivityStr = localStorage.getItem(LAST_ACTIVITY_KEY);
+
+      // Check if explicit logout parameter ?auth=false was provided
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('auth') === 'false') {
+        try {
+          sessionStorage.removeItem('ats_urja_user');
+          sessionStorage.removeItem('ats_urja_token');
+          localStorage.removeItem(LAST_ACTIVITY_KEY);
+        } catch (e) {}
+        if (!isCancelled) {
+          setIsAuthenticated(false);
+          setIsVerifyingSession(false);
+        }
+        return;
+      }
+
+      const storedExpiredMsg = sessionStorage.getItem('ats_session_expired_msg');
+      if (storedExpiredMsg && !isCancelled) {
+        setSessionExpiredMessage(storedExpiredMsg);
+      }
+
+      // If no token exists, user is unauthenticated
+      if (!storedToken) {
+        if (!isCancelled) {
+          setIsAuthenticated(false);
+          setIsVerifyingSession(false);
+        }
+        return;
+      }
+
+      // Check if 5 minutes of inactivity elapsed while browser was closed / tab idle
+      if (lastActivityStr) {
+        const elapsed = Date.now() - Number(lastActivityStr);
+        if (elapsed >= INACTIVITY_TIMEOUT_MS) {
+          const expiredMsg = 'Your session has expired due to 5 minutes of inactivity. Please log in again.';
+          try { sessionStorage.setItem('ats_session_expired_msg', expiredMsg); } catch (e) {}
+          handleInactivityLogout(false);
+          if (!isCancelled) {
+            setSessionExpiredMessage(expiredMsg);
+            setIsVerifyingSession(false);
+          }
+          return;
+        }
+      }
+
+      // Backend session validation with Spring Boot: GET /api/v1/auth/me
+      try {
+        const res = await fetch('http://localhost:8080/api/v1/auth/me', {
+          headers: { 'Authorization': `Bearer ${storedToken}` }
+        });
+
+        if (res.ok) {
+          const body = await res.json();
+          const verifiedUser = body.data || body;
+
+          let userObj = {};
+          if (storedUserStr) {
+            try { userObj = JSON.parse(storedUserStr); } catch (e) {}
+          }
+
+          const primaryRole = (verifiedUser.authorities && verifiedUser.authorities[0]?.authority) || userObj.role || 'ROLE_HR_ADMIN';
+          const fullUser = {
+            ...userObj,
+            id: verifiedUser.id || userObj.id,
+            name: verifiedUser.name || userObj.name,
+            email: verifiedUser.email || userObj.email,
+            username: verifiedUser.username || userObj.username,
+            roles: verifiedUser.authorities ? verifiedUser.authorities.map(a => a.authority) : (userObj.roles || [primaryRole]),
+            role: primaryRole,
+            token: storedToken,
+            avatar: verifiedUser.profileImageUrl || userObj.avatar || (primaryRole === 'ROLE_DEPT_HEAD' ? '/assets/images/man.jpg' : '/assets/images/woman.jpg'),
+            title: verifiedUser.title || userObj.title || 'HR Administrator',
+            dept: userObj.dept || 'Human Resources',
+            status: 'ACTIVE'
+          };
+
+          if (!isCancelled) {
+            setCurrentUser(fullUser);
+            setCurrentRoleId(primaryRole);
+            setIsAuthenticated(true);
+            setSessionExpiredMessage(null);
+            try {
+              localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
+            } catch (e) {}
+
+            // Same Page Persistence: Restore exact route and query params
+            const route = parseCurrentRoute();
+            setActiveTab(route.tab);
+            setIsVerifyingSession(false);
+          }
+          return;
+        } else if (res.status === 401 || res.status === 403) {
+          // Token is rejected or expired
+          try {
+            sessionStorage.removeItem('ats_urja_token');
+            sessionStorage.removeItem('ats_urja_user');
+            localStorage.removeItem(LAST_ACTIVITY_KEY);
+          } catch (e) {}
+          if (!isCancelled) {
+            setIsAuthenticated(false);
+            setSessionExpiredMessage('Your session has expired due to 5 minutes of inactivity. Please log in again.');
+            setIsVerifyingSession(false);
+          }
+          return;
+        }
+      } catch (err) {
+        console.warn('Backend verification call unavailable, using local session state:', err);
+        if (storedUserStr) {
+          try {
+            const parsed = JSON.parse(storedUserStr);
+            if (!isCancelled) {
+              setCurrentUser(parsed);
+              setCurrentRoleId(parsed.role || 'ROLE_HR_ADMIN');
+              setIsAuthenticated(true);
+              const route = parseCurrentRoute();
+              setActiveTab(route.tab);
+              setIsVerifyingSession(false);
+            }
+            return;
+          } catch (e) {}
+        }
+      }
+
+      if (!isCancelled) {
+        setIsAuthenticated(false);
+        setIsVerifyingSession(false);
+      }
+    };
+
+    validateSession();
+
+    return () => { isCancelled = true; };
+  }, [handleInactivityLogout]);
+
+  // Listen to browser Back / Forward buttons for seamless navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const route = parseCurrentRoute();
+      setActiveTab(route.tab);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const [requisitions, setRequisitions] = useState(INITIAL_REQUISITIONS);
   const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
   const [interviews, setInterviews] = useState(INITIAL_INTERVIEWS);
@@ -786,16 +1017,19 @@ export default function App() {
 
   // Login Success Handler with Role-Based Dashboard Redirection (Requirement 4 & 5)
   const handleLoginSuccess = (authData) => {
-    const primaryRole = (authData.roles && authData.roles[0]) || authData.role || 'ROLE_HR_ADMIN';
-    const match = users.find(u => 
-      (authData.email && u.email.toLowerCase() === authData.email.toLowerCase()) ||
-      (authData.username && u.username === authData.username)
+    const primaryRole = authData.roles ? authData.roles[0] : (authData.role || 'ROLE_HR_ADMIN');
+    const match = INITIAL_USERS.find(u => 
+      (authData.email && u.email.toLowerCase() === authData.email.toLowerCase()) || 
+      u.role === primaryRole
     );
 
     const fullUser = {
-      id: authData.id || match?.id || 99,
-      username: authData.username || match?.username || 'user',
-      name: authData.name || match?.name || 'Urja Team Member',
+      ...INITIAL_USERS[0],
+      ...match,
+      ...authData,
+      id: authData.id || match?.id || 1,
+      name: authData.name || match?.name || 'Administrator',
+      username: authData.username || match?.username || 'admin',
       role: primaryRole,
       roles: authData.roles || [primaryRole],
       email: authData.email || match?.email || '',
@@ -813,48 +1047,21 @@ export default function App() {
     try {
       sessionStorage.setItem('ats_urja_token', authData.token || '');
       sessionStorage.setItem('ats_urja_user', JSON.stringify(fullUser));
+      localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
     } catch (e) {}
 
-    // Determine target dashboard based on role and permissions
-    const targetTab = intendedRedirect || 'dashboard';
+    // Same page persistence: target route from current URL, intended redirect, or role default
+    const route = parseCurrentRoute();
+    const targetTab = intendedRedirect || (route.tab !== 'dashboard' ? route.tab : getRoleDefaultTab(primaryRole));
     setActiveTab(targetTab);
     setIntendedRedirect(null);
-
-    if (typeof window !== 'undefined') {
-      window.history.replaceState({}, '', `/?tab=${targetTab}`);
-    }
+    syncUrlWithRoute(targetTab);
 
     setIsAuthenticated(true);
+    setSessionExpiredMessage(null);
     showToast(`Welcome back, ${fullUser.name}!`);
   };
 
-  // Sign Out Handler (Requirement 4 & 5)
-  const handleSignOut = () => {
-    const token = sessionStorage.getItem('ats_urja_token') || currentUser?.token;
-    if (token) {
-      fetch('http://localhost:8080/api/v1/auth/logout', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      }).catch(() => {});
-    }
-    try {
-      sessionStorage.removeItem('ats_urja_user');
-      sessionStorage.removeItem('ats_urja_token');
-      localStorage.removeItem('ats_urja_user');
-      localStorage.removeItem('ats_urja_token');
-    } catch (e) {}
-    if (typeof window !== 'undefined') {
-      window.history.replaceState({}, '', '/');
-    }
-    setIntendedRedirect(null);
-    setCurrentUser(null);
-    setPersonalizedData(null);
-    setIsAuthenticated(false);
-    setShowProfileMenu(false);
-    showToast('Signed out of Urja ATS');
-  };
-
-  // Pending Approvals Count for Sidebar Badge (Screen 12)
   const pendingApprovalsCount = approvals.filter(a => a.status === 'Pending').length;
 
   // Role-scoped sidebar menu items
@@ -1038,10 +1245,39 @@ export default function App() {
   // RENDER SCREEN 1: LOGIN PAGE IF NOT AUTHENTICATED
   // Placed after all hooks to strictly adhere to React Rules of Hooks
   // ============================================================================
+  if (isVerifyingSession) {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        width: '100vw',
+        backgroundColor: '#F3F6FA',
+        fontFamily: "'Manrope', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif"
+      }}>
+        <div style={{
+          width: 44,
+          height: 44,
+          border: '4px solid #E2E8F0',
+          borderTopColor: '#087B55',
+          borderRadius: '50%',
+          animation: 'atsSpin 0.8s linear infinite'
+        }}></div>
+        <style>{`@keyframes atsSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+        <p style={{ marginTop: '1.1rem', color: '#26364A', fontSize: '0.92rem', fontWeight: 600 }}>
+          Verifying secure session...
+        </p>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <LoginPage 
         onLoginSuccess={handleLoginSuccess}
+        sessionExpiredMessage={sessionExpiredMessage}
       />
     );
   }
