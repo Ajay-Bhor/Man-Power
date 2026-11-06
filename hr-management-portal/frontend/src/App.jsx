@@ -1,4 +1,4 @@
-import api, { authService, getStoredToken, getStoredUser, setAuthSession, clearAuthSession, isJwtTokenValid, registerAuthFailureHandler, SESSION_EXPIRED_KEY } from './services/api';
+import api, { authService, getStoredToken, getStoredUser, setAuthSession, clearAuthSession, isJwtTokenValid, registerAuthFailureHandler } from './services/api';
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import './styles/portal.css';
 import './styles/urja-dashboard.css';
@@ -143,7 +143,7 @@ export default function App() {
   // Authentication & Session State
   const [isVerifyingSession, setIsVerifyingSession] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [sessionExpiredMessage, setSessionExpiredMessage] = useState(null);
+
   const [intendedRedirect, setIntendedRedirect] = useState(initialRoute.tab);
 
   // Active User & Persona State
@@ -187,9 +187,7 @@ export default function App() {
     setIsAuthenticated(false);
     setCurrentUser(null);
     setPersonalizedData(null);
-    const expiredMsg = 'Your session has expired due to 5 minutes of inactivity. Please log in again.';
-    try { sessionStorage.setItem(SESSION_EXPIRED_KEY, expiredMsg); } catch (e) {}
-    setSessionExpiredMessage(expiredMsg);
+
   }, []);
 
   // Manual Sign Out Handler
@@ -214,7 +212,6 @@ export default function App() {
     setPersonalizedData(null);
     setIsAuthenticated(false);
     setShowProfileMenu(false);
-    setSessionExpiredMessage(null);
   }, []);
 
   // Automatic Inactivity Timeout Hook (5 Minutes) & Multi-Tab Synchronization
@@ -248,10 +245,7 @@ export default function App() {
         return;
       }
 
-      const storedExpiredMsg = sessionStorage.getItem(SESSION_EXPIRED_KEY);
-      if (storedExpiredMsg && !isCancelled) {
-        setSessionExpiredMessage(storedExpiredMsg);
-      }
+
 
       // If no valid JWT token, user is unauthenticated
       if (!storedToken || !isJwtTokenValid(storedToken)) {
@@ -267,11 +261,8 @@ export default function App() {
       if (lastActivityStr) {
         const elapsed = Date.now() - Number(lastActivityStr);
         if (elapsed >= INACTIVITY_TIMEOUT_MS) {
-          const expiredMsg = 'Your session has expired due to 5 minutes of inactivity. Please log in again.';
-          try { sessionStorage.setItem(SESSION_EXPIRED_KEY, expiredMsg); } catch (e) {}
           handleInactivityLogout(false);
           if (!isCancelled) {
-            setSessionExpiredMessage(expiredMsg);
             setIsVerifyingSession(false);
           }
           return;
@@ -304,8 +295,7 @@ export default function App() {
           setCurrentUser(fullUser);
           setCurrentRoleId(primaryRole);
           setIsAuthenticated(true);
-          setSessionExpiredMessage(null);
-          try {
+                try {
             localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
           } catch (e) {}
 
@@ -319,7 +309,6 @@ export default function App() {
         clearAuthSession();
         if (!isCancelled) {
           setIsAuthenticated(false);
-          setSessionExpiredMessage('Your session has expired due to 5 minutes of inactivity. Please log in again.');
           setIsVerifyingSession(false);
         }
       }
@@ -999,7 +988,6 @@ export default function App() {
     syncUrlWithRoute(targetTab);
 
     setIsAuthenticated(true);
-    setSessionExpiredMessage(null);
     showToast(`Welcome back, ${fullUser.name}!`);
   };
 
@@ -1218,7 +1206,6 @@ export default function App() {
     return (
       <LoginPage 
         onLoginSuccess={handleLoginSuccess}
-        sessionExpiredMessage={sessionExpiredMessage}
       />
     );
   }

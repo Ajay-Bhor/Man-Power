@@ -146,13 +146,12 @@ export function triggerAuthFailure(reason) {
   isHandling401 = true;
 
   clearAuthSession();
-  const message = reason || 'Your session has expired due to inactivity. Please log in again.';
   try {
-    sessionStorage.setItem(SESSION_EXPIRED_KEY, message);
+    sessionStorage.removeItem(SESSION_EXPIRED_KEY);
   } catch (e) {}
 
   if (typeof authFailureHandler === 'function') {
-    authFailureHandler(message);
+    authFailureHandler();
   }
 
   // Release mutex after redirect window
@@ -315,3 +314,4 @@ export const authService = {
 };
 
 export default api;
+
