@@ -18,6 +18,8 @@ import OffersOnboardingView from './components/OffersOnboardingView';
 import ApprovalsInboxView from './components/ApprovalsInboxView';
 import EmployeesManagementView from './components/EmployeesManagementView';
 import TaskAssignmentView from './components/TaskAssignmentView';
+import ReportsAnalyticsView from './components/ReportsAnalyticsView';
+import './styles/urja-reports.css';
 import './styles/urja-offers.css';
 import './styles/urja-approvals.css';
 import './styles/urja-employees.css';
@@ -1640,74 +1642,7 @@ export default function App() {
               SCREEN 14: REPORTS & ANALYTICS
               ============================================================================ */}
           {activeTab === 'reports' && (
-            <div>
-              <div className="d-flex align-items-center justify-content-between mb-3">
-                <div>
-                  <h2 className="fw-bold text-dark mb-1" style={{ fontSize: '1.45rem' }}>Reports & Analytics</h2>
-                  <p className="text-muted small mb-0">Hiring velocity, TAT compliance and applicant channel insights.</p>
-                </div>
-                <button className="btn btn-outline-dark" onClick={() => showToast('Exporting executive PDF summary...')}>
-                  <i className="bi bi-file-earmark-arrow-down me-1"></i> Export Report
-                </button>
-              </div>
-
-              {/* 4 KPI Metric Cards */}
-              <div className="row g-3 mb-4">
-                <div className="col-md-3">
-                  <div className="card-portal p-3">
-                    <small className="text-muted d-block">Total Vacancies</small>
-                    <div className="fs-3 fw-bold text-dark mt-1">28</div>
-                    <small className="text-success">↑ 12% vs last month</small>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="card-portal p-3">
-                    <small className="text-muted d-block">Avg. Time to Hire</small>
-                    <div className="fs-3 fw-bold text-primary mt-1">8 Days</div>
-                    <small className="text-muted">Target: 30 Days</small>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="card-portal p-3">
-                    <small className="text-muted d-block">TAT SLA Compliance</small>
-                    <div className="fs-3 fw-bold text-success mt-1">81%</div>
-                    <small className="text-success">24 Days Avg</small>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="card-portal p-3">
-                    <small className="text-muted d-block">Source Effectiveness</small>
-                    <div className="fs-3 fw-bold text-warning mt-1">92%</div>
-                    <small className="text-muted">Direct + Portal</small>
-                  </div>
-                </div>
-              </div>
-
-              {/* Charts Row */}
-              <div className="row g-3">
-                <div className="col-lg-7">
-                  <MonthlyHiringTrendChart />
-                </div>
-                <div className="col-lg-5">
-                  <div className="card-portal p-3 h-100">
-                    <h5 className="fw-bold text-dark mb-3">Source of Candidates</h5>
-                    <div className="p-3 bg-light rounded-3 mb-3">
-                      <div className="d-flex justify-content-between mb-1 small"><span>Job Portals (Naukri, LinkedIn)</span><strong>45%</strong></div>
-                      <div className="progress mb-3" style={{ height: 6 }}><div className="progress-bar bg-primary" style={{ width: '45%' }}></div></div>
-
-                      <div className="d-flex justify-content-between mb-1 small"><span>Employee Referrals</span><strong>25%</strong></div>
-                      <div className="progress mb-3" style={{ height: 6 }}><div className="progress-bar bg-success" style={{ width: '25%' }}></div></div>
-
-                      <div className="d-flex justify-content-between mb-1 small"><span>Campus & Walk-in Drives</span><strong>18%</strong></div>
-                      <div className="progress mb-3" style={{ height: 6 }}><div className="progress-bar bg-warning" style={{ width: '18%' }}></div></div>
-
-                      <div className="d-flex justify-content-between mb-1 small"><span>Consultant Agencies</span><strong>12%</strong></div>
-                      <div className="progress" style={{ height: 6 }}><div className="progress-bar bg-purple" style={{ width: '12%', backgroundColor: '#8B5CF6' }}></div></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ReportsAnalyticsView currentUser={currentUser} onToast={showToast} />
           )}
 
           {/* ============================================================================

@@ -1,0 +1,912 @@
+/* ==============================================================================
+   TALENTPULSE ENTERPRISE HRMS — REPORTS & ANALYTICS STYLES
+   Theme: Premium Light Enterprise Design (Strictly Light Mode)
+   Palette:
+     Main Background:   #F3F6FA
+     Card Background:   #FFFFFF
+     Primary Green:     #087B55
+     Secondary Green:   #16A36A
+     Light Green Tint:  #EAF7F0
+     Primary Text:      #26364A
+     Secondary Text:    #718096
+     Borders:           #E2E8F0
+     Font Family:       'Manrope', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+   ============================================================================== */
+
+.urja-reports-root {
+  background-color: #F3F6FA;
+  color: #26364A;
+  font-family: 'Manrope', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* 1. Header Section */
+.urja-reports-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  background: #FFFFFF;
+  padding: 1.25rem 1.5rem;
+  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.urja-reports-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.urja-reports-header-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #EAF7F0;
+  color: #087B55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+  border: 1px solid rgba(8, 123, 85, 0.15);
+}
+
+.urja-reports-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #26364A;
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.urja-reports-subtitle {
+  font-size: 0.86rem;
+  color: #718096;
+  margin: 0.2rem 0 0 0;
+  font-weight: 500;
+}
+
+.urja-reports-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.urja-btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #26364A;
+}
+
+.urja-btn-export:hover {
+  background: #F3F6FA;
+  border-color: #CBD5E1;
+  color: #087B55;
+}
+
+.urja-btn-export.primary {
+  background: #087B55;
+  border-color: #087B55;
+  color: #FFFFFF;
+}
+
+.urja-btn-export.primary:hover {
+  background: #066344;
+  border-color: #066344;
+  box-shadow: 0 4px 12px rgba(8, 123, 85, 0.25);
+}
+
+/* 2. Controls & Filter Bar */
+.urja-reports-filter-bar {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.urja-reports-root .urja-filter-group {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 1.5rem !important;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.urja-reports-root .urja-filter-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #718096;
+  white-space: nowrap;
+}
+
+.urja-filter-select {
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.48rem 0.85rem;
+  font-size: 0.86rem;
+  color: #26364A;
+  background-color: #FFFFFF;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.urja-filter-select:focus {
+  border-color: #087B55;
+  box-shadow: 0 0 0 3px rgba(8, 123, 85, 0.1);
+}
+
+.urja-search-box {
+  position: relative;
+  min-width: 260px;
+  max-width: 340px;
+  flex: 1;
+}
+
+.urja-search-box i {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.urja-search-input {
+  width: 100%;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.48rem 0.85rem 0.48rem 2.25rem;
+  font-size: 0.86rem;
+  color: #26364A;
+  outline: none;
+  background: #FFFFFF;
+  transition: all 0.15s ease;
+}
+
+.urja-search-input:focus {
+  border-color: #087B55;
+  box-shadow: 0 0 0 3px rgba(8, 123, 85, 0.1);
+}
+
+.urja-filter-reset-btn {
+  background: transparent;
+  border: 1px dashed #CBD5E1;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.82rem;
+  color: #718096;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-filter-reset-btn:hover {
+  background: #F3F6FA;
+  color: #26364A;
+  border-color: #94A3B8;
+}
+
+/* 3. KPI Metric Cards (4 Cards Grid) */
+.urja-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 1200px) {
+  .urja-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .urja-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-kpi-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.urja-kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(8, 123, 85, 0.08);
+  border-color: #CBD5E1;
+}
+
+.urja-kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.urja-kpi-card:hover::before {
+  background: #087B55;
+}
+
+.urja-kpi-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.urja-kpi-icon-pill {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  background: #EAF7F0;
+  color: #087B55;
+}
+
+.urja-kpi-icon-pill.blue {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+.urja-kpi-icon-pill.orange {
+  background: #FFF7ED;
+  color: #EA580C;
+}
+
+.urja-kpi-icon-pill.green {
+  background: #EAF7F0;
+  color: #087B55;
+}
+
+.urja-kpi-icon-pill.emerald {
+  background: #F0FDF4;
+  color: #16A36A;
+}
+
+.urja-kpi-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #718096;
+  margin-bottom: 0.25rem;
+}
+
+.urja-kpi-val {
+  font-size: 1.95rem;
+  font-weight: 800;
+  color: #26364A;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.urja-kpi-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.urja-kpi-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.urja-kpi-trend.positive {
+  background: #EAF7F0;
+  color: #087B55;
+}
+
+.urja-kpi-trend.negative {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.urja-kpi-trend.neutral {
+  background: #F1F5F9;
+  color: #64748B;
+}
+
+.urja-kpi-subtext {
+  font-size: 0.75rem;
+  color: #718096;
+}
+
+.urja-sparkline-svg {
+  width: 76px;
+  height: 28px;
+  overflow: visible;
+}
+
+/* 4. Chart Cards & Layout Grids */
+.urja-charts-grid-row {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1080px) {
+  .urja-charts-grid-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-chart-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1.35rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.urja-chart-title-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.urja-chart-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #26364A;
+  margin: 0;
+}
+
+.urja-chart-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: #EAF7F0;
+  color: #087B55;
+}
+
+.urja-chart-hint {
+  font-size: 0.78rem;
+  color: #718096;
+}
+
+/* 5. Funnel Visualization Component */
+.urja-funnel-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.urja-funnel-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.urja-funnel-step:hover {
+  background: #EAF7F0;
+  border-color: #16A36A;
+  transform: translateX(4px);
+}
+
+.urja-funnel-step-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.urja-funnel-step-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #E2E8F0;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.urja-funnel-step:hover .urja-funnel-step-number {
+  background: #087B55;
+  color: #FFFFFF;
+}
+
+.urja-funnel-step-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #26364A;
+}
+
+.urja-funnel-step-bar-wrap {
+  flex: 1;
+  max-width: 140px;
+  margin: 0 1rem;
+}
+
+.urja-funnel-step-bar-bg {
+  height: 8px;
+  background: #E2E8F0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.urja-funnel-step-bar-fill {
+  height: 100%;
+  background: #087B55;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.urja-funnel-step-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: right;
+}
+
+.urja-funnel-step-count {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #26364A;
+}
+
+.urja-funnel-step-conv {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #087B55;
+  background: #EAF7F0;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  min-width: 48px;
+  text-align: center;
+}
+
+/* 6. Department Horizontal Bar Analytics */
+.urja-dept-analytics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.urja-dept-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-dept-item:hover {
+  background: #EAF7F0;
+  border-color: #087B55;
+}
+
+.urja-dept-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urja-dept-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #26364A;
+}
+
+.urja-dept-stats {
+  font-size: 0.82rem;
+  color: #718096;
+}
+
+.urja-dept-stats strong {
+  color: #087B55;
+}
+
+.urja-dept-bar-group {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #E2E8F0;
+}
+
+.urja-dept-bar-filled {
+  background: #087B55;
+}
+
+.urja-dept-bar-open {
+  background: #16A36A;
+  opacity: 0.55;
+}
+
+/* 7. Extra Insights & Efficiency Metrics */
+.urja-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 960px) {
+  .urja-insights-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.urja-insight-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.15rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.urja-insight-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  background: #EAF7F0;
+  color: #087B55;
+}
+
+.urja-insight-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #26364A;
+  margin-bottom: 0.2rem;
+}
+
+.urja-insight-desc {
+  font-size: 0.8rem;
+  color: #718096;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* 8. Department Performance Table */
+.urja-reports-table-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+}
+
+.urja-reports-table-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.urja-reports-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.urja-reports-table th {
+  background: #F8FAFC;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #718096;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #E2E8F0;
+  text-align: left;
+}
+
+.urja-reports-table td {
+  padding: 0.95rem 1.25rem;
+  border-bottom: 1px solid #F1F5F9;
+  color: #26364A;
+  vertical-align: middle;
+}
+
+.urja-reports-table tbody tr {
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.urja-reports-table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+.urja-badge-sla {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.urja-badge-sla.on-track {
+  background: #EAF7F0;
+  color: #087B55;
+}
+
+.urja-badge-sla.at-risk {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.urja-badge-sla.breached {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* 9. Drilldown Right Details Drawer */
+.urja-reports-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 1040;
+  transition: opacity 0.2s ease;
+}
+
+.urja-reports-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 520px;
+  height: 100vh;
+  background: #FFFFFF;
+  z-index: 1050;
+  box-shadow: -6px 0 32px rgba(15, 23, 42, 0.16);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: urjaReportsDrawerSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes urjaReportsDrawerSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.urja-reports-drawer-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+}
+
+.urja-reports-drawer-title-box {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.urja-reports-drawer-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #26364A;
+  margin: 0;
+}
+
+.urja-reports-drawer-close-btn {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #718096;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.urja-reports-drawer-close-btn:hover {
+  background: #F1F5F9;
+  color: #26364A;
+}
+
+.urja-reports-drawer-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  flex: 1;
+}
+
+.urja-drilldown-highlight-box {
+  background: #EAF7F0;
+  border: 1px solid rgba(8, 123, 85, 0.2);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urja-drilldown-hl-val {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #087B55;
+  line-height: 1;
+}
+
+.urja-drilldown-hl-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #26364A;
+  margin-top: 0.2rem;
+}
+
+.urja-drawer-subheading {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #718096;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.65rem;
+}
+
+.urja-drilldown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.urja-drilldown-card {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.urja-drilldown-card-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.urja-drilldown-card-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #26364A;
+}
+
+.urja-drilldown-card-meta {
+  font-size: 0.76rem;
+  color: #718096;
+  margin-top: 0.15rem;
+}
+
+.urja-reports-drawer-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* 10. Printable PDF Styles */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .sidebar,
+  .top-navbar,
+  .urja-reports-actions,
+  .urja-reports-filter-bar,
+  .urja-reports-drawer,
+  .urja-reports-drawer-backdrop {
+    display: none !important;
+  }
+  .urja-reports-root {
+    background: #FFFFFF !important;
+    padding: 0 !important;
+  }
+  .urja-chart-card,
+  .urja-kpi-card,
+  .urja-reports-table-card {
+    box-shadow: none !important;
+    border: 1px solid #CBD5E1 !important;
+    page-break-inside: avoid;
+  }
+}
