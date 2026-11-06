@@ -1,8 +1,8 @@
 import React from 'react';
 
 /**
- * Reusable Status Tabs Component with Lime-Green Active Indicator
- * and Prominent "+ Create Requisition" Action Button
+ * Reusable Status Tabs Component with Dark Green Active Indicator
+ * and clean badge pills matching the corporate theme
  */
 export default function RequisitionStatusTabs({
   activeStatusTab = 'ALL',
@@ -13,8 +13,7 @@ export default function RequisitionStatusTabs({
     inApproval: 7,
     filled: 6,
     onHold: 2
-  },
-  onCreateRequisition
+  }
 }) {
   const tabs = [
     { key: 'ALL', label: 'All', count: counts.all ?? 28 },
@@ -25,43 +24,28 @@ export default function RequisitionStatusTabs({
   ];
 
   return (
-    <div className="urja-status-tabs-container">
-      {/* Horizontal Tabs Scrollable Wrapper */}
-      <div className="urja-status-tabs-scroll-area">
-        <div className="urja-status-tabs-list" role="tablist">
-          {tabs.map((tab) => {
-            const isActive = activeStatusTab === tab.key;
-            return (
-              <button
-                key={tab.key}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                className={`urja-status-tab-item ${isActive ? 'active' : ''}`}
-                onClick={() => onTabChange && onTabChange(tab.key)}
-              >
-                <span className="urja-status-tab-label">{tab.label}</span>
-                <span className={`urja-status-tab-badge ${isActive ? 'active' : ''}`}>
-                  {tab.count}
-                </span>
-                {isActive && <span className="urja-status-tab-indicator" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Prominent + Create Requisition Button */}
-      <div className="urja-status-tabs-actions">
-        <button
-          type="button"
-          className="urja-btn-create-requisition"
-          onClick={onCreateRequisition}
-          title="Create New Manpower Requisition"
-        >
-          <i className="bi bi-plus-lg me-1" />
-          <span>Create Requisition</span>
-        </button>
+    <div className="urja-req-tabs-row">
+      {/* Horizontal Tabs Scrollable List */}
+      <div className="urja-req-tabs-list" role="tablist">
+        {tabs.map((tab) => {
+          const isActive = activeStatusTab === tab.key;
+          return (
+            <button
+              key={tab.key}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              className={`urja-req-tab-btn ${isActive ? 'active' : ''}`}
+              onClick={() => onTabChange && onTabChange(tab.key)}
+            >
+              <span>{tab.label}</span>
+              <span className={`urja-req-tab-badge ${isActive ? 'active' : ''}`}>
+                {tab.count}
+              </span>
+              {isActive && <span className="urja-req-tab-indicator" />}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

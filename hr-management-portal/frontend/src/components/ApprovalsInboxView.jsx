@@ -289,6 +289,10 @@ const REFERENCE_FALLBACK_APPROVALS = [
   }
 ];
 
+const API_BASE = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:8080'
+  : '';
+
 export default function ApprovalsInboxView({
   currentUser,
   onToast = () => {},
@@ -366,7 +370,7 @@ export default function ApprovalsInboxView({
       const headers = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
-      const res = await fetch(`/api/v1/approvals/${approval.id}`, { headers });
+      const res = await fetch(`${API_BASE}/api/v1/approvals/${approval.id}`, { headers });
       if (res.ok) {
         const json = await res.json();
         if (fetchId === activeFetchIdRef.current && json.data) {
@@ -414,7 +418,7 @@ export default function ApprovalsInboxView({
     try {
       const headers = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
-      const res = await fetch('/api/v1/approvals/summary-stats', { headers });
+      const res = await fetch(`${API_BASE}/api/v1/approvals/summary-stats`, { headers });
       if (res.ok) {
         const json = await res.json();
         if (json.data) {
@@ -450,7 +454,7 @@ export default function ApprovalsInboxView({
       if (filterRequester !== 'ALL') params.set('requestedBy', filterRequester);
       if (appliedSearch) params.set('search', appliedSearch);
 
-      const res = await fetch(`/api/v1/approvals?${params.toString()}`, { headers });
+      const res = await fetch(`${API_BASE}/api/v1/approvals?${params.toString()}`, { headers });
       if (res.ok) {
         const json = await res.json();
         if (json.data && json.data.content) {
@@ -580,7 +584,7 @@ export default function ApprovalsInboxView({
       const headers = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
-      const res = await fetch(`/api/v1/approvals/${selectedApproval.id}/decision`, {
+      const res = await fetch(`${API_BASE}/api/v1/approvals/${selectedApproval.id}/decision`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -674,7 +678,7 @@ export default function ApprovalsInboxView({
       const headers = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
-      const res = await fetch(`/api/v1/approvals/${selectedApproval.id}/comments`, {
+      const res = await fetch(`${API_BASE}/api/v1/approvals/${selectedApproval.id}/comments`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ comment: commentText.trim() })
@@ -1151,16 +1155,24 @@ export default function ApprovalsInboxView({
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Right: Selected Approval Details Panel (Drawer) */}
-        {selectedApproval && (
-          <>
-            <div 
-              className="urja-drawer-backdrop" 
-              onClick={handleCloseDrawer} 
-              aria-hidden="true" 
-            />
-            <div className="urja-details-panel" id="urja-details-panel">
+      {/* Right: Selected Approval Details Panel (Portal Drawer Layer 1050 above Backdrop 1040) */}
+      {selectedApproval && typeof document !== 'undefined' && createPortal(
+        <>
+          <div 
+            className="urja-drawer-backdrop" 
+            onClick={handleCloseDrawer} 
+            aria-hidden="true" 
+          />
+          <aside 
+            className="urja-details-panel" 
+            id="urja-details-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Approval Details"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Header */}
             <div className="urja-details-header">
               <div className="urja-details-header-title">
@@ -1510,10 +1522,10 @@ export default function ApprovalsInboxView({
                 <span>Comment</span>
               </button>
             </div>
-          </div>
-          </>
-        )}
-      </div>
+          </aside>
+        </>,
+        document.body
+      )}
 
       {/* =====================================================================
           ACTION MODALS (PORTAL RENDERED ON DOCUMENT BODY - Z-INDEX 1100 / 1110)

@@ -661,8 +661,9 @@
   gap: 0.75rem;
 }
 
-/* Details Drawer */
-.urja-drawer-backdrop {
+/* Details Drawer - Scoped to avoid leaking */
+.urja-tasks-view .urja-drawer-backdrop,
+.urja-tasks-container .urja-drawer-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.45);

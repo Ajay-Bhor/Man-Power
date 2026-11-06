@@ -40,3 +40,4 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.ok(null, "User permanently deleted successfully."));
     }
 }
+
